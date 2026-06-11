@@ -343,7 +343,7 @@
       </div>
       <div class="form-row">
         <div><label class="fl">Industry sector</label><div class="sw"><select id="f-sector"><option value="">Select sector…</option><option>Construction</option><option>Professional Services</option><option>Retail</option><option>Manufacturing</option><option>Hospitality</option><option>Healthcare</option><option>Transport &amp; Logistics</option><option>Finance &amp; Insurance</option></select></div></div>
-        <div><label class="fl">Annual revenue</label><div class="sw"><select id="f-revenue"><option value="">Select range…</option><option>Under $500K</option><option>$500K – $1M</option><option>$1M – $3M</option><option>$3M – $10M</option><option>$10M – $30M</option><option>$30M+</option></select></div></div>
+        <div><label class="fl">Annual revenue (<span id="rev-currency-hint">local currency</span>)</label><div class="sw"><select id="f-revenue"><option value="">Select range…</option><option>Under 500K</option><option>500K – 1M</option><option>1M – 3M</option><option>3M – 10M</option><option>10M – 30M</option><option>30M+</option></select></div></div>
       </div>
       <div class="form-row">
         <div><label class="fl">Team size</label><div class="sw"><select id="f-staff"><option value="">Select…</option><option>1–5</option><option>6–20</option><option>21–50</option><option>51–100</option><option>100+</option></select></div></div>
@@ -625,6 +625,8 @@ function updatePriceDisplay(countryCode) {
   const data = COUNTRY_DATA[countryCode] || COUNTRY_DATA['AU'];
   const el = document.getElementById('price-display');
   if(el) el.textContent = data.label;
+  const hint = document.getElementById('rev-currency-hint');
+  if(hint) hint.textContent = data.currency;
 }
 
 function startAssessment() {
@@ -1057,14 +1059,11 @@ function renderReport(text, worst, best) {
             <div class="fix-card-timing">${f.timing}</div>
             <div class="fix-card-title">${f.title}</div>
           </div>
-          <div class="fix-card-impact-badge">
-            <div class="fix-card-impact-label">Impact</div>
-            <div class="fix-card-impact-val">${f.impact || 'High impact'}</div>
-          </div>
         </div>
         <div class="fix-card-body">
           <div class="fix-card-body-text">${f.desc}</div>
           ${sentences.length > 1 ? '<div class="fix-steps">' + stepsHTML + '</div>' : ''}
+          ${f.impact ? '<div style="margin-top:16px;padding:14px 16px;background:var(--green-soft);border-radius:8px;border-left:3px solid var(--green);"><div style=\'font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:4px;\'>Impact</div><div style=\'font-family:var(--mono);font-size:12px;color:var(--green);font-weight:600;\'>' + f.impact + '</div></div>' : ''}
         </div>
       </div>`;
     });
@@ -1082,10 +1081,6 @@ function renderReport(text, worst, best) {
           <div style="flex:1;padding:16px 20px;background:white;border-bottom:1px solid var(--border);">
             <div class="fix-card-timing">${timings[i]}</div>
             <div class="fix-card-title">${title}</div>
-          </div>
-          <div class="fix-card-impact-badge">
-            <div class="fix-card-impact-label">Priority</div>
-            <div class="fix-card-impact-val">High impact</div>
           </div>
         </div>
         <div class="fix-card-body">
