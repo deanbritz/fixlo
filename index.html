@@ -22,51 +22,96 @@
   .logo span { color:var(--accent); }
   .nav-tag { font-family:var(--mono); font-size:11px; color:var(--ink-light); text-transform:uppercase; letter-spacing:1px; }
 
-  /* ── INTRO ── */
-  #intro-screen { display:grid; grid-template-columns:1fr 1fr; min-height:calc(100vh - 57px); }
-  .intro-left { padding:60px 52px; display:flex; flex-direction:column; justify-content:center; background:var(--cream); }
-  .intro-right { background:var(--ink); padding:60px 48px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
-  .intro-right::before { content:''; position:absolute; bottom:-80px; right:-80px; width:360px; height:360px; background:radial-gradient(circle, rgba(200,82,26,0.15) 0%, transparent 70%); pointer-events:none; }
-  .eyebrow { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:18px; display:flex; align-items:center; gap:10px; }
-  .eyebrow::before { content:''; display:inline-block; width:20px; height:1px; background:var(--accent); }
-  .intro-h1 { font-family:var(--serif); font-size:48px; font-weight:600; line-height:1.1; color:var(--ink); margin-bottom:18px; }
-  .intro-h1 em { font-style:italic; color:var(--accent); }
-  .intro-sub { font-size:15px; color:var(--ink-light); line-height:1.7; font-weight:300; margin-bottom:32px; border-left:3px solid var(--border); padding-left:16px; }
-  .meta-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-bottom:28px; background:white; border:1.5px solid var(--border); border-radius:10px; overflow:hidden; }
-  .meta-item { padding:16px 10px; text-align:center; border-right:1px solid var(--border); }
-  .meta-item:last-child { border-right:none; }
-  .meta-num { font-family:var(--serif); font-size:24px; font-weight:600; color:var(--ink); display:block; line-height:1; margin-bottom:4px; }
-  .meta-label { font-family:var(--mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; letter-spacing:0.5px; }
-  .rp-label { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:rgba(247,244,238,0.35); margin-bottom:18px; }
-  .rp-items { display:flex; flex-direction:column; gap:0; margin-bottom:28px; }
-  .rp-item { display:flex; align-items:flex-start; gap:14px; padding:14px 0; border-bottom:1px solid rgba(247,244,238,0.08); }
-  .rp-item:last-child { border-bottom:none; }
-  .rp-icon { width:34px; height:34px; background:rgba(200,82,26,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
-  .rp-item-title { font-size:13px; font-weight:500; color:var(--cream); margin-bottom:2px; }
-  .rp-item-sub { font-size:11px; color:rgba(247,244,238,0.45); line-height:1.5; }
-  .rp-price-block { background:var(--accent); border-radius:10px; padding:20px 24px; position:relative; z-index:2; }
-  .rp-price-label { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.65); margin-bottom:4px; }
-  .rp-price-amount { font-family:var(--serif); font-size:44px; font-weight:700; color:white; line-height:1; margin-bottom:4px; }
-  .rp-price-note { font-size:12px; color:rgba(255,255,255,0.65); }
-  .intro-form { background:white; border:1.5px solid var(--border); border-radius:12px; padding:26px; margin-bottom:14px; text-align:left; }
-  .form-section-label { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--ink-light); margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border); }
-  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
-  .fl { display:block; font-size:11px; font-weight:500; color:var(--ink-mid); margin-bottom:6px; font-family:var(--mono); text-transform:uppercase; letter-spacing:0.3px; }
-  input[type=text], select {
-    width:100%; padding:11px 13px; border:1.5px solid var(--border); border-radius:8px;
-    font-family:var(--sans); font-size:14px; color:var(--ink); background:var(--cream);
-    transition:border-color 0.2s; appearance:none;
+  /* ── INTRO WIZARD ── */
+  #intro-screen { min-height:calc(100vh - 57px); display:flex; align-items:stretch; }
+  .wizard-left {
+    width:380px; flex-shrink:0; background:var(--ink); padding:56px 48px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    position:sticky; top:57px; height:calc(100vh - 57px); overflow:hidden;
   }
-  input:focus, select:focus { outline:none; border-color:var(--accent); background:white; }
-  .sw { position:relative; }
-  .sw::after { content:'▾'; position:absolute; right:13px; top:50%; transform:translateY(-50%); color:var(--ink-light); pointer-events:none; font-size:11px; }
-  .btn-start { width:100%; background:var(--ink); color:var(--cream); border:none; padding:15px; border-radius:9px; font-family:var(--sans); font-size:15px; font-weight:500; cursor:pointer; transition:all 0.25s; margin-top:8px; display:flex; align-items:center; justify-content:center; gap:10px; }
-  .btn-start:hover { background:var(--accent); transform:translateY(-1px); box-shadow:0 8px 32px rgba(200,82,26,0.28); }
-  .trust-row { display:flex; justify-content:center; gap:18px; flex-wrap:wrap; }
-  .trust-item { font-family:var(--mono); font-size:10px; color:var(--ink-light); display:flex; align-items:center; gap:5px; }
-  .trust-item::before { content:'✓'; color:var(--green); font-size:10px; }
+  .wizard-left::before {
+    content:''; position:absolute; bottom:-100px; left:-60px;
+    width:400px; height:400px;
+    background:radial-gradient(circle, rgba(200,82,26,0.18) 0%, transparent 65%);
+    pointer-events:none;
+  }
+  .wl-logo { font-family:var(--serif); font-size:20px; font-weight:700; color:var(--cream); letter-spacing:-0.5px; position:relative; z-index:2; }
+  .wl-logo span { color:var(--accent); }
+  .wl-content { position:relative; z-index:2; }
+  .wl-tagline { font-family:var(--serif); font-size:32px; font-weight:600; color:var(--cream); line-height:1.2; margin-bottom:16px; }
+  .wl-tagline em { font-style:italic; color:rgba(200,82,26,0.85); }
+  .wl-sub { font-size:14px; color:rgba(247,244,238,0.45); line-height:1.7; margin-bottom:36px; font-weight:300; }
+  .wl-steps { display:flex; flex-direction:column; gap:0; }
+  .wl-step { display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid rgba(247,244,238,0.07); }
+  .wl-step:last-child { border-bottom:none; }
+  .wl-step-num { width:28px; height:28px; border-radius:50%; border:1.5px solid rgba(247,244,238,0.15); display:flex; align-items:center; justify-content:center; font-family:var(--mono); font-size:11px; color:rgba(247,244,238,0.35); flex-shrink:0; transition:all 0.3s; }
+  .wl-step.wl-active .wl-step-num { background:var(--accent); border-color:var(--accent); color:white; }
+  .wl-step.wl-done .wl-step-num { background:var(--green); border-color:var(--green); color:white; }
+  .wl-step-text { font-size:13px; color:rgba(247,244,238,0.35); transition:color 0.3s; }
+  .wl-step.wl-active .wl-step-text { color:var(--cream); font-weight:500; }
+  .wl-step.wl-done .wl-step-text { color:rgba(247,244,238,0.5); }
+  .wl-price { background:rgba(200,82,26,0.15); border:1px solid rgba(200,82,26,0.3); border-radius:10px; padding:18px 20px; position:relative; z-index:2; }
+  .wl-price-label { font-family:var(--mono); font-size:9px; text-transform:uppercase; letter-spacing:1.5px; color:rgba(247,244,238,0.4); margin-bottom:6px; }
+  .wl-price-amount { font-family:var(--serif); font-size:38px; font-weight:700; color:var(--accent); line-height:1; margin-bottom:4px; }
+  .wl-price-note { font-size:11px; color:rgba(247,244,238,0.35); }
 
-  /* ── ASSESSMENT ── */
+  .wizard-right { flex:1; display:flex; align-items:center; justify-content:center; padding:56px 72px; background:var(--cream); }
+  .wizard-panel { width:100%; max-width:480px; animation:fadeUp 0.35s ease; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+  .wp-step-indicator { font-family:var(--mono); font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:1.5px; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .wp-step-indicator::before { content:''; display:inline-block; width:18px; height:1px; background:var(--accent); }
+  .wp-dots { display:flex; gap:6px; margin-bottom:36px; }
+  .wp-dot { height:3px; border-radius:2px; transition:all 0.3s; }
+  .wp-dot.wp-inactive { width:20px; background:var(--border); }
+  .wp-dot.wp-active { width:36px; background:var(--accent); }
+  .wp-dot.wp-done { width:20px; background:var(--green); }
+  .wp-title { font-family:var(--serif); font-size:36px; font-weight:600; line-height:1.2; color:var(--ink); margin-bottom:8px; }
+  .wp-title em { font-style:italic; color:var(--accent); }
+  .wp-sub { font-size:14px; color:var(--ink-light); line-height:1.6; margin-bottom:32px; font-weight:300; }
+
+  /* FIELD STYLES */
+  .wf-group { margin-bottom:20px; }
+  .wf-label { display:block; font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:0.8px; color:var(--ink-light); margin-bottom:8px; }
+  .wf-input, .wf-select {
+    width:100%; padding:14px 16px; border:2px solid var(--border); border-radius:10px;
+    font-family:var(--sans); font-size:15px; color:var(--ink); background:white;
+    transition:all 0.2s; appearance:none; outline:none;
+  }
+  .wf-input:focus, .wf-select:focus { border-color:var(--accent); box-shadow:0 0 0 4px rgba(200,82,26,0.08); }
+  .wf-input::placeholder { color:var(--border-dark, #B8B0A4); }
+  .wf-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .wf-select-wrap { position:relative; }
+  .wf-select-wrap::after { content:'▾'; position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--ink-light); pointer-events:none; font-size:12px; }
+
+  /* COUNTRY CARD SELECTOR */
+  .country-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:8px; }
+  .country-card {
+    background:white; border:2px solid var(--border); border-radius:10px;
+    padding:16px 12px; cursor:pointer; transition:all 0.18s; text-align:center;
+    position:relative;
+  }
+  .country-card:hover { border-color:var(--accent); transform:translateY(-2px); box-shadow:0 6px 20px rgba(200,82,26,0.1); }
+  .country-card.cc-selected { border-color:var(--accent); background:var(--accent-soft); }
+  .country-card.cc-selected::after { content:'✓'; position:absolute; top:7px; right:9px; font-size:9px; color:var(--accent); font-weight:700; font-family:var(--mono); }
+  .cc-flag { font-size:24px; display:block; margin-bottom:6px; line-height:1; }
+  .cc-name { font-size:12px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+  .cc-currency { font-family:var(--mono); font-size:10px; color:var(--ink-light); }
+
+  /* WIZARD BUTTONS */
+  .wp-btn-row { display:flex; gap:12px; align-items:center; margin-top:28px; }
+  .wp-btn-next { flex:1; background:var(--ink); color:var(--cream); border:none; padding:15px; border-radius:10px; font-family:var(--sans); font-size:15px; font-weight:500; cursor:pointer; transition:all 0.2s; }
+  .wp-btn-next:hover { background:var(--accent); transform:translateY(-1px); box-shadow:0 6px 24px rgba(200,82,26,0.25); }
+  .wp-btn-back { background:transparent; border:2px solid var(--border); color:var(--ink-light); padding:15px 20px; border-radius:10px; font-family:var(--sans); font-size:14px; cursor:pointer; transition:all 0.2s; }
+  .wp-btn-back:hover { border-color:var(--ink-mid); color:var(--ink); }
+  .wp-trust { display:flex; gap:16px; margin-top:16px; flex-wrap:wrap; }
+  .wp-trust-item { font-family:var(--mono); font-size:10px; color:var(--ink-light); display:flex; align-items:center; gap:5px; }
+  .wp-trust-item::before { content:'✓'; color:var(--green); }
+
+  /* Hide old classes */
+  .what-you-get, .wyg-grid { display:none; }
+
+
+    /* ── ASSESSMENT ── */
   #assessment-screen { display:none; }
   .aw { display:grid; grid-template-columns:256px 1fr; min-height:calc(100vh - 57px); }
   .a-sidebar { border-right:1px solid var(--border); background:white; padding:28px 20px; position:sticky; top:57px; height:calc(100vh - 57px); overflow-y:auto; }
@@ -324,54 +369,153 @@
 
 <!-- ══ INTRO ══ -->
 <div id="intro-screen">
-  <!-- LEFT PANEL -->
-  <div class="intro-left">
-    <div class="eyebrow">Business Diagnostic</div>
-    <h1 class="intro-h1">Find out exactly<br>what to <em>fix first.</em></h1>
-    <p class="intro-sub">20 questions. Scored across 5 areas of your business. A personalised report that tells you what's costing you the most — and exactly what to do about it this week.</p>
-    <div class="meta-strip">
-      <div class="meta-item"><span class="meta-num">20</span><span class="meta-label">Questions</span></div>
-      <div class="meta-item"><span class="meta-num">4 min</span><span class="meta-label">To complete</span></div>
-      <div class="meta-item"><span class="meta-num">5</span><span class="meta-label">Areas scored</span></div>
-      <div class="meta-item"><span class="meta-num">3</span><span class="meta-label">Fixes</span></div>
+  <!-- STICKY LEFT SIDEBAR -->
+  <div class="wizard-left">
+    <div class="wl-logo">FIX<span>LO</span>™</div>
+    <div class="wl-content">
+      <div class="wl-tagline">Find out exactly<br>what to <em>fix first.</em></div>
+      <div class="wl-sub">20 questions. 4 minutes. A personalised report with 3 named actions you can act on this week.</div>
+      <div class="wl-steps">
+        <div class="wl-step wl-active" id="wl-s0"><div class="wl-step-num">1</div><div class="wl-step-text">Your location &amp; currency</div></div>
+        <div class="wl-step" id="wl-s1"><div class="wl-step-num">2</div><div class="wl-step-text">About your business</div></div>
+        <div class="wl-step" id="wl-s2"><div class="wl-step-num">3</div><div class="wl-step-text">Begin diagnostic</div></div>
+      </div>
     </div>
-    <div class="intro-form">
-      <div class="form-section-label">Your details</div>
-      <div class="form-row">
-        <div><label class="fl">Your first name</label><input type="text" id="f-name" placeholder="e.g. James" /></div>
-        <div><label class="fl">Business name</label><input type="text" id="f-biz" placeholder="e.g. Meridian Building Co." /></div>
-      </div>
-      <div class="form-row">
-        <div><label class="fl">Industry sector</label><div class="sw"><select id="f-sector"><option value="">Select sector…</option><option>Construction</option><option>Professional Services</option><option>Retail</option><option>Manufacturing</option><option>Hospitality</option><option>Healthcare</option><option>Transport &amp; Logistics</option><option>Finance &amp; Insurance</option></select></div></div>
-        <div><label class="fl">Annual revenue (<span id="rev-currency-hint">local currency</span>)</label><div class="sw"><select id="f-revenue"><option value="">Select range…</option><option>Under 500K</option><option>500K – 1M</option><option>1M – 3M</option><option>3M – 10M</option><option>10M – 30M</option><option>30M+</option></select></div></div>
-      </div>
-      <div class="form-row">
-        <div><label class="fl">Team size</label><div class="sw"><select id="f-staff"><option value="">Select…</option><option>1–5</option><option>6–20</option><option>21–50</option><option>51–100</option><option>100+</option></select></div></div>
-        <div><label class="fl">Country</label><div class="sw"><select id="f-country" onchange="updatePriceDisplay(this.value)"><option value="">Select…</option><option value="AU">Australia</option><option value="NZ">New Zealand</option><option value="UK">United Kingdom</option><option value="CA">Canada</option><option value="US">United States</option><option value="ZA">South Africa</option></select></div></div>
-      </div>
-      <button class="btn-start" onclick="startAssessment()">Begin my diagnostic →</button>
-    </div>
-    <div class="trust-row">
-      <span class="trust-item">No login required</span>
-      <span class="trust-item">Instant report</span>
-      <span class="trust-item">Private &amp; secure</span>
-      <span class="trust-item">Save as PDF</span>
+    <div class="wl-price">
+      <div class="wl-price-label">One-time investment</div>
+      <div class="wl-price-amount" id="wl-price">$49 AUD</div>
+      <div class="wl-price-note">No subscription · No follow-up calls</div>
     </div>
   </div>
-  <!-- RIGHT PANEL -->
-  <div class="intro-right">
-    <div class="rp-label">What you receive</div>
-    <div class="rp-items">
-      <div class="rp-item"><div class="rp-icon">📊</div><div><div class="rp-item-title">5-module scored diagnostic</div><div class="rp-item-sub">Each area of your business scored 0–100 with honest findings.</div></div></div>
-      <div class="rp-item"><div class="rp-icon">🔍</div><div><div class="rp-item-title">Deep-dive priority findings</div><div class="rp-item-sub">What your answers reveal about where you're losing time and money.</div></div></div>
-      <div class="rp-item"><div class="rp-icon">⚡</div><div><div class="rp-item-title">3 named fixes this week</div><div class="rp-item-sub">Fix 1 today. Fix 2 Wednesday. Fix 3 Friday. Specific tasks, not vague advice.</div></div></div>
-      <div class="rp-item"><div class="rp-icon">📄</div><div><div class="rp-item-title">Printable PDF report</div><div class="rp-item-sub">Save, share with your accountant, or bring to your next planning session.</div></div></div>
+
+  <!-- RIGHT WIZARD PANEL -->
+  <div class="wizard-right">
+
+    <!-- STEP 1: COUNTRY -->
+    <div class="wizard-panel" id="wp-step1">
+      <div class="wp-step-indicator">Step 1 of 2</div>
+      <div class="wp-dots">
+        <div class="wp-dot wp-active"></div>
+        <div class="wp-dot wp-inactive"></div>
+      </div>
+      <div class="wp-title">Where are you<br><em>based?</em></div>
+      <div class="wp-sub">We use your location to set the right currency and benchmarks for your industry.</div>
+      <div class="country-grid">
+        <div class="country-card" onclick="selectCountry(this,'AU','$49 AUD','AUD')" data-code="AU">
+          <span class="cc-flag">🇦🇺</span>
+          <div class="cc-name">Australia</div>
+          <div class="cc-currency">AUD · $49</div>
+        </div>
+        <div class="country-card" onclick="selectCountry(this,'NZ','$49 NZD','NZD')" data-code="NZ">
+          <span class="cc-flag">🇳🇿</span>
+          <div class="cc-name">New Zealand</div>
+          <div class="cc-currency">NZD · $49</div>
+        </div>
+        <div class="country-card" onclick="selectCountry(this,'UK','£29 GBP','GBP')" data-code="UK">
+          <span class="cc-flag">🇬🇧</span>
+          <div class="cc-name">United Kingdom</div>
+          <div class="cc-currency">GBP · £29</div>
+        </div>
+        <div class="country-card" onclick="selectCountry(this,'CA','CA$49','CAD')" data-code="CA">
+          <span class="cc-flag">🇨🇦</span>
+          <div class="cc-name">Canada</div>
+          <div class="cc-currency">CAD · CA$49</div>
+        </div>
+        <div class="country-card" onclick="selectCountry(this,'US','$35 USD','USD')" data-code="US">
+          <span class="cc-flag">🇺🇸</span>
+          <div class="cc-name">United States</div>
+          <div class="cc-currency">USD · $35</div>
+        </div>
+        <div class="country-card" onclick="selectCountry(this,'ZA','R649 ZAR','ZAR')" data-code="ZA">
+          <span class="cc-flag">🇿🇦</span>
+          <div class="cc-name">South Africa</div>
+          <div class="cc-currency">ZAR · R649</div>
+        </div>
+      </div>
+      <div class="wp-btn-row">
+        <button class="wp-btn-next" onclick="goStep2()" id="step1-next" disabled style="opacity:0.38;">Continue →</button>
+      </div>
+      <div class="wp-trust">
+        <span class="wp-trust-item">No login required</span>
+        <span class="wp-trust-item">Report delivered instantly</span>
+        <span class="wp-trust-item">Private &amp; secure</span>
+      </div>
     </div>
-    <div class="rp-price-block">
-      <div class="rp-price-label">One-time investment</div>
-      <div class="rp-price-amount" id="price-display">$49 AUD</div>
-      <div class="rp-price-note">No subscription. No follow-up calls. Just your report.</div>
+
+    <!-- STEP 2: BUSINESS DETAILS -->
+    <div class="wizard-panel" id="wp-step2" style="display:none;">
+      <div class="wp-step-indicator">Step 2 of 2</div>
+      <div class="wp-dots">
+        <div class="wp-dot wp-done"></div>
+        <div class="wp-dot wp-active"></div>
+      </div>
+      <div class="wp-title">About your<br><em>business</em></div>
+      <div class="wp-sub">This personalises your report and benchmarks you against the right industry data.</div>
+      <div class="wf-row">
+        <div class="wf-group">
+          <label class="wf-label">Your first name</label>
+          <input class="wf-input" type="text" id="f-name" placeholder="e.g. James" />
+        </div>
+        <div class="wf-group">
+          <label class="wf-label">Business name</label>
+          <input class="wf-input" type="text" id="f-biz" placeholder="e.g. Meridian Co." />
+        </div>
+      </div>
+      <div class="wf-group">
+        <label class="wf-label">Industry sector</label>
+        <div class="wf-select-wrap">
+          <select class="wf-select" id="f-sector">
+            <option value="">Select your sector…</option>
+            <option>Construction</option>
+            <option>Professional Services</option>
+            <option>Retail</option>
+            <option>Manufacturing</option>
+            <option>Hospitality</option>
+            <option>Healthcare</option>
+            <option>Transport &amp; Logistics</option>
+            <option>Finance &amp; Insurance</option>
+          </select>
+        </div>
+      </div>
+      <div class="wf-row">
+        <div class="wf-group">
+          <label class="wf-label">Annual revenue (<span id="rev-currency-hint">local currency</span>)</label>
+          <div class="wf-select-wrap">
+            <select class="wf-select" id="f-revenue">
+              <option value="">Select range…</option>
+              <option>Under 500K</option>
+              <option>500K – 1M</option>
+              <option>1M – 3M</option>
+              <option>3M – 10M</option>
+              <option>10M – 30M</option>
+              <option>30M+</option>
+            </select>
+          </div>
+        </div>
+        <div class="wf-group">
+          <label class="wf-label">Team size</label>
+          <div class="wf-select-wrap">
+            <select class="wf-select" id="f-staff">
+              <option value="">Select range…</option>
+              <option>1–5</option>
+              <option>6–20</option>
+              <option>21–50</option>
+              <option>51–100</option>
+              <option>100+</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="wp-btn-row">
+        <button class="wp-btn-back" onclick="goStep1()">← Back</button>
+        <button class="wp-btn-next" onclick="startAssessment()">Begin my diagnostic →</button>
+      </div>
+      <div class="wp-trust">
+        <span class="wp-trust-item">Save as PDF anytime</span>
+        <span class="wp-trust-item">Results not stored</span>
+      </div>
     </div>
+
   </div>
 </div>
 
@@ -612,6 +756,43 @@ function startTimer() {
 const SL = {1:'Very low',2:'Low',3:'Below average',4:'Slightly below average',5:'Average',6:'Above average',7:'Good',8:'Strong',9:'Very strong',10:'Excellent'};
 function sliderLabel(v, inv) { return SL[inv ? 11-v : v] || 'Score: '+v; }
 
+// ── WIZARD STATE ──
+let wizardCountry = { code:'AU', price:'$49 AUD', currency:'AUD', name:'Australia' };
+
+function selectCountry(el, code, price, currency) {
+  document.querySelectorAll('.country-card').forEach(c => c.classList.remove('cc-selected'));
+  el.classList.add('cc-selected');
+  const names = {AU:'Australia',NZ:'New Zealand',UK:'United Kingdom',CA:'Canada',US:'United States',ZA:'South Africa'};
+  wizardCountry = { code, price, currency, name: names[code] || code };
+  document.getElementById('wl-price').textContent = price;
+  const hint = document.getElementById('rev-currency-hint');
+  if(hint) hint.textContent = currency;
+  const btn = document.getElementById('step1-next');
+  if(btn) { btn.disabled = false; btn.style.opacity = '1'; }
+}
+
+function goStep1() {
+  document.getElementById('wp-step1').style.display = 'block';
+  document.getElementById('wp-step2').style.display = 'none';
+  updateWizardSidebar(0);
+}
+
+function goStep2() {
+  document.getElementById('wp-step1').style.display = 'none';
+  document.getElementById('wp-step2').style.display = 'block';
+  updateWizardSidebar(1);
+}
+
+function updateWizardSidebar(activeStep) {
+  [0,1,2].forEach(i => {
+    const el = document.getElementById('wl-s'+i);
+    if(!el) return;
+    el.classList.remove('wl-active','wl-done');
+    if(i < activeStep) el.classList.add('wl-done');
+    else if(i === activeStep) el.classList.add('wl-active');
+  });
+}
+
 const COUNTRY_DATA = {
   'AU': { currency:'AUD', symbol:'$', price:'49', label:'$49 AUD', countryName:'Australia' },
   'NZ': { currency:'NZD', symbol:'$', price:'49', label:'$49 NZD', countryName:'New Zealand' },
@@ -634,8 +815,9 @@ function startAssessment() {
   const biz = document.getElementById('f-biz').value.trim();
   const sector = document.getElementById('f-sector').value;
   if(!name||!biz||!sector){alert('Please fill in your name, business name and sector to continue.');return;}
-  const countryCode = document.getElementById('f-country').value || 'AU';
+  const countryCode = wizardCountry.code || 'AU';
   const countryInfo = COUNTRY_DATA[countryCode] || COUNTRY_DATA['AU'];
+  if(!userData) userData = {};
   userData = { name, biz, sector,
     revenue: document.getElementById('f-revenue').value || 'not specified',
     staff: document.getElementById('f-staff').value || 'not specified',
