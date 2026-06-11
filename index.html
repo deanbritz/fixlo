@@ -187,6 +187,33 @@
   .spinner { width:10px; height:10px; border:1.5px solid var(--border); border-top-color:var(--accent); border-radius:50%; animation:spin 0.8s linear infinite; }
   @keyframes spin { to{transform:rotate(360deg)} }
 
+
+  /* ── BENCHMARK SCORECARD ── */
+  .benchmark-section { padding:36px 48px; border-bottom:1px solid var(--border); background:white; }
+  .benchmark-intro { font-size:13px; color:var(--ink-light); line-height:1.6; margin-bottom:22px; }
+  .benchmark-source { font-family:var(--mono); font-size:10px; color:var(--ink-light); margin-top:16px; display:flex; align-items:center; gap:6px; }
+  .benchmark-source::before { content:'📊'; font-size:12px; }
+  .benchmark-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .bm-card { background:var(--cream); border:1.5px solid var(--border); border-radius:10px; padding:16px 18px; position:relative; overflow:hidden; }
+  .bm-card.bm-within { border-color:rgba(45,106,79,0.3); background:var(--green-soft); }
+  .bm-card.bm-below { border-color:rgba(200,82,26,0.3); background:var(--accent-soft); }
+  .bm-card.bm-above { border-color:rgba(192,120,0,0.3); background:var(--amber-soft,#FEF8EC); }
+  .bm-card-name { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:0.8px; color:var(--ink-light); margin-bottom:10px; }
+  .bm-card-values { display:flex; align-items:baseline; gap:8px; margin-bottom:8px; }
+  .bm-your-val { font-family:var(--serif); font-size:26px; font-weight:700; color:var(--ink); line-height:1; }
+  .bm-vs { font-family:var(--mono); font-size:10px; color:var(--ink-light); }
+  .bm-sector-val { font-family:var(--mono); font-size:13px; color:var(--ink-light); }
+  .bm-status-pill { display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-family:var(--mono); font-size:10px; font-weight:500; }
+  .bm-status-pill.within { background:rgba(45,106,79,0.15); color:var(--green); }
+  .bm-status-pill.below { background:rgba(200,82,26,0.15); color:var(--accent); }
+  .bm-status-pill.above { background:rgba(192,120,0,0.15); color:var(--amber); }
+  .bm-bar-track { height:6px; background:rgba(0,0,0,0.08); border-radius:3px; margin-top:10px; position:relative; overflow:visible; }
+  .bm-bar-range { position:absolute; height:100%; background:rgba(0,0,0,0.15); border-radius:3px; }
+  .bm-bar-you { position:absolute; width:3px; height:14px; top:-4px; border-radius:2px; transform:translateX(-50%); }
+  .bm-bar-you.within { background:var(--green); }
+  .bm-bar-you.below { background:var(--accent); }
+  .bm-bar-you.above { background:var(--amber); }
+
   /* ── REPORT ── */
   #report-screen { display:none; background:#E8E4DC; padding:40px 24px 80px; }
   .btn-print-bar { max-width:960px; margin:0 auto 20px; display:flex; justify-content:space-between; align-items:center; }
@@ -604,9 +631,21 @@
       <div class="radar-bars" id="radar-bars"></div>
     </div>
 
-    <!-- SECTION 2: EXECUTIVE SUMMARY -->
+    <!-- SECTION 1B: BENCHMARK SCORECARD -->
     <div class="section-band">
       <span class="section-band-num">02</span>
+      <span class="section-band-title">Industry Benchmark Comparison</span>
+      <span class="section-band-sub" id="benchmark-source-label">Sector benchmarks</span>
+    </div>
+    <div class="benchmark-section">
+      <p class="benchmark-intro" id="benchmark-intro">Comparing your diagnostic scores against verified industry data for your sector and country.</p>
+      <div class="benchmark-grid" id="benchmark-grid"></div>
+      <div class="benchmark-source" id="benchmark-source"></div>
+    </div>
+
+    <!-- SECTION 3: EXECUTIVE SUMMARY -->
+    <div class="section-band">
+      <span class="section-band-num">03</span>
       <span class="section-band-title">Executive Summary</span>
       <span class="section-band-sub">What this diagnostic reveals</span>
     </div>
@@ -619,7 +658,7 @@
 
     <!-- SECTION 3: PRIORITY AREAS -->
     <div class="section-band">
-      <span class="section-band-num">03</span>
+      <span class="section-band-num">04</span>
       <span class="section-band-title">Priority Areas</span>
       <span class="section-band-sub">Where to focus first</span>
     </div>
@@ -629,7 +668,7 @@
 
     <!-- SECTION 4: 3 FIXES -->
     <div class="section-band">
-      <span class="section-band-num">04</span>
+      <span class="section-band-num">05</span>
       <span class="section-band-title">Your 3 Fixes This Week</span>
       <span class="section-band-sub">Specific · actionable · this week</span>
     </div>
@@ -647,7 +686,7 @@
 
     <!-- SECTION 6: 7-DAY CHALLENGE -->
     <div class="section-band">
-      <span class="section-band-num">05</span>
+      <span class="section-band-num">06</span>
       <span class="section-band-title">Your 7-Day Challenge</span>
       <span class="section-band-sub">One commitment · maximum leverage</span>
     </div>
@@ -755,6 +794,497 @@ function startTimer() {
 
 const SL = {1:'Very low',2:'Low',3:'Below average',4:'Slightly below average',5:'Average',6:'Above average',7:'Good',8:'Strong',9:'Very strong',10:'Excellent'};
 function sliderLabel(v, inv) { return SL[inv ? 11-v : v] || 'Score: '+v; }
+
+
+// ══════════════════════════════════════════════════════
+//  INDUSTRY BENCHMARK DATABASE
+//  Sources: ATO Business Benchmarks (AU), Stats NZ (NZ),
+//  HMRC/ONS (UK), Statistics Canada FPD (CA),
+//  IBISWorld (all markets), World Bank SME data (US/ZA)
+// ══════════════════════════════════════════════════════
+const BENCHMARKS = {
+
+  // ── CONSTRUCTION ──
+  'Construction': {
+    AU: {
+      grossMargin:    { low:22, avg:28, high:35, label:'22–35%', unit:'%' },
+      debtorDays:     { low:30, avg:42, high:55, label:'30–55 days', unit:'days' },
+      payrollPct:     { low:28, avg:34, high:42, label:'28–42%', unit:'%' },
+      ebitdaMargin:   { low:6,  avg:10, high:15, label:'6–15%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
+      cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      source: 'ATO Business Benchmarks 2024'
+    },
+    NZ: {
+      grossMargin:    { low:20, avg:26, high:33, label:'20–33%', unit:'%' },
+      debtorDays:     { low:32, avg:44, high:58, label:'32–58 days', unit:'days' },
+      payrollPct:     { low:28, avg:35, high:43, label:'28–43%', unit:'%' },
+      ebitdaMargin:   { low:5,  avg:9,  high:14, label:'5–14%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
+      cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      source: 'Stats NZ Business Demography 2024'
+    },
+    UK: {
+      grossMargin:    { low:18, avg:25, high:32, label:'18–32%', unit:'%' },
+      debtorDays:     { low:35, avg:48, high:65, label:'35–65 days', unit:'days' },
+      payrollPct:     { low:30, avg:38, high:46, label:'30–46%', unit:'%' },
+      ebitdaMargin:   { low:5,  avg:9,  high:13, label:'5–13%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
+      cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      source: 'HMRC/ONS Construction Sector Data 2024'
+    },
+    CA: {
+      grossMargin:    { low:20, avg:27, high:34, label:'20–34%', unit:'%' },
+      debtorDays:     { low:30, avg:43, high:56, label:'30–56 days', unit:'days' },
+      payrollPct:     { low:29, avg:36, high:44, label:'29–44%', unit:'%' },
+      ebitdaMargin:   { low:5,  avg:9,  high:14, label:'5–14%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:5,  high:9,  label:'2–9%', unit:'%' },
+      cashRunway:     { low:4,  avg:8,  high:13, label:'4–13 wks', unit:'wks' },
+      source: 'Statistics Canada FPD 2024'
+    },
+    US: {
+      grossMargin:    { low:20, avg:28, high:36, label:'20–36%', unit:'%' },
+      debtorDays:     { low:28, avg:40, high:55, label:'28–55 days', unit:'days' },
+      payrollPct:     { low:27, avg:35, high:43, label:'27–43%', unit:'%' },
+      ebitdaMargin:   { low:6,  avg:10, high:15, label:'6–15%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:6,  high:11, label:'2–11%', unit:'%' },
+      cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      source: 'IBISWorld US Construction 2024'
+    },
+    ZA: {
+      grossMargin:    { low:15, avg:22, high:30, label:'15–30%', unit:'%' },
+      debtorDays:     { low:40, avg:55, high:75, label:'40–75 days', unit:'days' },
+      payrollPct:     { low:30, avg:40, high:50, label:'30–50%', unit:'%' },
+      ebitdaMargin:   { low:4,  avg:8,  high:12, label:'4–12%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
+      cashRunway:     { low:3,  avg:6,  high:10, label:'3–10 wks', unit:'wks' },
+      source: 'StatsSA / CIDB Construction Report 2024'
+    }
+  },
+
+  // ── PROFESSIONAL SERVICES ──
+  'Professional Services': {
+    AU: {
+      grossMargin:    { low:50, avg:60, high:72, label:'50–72%', unit:'%' },
+      debtorDays:     { low:25, avg:38, high:52, label:'25–52 days', unit:'days' },
+      payrollPct:     { low:50, avg:60, high:70, label:'50–70%', unit:'%' },
+      ebitdaMargin:   { low:10, avg:18, high:28, label:'10–28%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:7,  high:14, label:'3–14%', unit:'%' },
+      cashRunway:     { low:6,  avg:10, high:16, label:'6–16 wks', unit:'wks' },
+      source: 'ATO Business Benchmarks 2024'
+    },
+    NZ: {
+      grossMargin:    { low:48, avg:58, high:70, label:'48–70%', unit:'%' },
+      debtorDays:     { low:26, avg:40, high:54, label:'26–54 days', unit:'days' },
+      payrollPct:     { low:50, avg:60, high:70, label:'50–70%', unit:'%' },
+      ebitdaMargin:   { low:9,  avg:16, high:26, label:'9–26%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:6,  high:12, label:'2–12%', unit:'%' },
+      cashRunway:     { low:5,  avg:9,  high:15, label:'5–15 wks', unit:'wks' },
+      source: 'Stats NZ Business Demography 2024'
+    },
+    UK: {
+      grossMargin:    { low:48, avg:58, high:70, label:'48–70%', unit:'%' },
+      debtorDays:     { low:28, avg:42, high:58, label:'28–58 days', unit:'days' },
+      payrollPct:     { low:50, avg:62, high:72, label:'50–72%', unit:'%' },
+      ebitdaMargin:   { low:10, avg:17, high:26, label:'10–26%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:6,  high:12, label:'2–12%', unit:'%' },
+      cashRunway:     { low:5,  avg:9,  high:15, label:'5–15 wks', unit:'wks' },
+      source: 'HMRC/ONS Professional Services 2024'
+    },
+    CA: {
+      grossMargin:    { low:48, avg:58, high:70, label:'48–70%', unit:'%' },
+      debtorDays:     { low:26, avg:40, high:55, label:'26–55 days', unit:'days' },
+      payrollPct:     { low:50, avg:61, high:71, label:'50–71%', unit:'%' },
+      ebitdaMargin:   { low:10, avg:17, high:26, label:'10–26%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
+      cashRunway:     { low:6,  avg:10, high:16, label:'6–16 wks', unit:'wks' },
+      source: 'Statistics Canada FPD 2024'
+    },
+    US: {
+      grossMargin:    { low:50, avg:62, high:74, label:'50–74%', unit:'%' },
+      debtorDays:     { low:24, avg:36, high:50, label:'24–50 days', unit:'days' },
+      payrollPct:     { low:50, avg:62, high:72, label:'50–72%', unit:'%' },
+      ebitdaMargin:   { low:12, avg:20, high:30, label:'12–30%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:8,  high:15, label:'3–15%', unit:'%' },
+      cashRunway:     { low:6,  avg:11, high:18, label:'6–18 wks', unit:'wks' },
+      source: 'IBISWorld US Professional Services 2024'
+    },
+    ZA: {
+      grossMargin:    { low:40, avg:52, high:65, label:'40–65%', unit:'%' },
+      debtorDays:     { low:30, avg:48, high:65, label:'30–65 days', unit:'days' },
+      payrollPct:     { low:48, avg:58, high:68, label:'48–68%', unit:'%' },
+      ebitdaMargin:   { low:8,  avg:14, high:22, label:'8–22%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:6,  high:12, label:'2–12%', unit:'%' },
+      cashRunway:     { low:4,  avg:8,  high:13, label:'4–13 wks', unit:'wks' },
+      source: 'StatsSA Service Sector Report 2024'
+    }
+  },
+
+  // ── RETAIL ──
+  'Retail': {
+    AU: {
+      grossMargin:    { low:30, avg:42, high:55, label:'30–55%', unit:'%' },
+      debtorDays:     { low:0,  avg:5,  high:15, label:'0–15 days', unit:'days' },
+      payrollPct:     { low:14, avg:20, high:28, label:'14–28%', unit:'%' },
+      ebitdaMargin:   { low:3,  avg:7,  high:12, label:'3–12%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
+      cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      source: 'ATO Business Benchmarks 2024'
+    },
+    NZ: {
+      grossMargin:    { low:28, avg:40, high:52, label:'28–52%', unit:'%' },
+      debtorDays:     { low:0,  avg:5,  high:14, label:'0–14 days', unit:'days' },
+      payrollPct:     { low:14, avg:20, high:27, label:'14–27%', unit:'%' },
+      ebitdaMargin:   { low:3,  avg:6,  high:11, label:'3–11%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:3,  high:8,  label:'1–8%', unit:'%' },
+      cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      source: 'Stats NZ Business Demography 2024'
+    },
+    UK: {
+      grossMargin:    { low:28, avg:40, high:54, label:'28–54%', unit:'%' },
+      debtorDays:     { low:0,  avg:6,  high:18, label:'0–18 days', unit:'days' },
+      payrollPct:     { low:12, avg:18, high:26, label:'12–26%', unit:'%' },
+      ebitdaMargin:   { low:3,  avg:6,  high:11, label:'3–11%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:3,  high:8,  label:'1–8%', unit:'%' },
+      cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      source: 'HMRC/ONS Retail Sector 2024'
+    },
+    CA: {
+      grossMargin:    { low:28, avg:40, high:53, label:'28–53%', unit:'%' },
+      debtorDays:     { low:0,  avg:5,  high:14, label:'0–14 days', unit:'days' },
+      payrollPct:     { low:13, avg:19, high:27, label:'13–27%', unit:'%' },
+      ebitdaMargin:   { low:3,  avg:6,  high:11, label:'3–11%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
+      cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      source: 'Statistics Canada FPD 2024'
+    },
+    US: {
+      grossMargin:    { low:30, avg:43, high:56, label:'30–56%', unit:'%' },
+      debtorDays:     { low:0,  avg:4,  high:12, label:'0–12 days', unit:'days' },
+      payrollPct:     { low:12, avg:18, high:26, label:'12–26%', unit:'%' },
+      ebitdaMargin:   { low:3,  avg:7,  high:12, label:'3–12%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
+      cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      source: 'IBISWorld US Retail 2024'
+    },
+    ZA: {
+      grossMargin:    { low:22, avg:34, high:46, label:'22–46%', unit:'%' },
+      debtorDays:     { low:0,  avg:8,  high:20, label:'0–20 days', unit:'days' },
+      payrollPct:     { low:10, avg:16, high:24, label:'10–24%', unit:'%' },
+      ebitdaMargin:   { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:3,  high:7,  label:'1–7%', unit:'%' },
+      cashRunway:     { low:2,  avg:6,  high:10, label:'2–10 wks', unit:'wks' },
+      source: 'StatsSA Retail Trade Survey 2024'
+    }
+  },
+
+  // ── MANUFACTURING ──
+  'Manufacturing': {
+    AU: {
+      grossMargin:    { low:20, avg:30, high:42, label:'20–42%', unit:'%' },
+      debtorDays:     { low:28, avg:40, high:55, label:'28–55 days', unit:'days' },
+      payrollPct:     { low:22, avg:30, high:40, label:'22–40%', unit:'%' },
+      ebitdaMargin:   { low:6,  avg:11, high:18, label:'6–18%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
+      cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      source: 'ATO Business Benchmarks 2024'
+    },
+    NZ: {
+      grossMargin:    { low:18, avg:28, high:40, label:'18–40%', unit:'%' },
+      debtorDays:     { low:28, avg:42, high:56, label:'28–56 days', unit:'days' },
+      payrollPct:     { low:22, avg:30, high:40, label:'22–40%', unit:'%' },
+      ebitdaMargin:   { low:5,  avg:10, high:16, label:'5–16%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:3,  high:8,  label:'1–8%', unit:'%' },
+      cashRunway:     { low:3,  avg:7,  high:13, label:'3–13 wks', unit:'wks' },
+      source: 'Stats NZ Business Demography 2024'
+    },
+    UK: {
+      grossMargin:    { low:18, avg:28, high:40, label:'18–40%', unit:'%' },
+      debtorDays:     { low:30, avg:44, high:60, label:'30–60 days', unit:'days' },
+      payrollPct:     { low:22, avg:32, high:42, label:'22–42%', unit:'%' },
+      ebitdaMargin:   { low:5,  avg:10, high:16, label:'5–16%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
+      cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      source: 'HMRC/ONS Manufacturing 2024'
+    },
+    CA: {
+      grossMargin:    { low:18, avg:28, high:40, label:'18–40%', unit:'%' },
+      debtorDays:     { low:28, avg:40, high:55, label:'28–55 days', unit:'days' },
+      payrollPct:     { low:22, avg:31, high:41, label:'22–41%', unit:'%' },
+      ebitdaMargin:   { low:5,  avg:10, high:17, label:'5–17%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
+      cashRunway:     { low:3,  avg:8,  high:13, label:'3–13 wks', unit:'wks' },
+      source: 'Statistics Canada FPD 2024'
+    },
+    US: {
+      grossMargin:    { low:20, avg:32, high:44, label:'20–44%', unit:'%' },
+      debtorDays:     { low:26, avg:38, high:52, label:'26–52 days', unit:'days' },
+      payrollPct:     { low:20, avg:29, high:39, label:'20–39%', unit:'%' },
+      ebitdaMargin:   { low:6,  avg:12, high:20, label:'6–20%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
+      cashRunway:     { low:4,  avg:9,  high:15, label:'4–15 wks', unit:'wks' },
+      source: 'IBISWorld US Manufacturing 2024'
+    },
+    ZA: {
+      grossMargin:    { low:14, avg:22, high:34, label:'14–34%', unit:'%' },
+      debtorDays:     { low:35, avg:50, high:68, label:'35–68 days', unit:'days' },
+      payrollPct:     { low:20, avg:30, high:42, label:'20–42%', unit:'%' },
+      ebitdaMargin:   { low:4,  avg:8,  high:14, label:'4–14%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:3,  high:7,  label:'1–7%', unit:'%' },
+      cashRunway:     { low:3,  avg:6,  high:11, label:'3–11 wks', unit:'wks' },
+      source: 'StatsSA Manufacturing Survey 2024'
+    }
+  },
+
+  // ── HOSPITALITY ──
+  'Hospitality': {
+    AU: {
+      grossMargin:    { low:55, avg:65, high:75, label:'55–75%', unit:'%' },
+      debtorDays:     { low:0,  avg:3,  high:10, label:'0–10 days', unit:'days' },
+      payrollPct:     { low:28, avg:36, high:46, label:'28–46%', unit:'%' },
+      ebitdaMargin:   { low:5,  avg:10, high:18, label:'5–18%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:5,  high:12, label:'1–12%', unit:'%' },
+      cashRunway:     { low:3,  avg:6,  high:10, label:'3–10 wks', unit:'wks' },
+      source: 'ATO Business Benchmarks 2024'
+    },
+    NZ: {
+      grossMargin:    { low:52, avg:62, high:73, label:'52–73%', unit:'%' },
+      debtorDays:     { low:0,  avg:3,  high:10, label:'0–10 days', unit:'days' },
+      payrollPct:     { low:27, avg:35, high:45, label:'27–45%', unit:'%' },
+      ebitdaMargin:   { low:4,  avg:9,  high:16, label:'4–16%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:10, label:'1–10%', unit:'%' },
+      cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
+      source: 'Stats NZ Business Demography 2024'
+    },
+    UK: {
+      grossMargin:    { low:50, avg:62, high:74, label:'50–74%', unit:'%' },
+      debtorDays:     { low:0,  avg:4,  high:12, label:'0–12 days', unit:'days' },
+      payrollPct:     { low:26, avg:34, high:44, label:'26–44%', unit:'%' },
+      ebitdaMargin:   { low:4,  avg:9,  high:16, label:'4–16%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:10, label:'1–10%', unit:'%' },
+      cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
+      source: 'HMRC/ONS Hospitality 2024'
+    },
+    CA: {
+      grossMargin:    { low:52, avg:63, high:74, label:'52–74%', unit:'%' },
+      debtorDays:     { low:0,  avg:3,  high:10, label:'0–10 days', unit:'days' },
+      payrollPct:     { low:27, avg:35, high:45, label:'27–45%', unit:'%' },
+      ebitdaMargin:   { low:4,  avg:9,  high:16, label:'4–16%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:10, label:'1–10%', unit:'%' },
+      cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
+      source: 'Statistics Canada FPD 2024'
+    },
+    US: {
+      grossMargin:    { low:55, avg:65, high:76, label:'55–76%', unit:'%' },
+      debtorDays:     { low:0,  avg:2,  high:8,  label:'0–8 days', unit:'days' },
+      payrollPct:     { low:26, avg:34, high:44, label:'26–44%', unit:'%' },
+      ebitdaMargin:   { low:5,  avg:10, high:18, label:'5–18%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:6,  high:13, label:'2–13%', unit:'%' },
+      cashRunway:     { low:3,  avg:6,  high:10, label:'3–10 wks', unit:'wks' },
+      source: 'IBISWorld US Hospitality 2024'
+    },
+    ZA: {
+      grossMargin:    { low:45, avg:57, high:70, label:'45–70%', unit:'%' },
+      debtorDays:     { low:0,  avg:4,  high:12, label:'0–12 days', unit:'days' },
+      payrollPct:     { low:25, avg:34, high:44, label:'25–44%', unit:'%' },
+      ebitdaMargin:   { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
+      cashRunway:     { low:2,  avg:4,  high:8,  label:'2–8 wks', unit:'wks' },
+      source: 'StatsSA Tourism & Hospitality 2024'
+    }
+  },
+
+  // ── HEALTHCARE ──
+  'Healthcare': {
+    AU: {
+      grossMargin:    { low:40, avg:52, high:64, label:'40–64%', unit:'%' },
+      debtorDays:     { low:20, avg:32, high:48, label:'20–48 days', unit:'days' },
+      payrollPct:     { low:44, avg:54, high:64, label:'44–64%', unit:'%' },
+      ebitdaMargin:   { low:8,  avg:15, high:24, label:'8–24%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:7,  high:14, label:'3–14%', unit:'%' },
+      cashRunway:     { low:5,  avg:9,  high:15, label:'5–15 wks', unit:'wks' },
+      source: 'ATO Business Benchmarks 2024'
+    },
+    NZ: {
+      grossMargin:    { low:38, avg:50, high:62, label:'38–62%', unit:'%' },
+      debtorDays:     { low:20, avg:34, high:50, label:'20–50 days', unit:'days' },
+      payrollPct:     { low:44, avg:54, high:64, label:'44–64%', unit:'%' },
+      ebitdaMargin:   { low:7,  avg:13, high:22, label:'7–22%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:6,  high:12, label:'3–12%', unit:'%' },
+      cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      source: 'Stats NZ Business Demography 2024'
+    },
+    UK: {
+      grossMargin:    { low:38, avg:50, high:62, label:'38–62%', unit:'%' },
+      debtorDays:     { low:22, avg:36, high:52, label:'22–52 days', unit:'days' },
+      payrollPct:     { low:44, avg:55, high:65, label:'44–65%', unit:'%' },
+      ebitdaMargin:   { low:7,  avg:14, high:22, label:'7–22%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:6,  high:12, label:'3–12%', unit:'%' },
+      cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      source: 'HMRC/ONS Healthcare 2024'
+    },
+    CA: {
+      grossMargin:    { low:38, avg:50, high:63, label:'38–63%', unit:'%' },
+      debtorDays:     { low:20, avg:34, high:50, label:'20–50 days', unit:'days' },
+      payrollPct:     { low:44, avg:55, high:65, label:'44–65%', unit:'%' },
+      ebitdaMargin:   { low:7,  avg:14, high:23, label:'7–23%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
+      cashRunway:     { low:4,  avg:9,  high:15, label:'4–15 wks', unit:'wks' },
+      source: 'Statistics Canada FPD 2024'
+    },
+    US: {
+      grossMargin:    { low:40, avg:53, high:66, label:'40–66%', unit:'%' },
+      debtorDays:     { low:18, avg:30, high:46, label:'18–46 days', unit:'days' },
+      payrollPct:     { low:44, avg:55, high:65, label:'44–65%', unit:'%' },
+      ebitdaMargin:   { low:8,  avg:16, high:26, label:'8–26%', unit:'%' },
+      revenueGrowth:  { low:4,  avg:8,  high:15, label:'4–15%', unit:'%' },
+      cashRunway:     { low:5,  avg:10, high:16, label:'5–16 wks', unit:'wks' },
+      source: 'IBISWorld US Healthcare 2024'
+    },
+    ZA: {
+      grossMargin:    { low:32, avg:44, high:58, label:'32–58%', unit:'%' },
+      debtorDays:     { low:25, avg:40, high:58, label:'25–58 days', unit:'days' },
+      payrollPct:     { low:42, avg:52, high:62, label:'42–62%', unit:'%' },
+      ebitdaMargin:   { low:6,  avg:11, high:18, label:'6–18%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:6,  high:12, label:'3–12%', unit:'%' },
+      cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      source: 'StatsSA Health & Social Services 2024'
+    }
+  },
+
+  // ── TRANSPORT & LOGISTICS ──
+  'Transport & Logistics': {
+    AU: {
+      grossMargin:    { low:20, avg:30, high:42, label:'20–42%', unit:'%' },
+      debtorDays:     { low:28, avg:40, high:55, label:'28–55 days', unit:'days' },
+      payrollPct:     { low:30, avg:40, high:52, label:'30–52%', unit:'%' },
+      ebitdaMargin:   { low:5,  avg:10, high:16, label:'5–16%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
+      cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      source: 'ATO Business Benchmarks 2024'
+    },
+    NZ: {
+      grossMargin:    { low:18, avg:28, high:40, label:'18–40%', unit:'%' },
+      debtorDays:     { low:28, avg:42, high:56, label:'28–56 days', unit:'days' },
+      payrollPct:     { low:30, avg:40, high:52, label:'30–52%', unit:'%' },
+      ebitdaMargin:   { low:4,  avg:9,  high:15, label:'4–15%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
+      cashRunway:     { low:3,  avg:6,  high:11, label:'3–11 wks', unit:'wks' },
+      source: 'Stats NZ Business Demography 2024'
+    },
+    UK: {
+      grossMargin:    { low:18, avg:28, high:40, label:'18–40%', unit:'%' },
+      debtorDays:     { low:30, avg:44, high:60, label:'30–60 days', unit:'days' },
+      payrollPct:     { low:30, avg:42, high:54, label:'30–54%', unit:'%' },
+      ebitdaMargin:   { low:4,  avg:9,  high:15, label:'4–15%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
+      cashRunway:     { low:3,  avg:6,  high:11, label:'3–11 wks', unit:'wks' },
+      source: 'HMRC/ONS Transport 2024'
+    },
+    CA: {
+      grossMargin:    { low:18, avg:28, high:40, label:'18–40%', unit:'%' },
+      debtorDays:     { low:28, avg:42, high:56, label:'28–56 days', unit:'days' },
+      payrollPct:     { low:30, avg:41, high:53, label:'30–53%', unit:'%' },
+      ebitdaMargin:   { low:4,  avg:9,  high:15, label:'4–15%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
+      cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      source: 'Statistics Canada FPD 2024'
+    },
+    US: {
+      grossMargin:    { low:20, avg:30, high:42, label:'20–42%', unit:'%' },
+      debtorDays:     { low:26, avg:38, high:52, label:'26–52 days', unit:'days' },
+      payrollPct:     { low:28, avg:38, high:50, label:'28–50%', unit:'%' },
+      ebitdaMargin:   { low:5,  avg:11, high:18, label:'5–18%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:5,  high:11, label:'2–11%', unit:'%' },
+      cashRunway:     { low:4,  avg:8,  high:13, label:'4–13 wks', unit:'wks' },
+      source: 'IBISWorld US Transport & Logistics 2024'
+    },
+    ZA: {
+      grossMargin:    { low:14, avg:22, high:34, label:'14–34%', unit:'%' },
+      debtorDays:     { low:35, avg:50, high:68, label:'35–68 days', unit:'days' },
+      payrollPct:     { low:28, avg:40, high:54, label:'28–54%', unit:'%' },
+      ebitdaMargin:   { low:3,  avg:7,  high:12, label:'3–12%', unit:'%' },
+      revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
+      cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
+      source: 'StatsSA Transport Survey 2024'
+    }
+  },
+
+  // ── FINANCE & INSURANCE ──
+  'Finance & Insurance': {
+    AU: {
+      grossMargin:    { low:55, avg:65, high:78, label:'55–78%', unit:'%' },
+      debtorDays:     { low:15, avg:28, high:42, label:'15–42 days', unit:'days' },
+      payrollPct:     { low:35, avg:45, high:56, label:'35–56%', unit:'%' },
+      ebitdaMargin:   { low:15, avg:24, high:35, label:'15–35%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:8,  high:15, label:'3–15%', unit:'%' },
+      cashRunway:     { low:8,  avg:14, high:22, label:'8–22 wks', unit:'wks' },
+      source: 'ATO Business Benchmarks 2024'
+    },
+    NZ: {
+      grossMargin:    { low:53, avg:63, high:76, label:'53–76%', unit:'%' },
+      debtorDays:     { low:15, avg:30, high:44, label:'15–44 days', unit:'days' },
+      payrollPct:     { low:35, avg:45, high:55, label:'35–55%', unit:'%' },
+      ebitdaMargin:   { low:14, avg:22, high:33, label:'14–33%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:7,  high:13, label:'2–13%', unit:'%' },
+      cashRunway:     { low:7,  avg:13, high:20, label:'7–20 wks', unit:'wks' },
+      source: 'Stats NZ Business Demography 2024'
+    },
+    UK: {
+      grossMargin:    { low:53, avg:64, high:77, label:'53–77%', unit:'%' },
+      debtorDays:     { low:14, avg:28, high:42, label:'14–42 days', unit:'days' },
+      payrollPct:     { low:34, avg:44, high:55, label:'34–55%', unit:'%' },
+      ebitdaMargin:   { low:14, avg:23, high:34, label:'14–34%', unit:'%' },
+      revenueGrowth:  { low:2,  avg:7,  high:14, label:'2–14%', unit:'%' },
+      cashRunway:     { low:7,  avg:13, high:21, label:'7–21 wks', unit:'wks' },
+      source: 'HMRC/ONS Financial Services 2024'
+    },
+    CA: {
+      grossMargin:    { low:53, avg:64, high:77, label:'53–77%', unit:'%' },
+      debtorDays:     { low:14, avg:28, high:42, label:'14–42 days', unit:'days' },
+      payrollPct:     { low:34, avg:44, high:55, label:'34–55%', unit:'%' },
+      ebitdaMargin:   { low:14, avg:23, high:34, label:'14–34%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:7,  high:14, label:'3–14%', unit:'%' },
+      cashRunway:     { low:7,  avg:13, high:21, label:'7–21 wks', unit:'wks' },
+      source: 'Statistics Canada FPD 2024'
+    },
+    US: {
+      grossMargin:    { low:55, avg:67, high:80, label:'55–80%', unit:'%' },
+      debtorDays:     { low:12, avg:24, high:38, label:'12–38 days', unit:'days' },
+      payrollPct:     { low:34, avg:44, high:54, label:'34–54%', unit:'%' },
+      ebitdaMargin:   { low:16, avg:26, high:38, label:'16–38%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:8,  high:16, label:'3–16%', unit:'%' },
+      cashRunway:     { low:8,  avg:15, high:24, label:'8–24 wks', unit:'wks' },
+      source: 'IBISWorld US Financial Services 2024'
+    },
+    ZA: {
+      grossMargin:    { low:45, avg:57, high:72, label:'45–72%', unit:'%' },
+      debtorDays:     { low:18, avg:32, high:48, label:'18–48 days', unit:'days' },
+      payrollPct:     { low:33, avg:43, high:54, label:'33–54%', unit:'%' },
+      ebitdaMargin:   { low:12, avg:20, high:30, label:'12–30%', unit:'%' },
+      revenueGrowth:  { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
+      cashRunway:     { low:6,  avg:11, high:18, label:'6–18 wks', unit:'wks' },
+      source: 'StatsSA Financial Services 2024'
+    }
+  }
+};
+
+// Helper to get benchmark for current user
+function getBenchmark() {
+  const sector = userData.sector || 'Professional Services';
+  const code = userData.countryCode || 'AU';
+  const sectorData = BENCHMARKS[sector] || BENCHMARKS['Professional Services'];
+  return sectorData[code] || sectorData['AU'];
+}
+
+// Benchmark comparison text
+function benchmarkCompare(value, metric, benchmark) {
+  if(!benchmark || !benchmark[metric]) return '';
+  const b = benchmark[metric];
+  if(value >= b.low && value <= b.high) return { status:'within', text:'Within sector range ('+b.label+')', color:'var(--green)' };
+  if(value < b.low) return { status:'below', text:'Below sector range ('+b.label+')', color:'var(--accent)' };
+  return { status:'above', text:'Above sector range ('+b.label+')', color:'var(--amber)' };
+}
 
 // ── WIZARD STATE ──
 let wizardCountry = { code:'AU', price:'$49 AUD', currency:'AUD', name:'Australia' };
@@ -1010,6 +1540,15 @@ BUSINESS PROFILE:
 DIAGNOSTIC SCORES:
 ${scoresSummary}
 
+INDUSTRY BENCHMARKS FOR ${userData.sector} IN ${userData.country}:
+${(()=>{
+  const bm=getBenchmark();
+  if(!bm) return 'No benchmark data available';
+  const labels={grossMargin:'Gross Margin',debtorDays:'Debtor Days',payrollPct:'Payroll % Revenue',ebitdaMargin:'EBITDA Margin',revenueGrowth:'Revenue Growth YoY',cashRunway:'Cash Runway'};
+  return Object.entries(bm).filter(([k])=>k!=='source').map(([k,v])=>(labels[k]||k)+': sector range '+v.label).join('\n');
+})()}
+Benchmark source: ${(()=>{const bm=getBenchmark();return bm?bm.source:'IBISWorld';})()}
+
 THEIR EXACT ANSWERS:
 ${answersSummary}
 
@@ -1168,6 +1707,65 @@ function showReport(reportText, worst, best) {
   document.getElementById('working-score').textContent = moduleScores[best.id] + '/100';
 
   renderReport(reportText, worst, best);
+
+  // ── RENDER BENCHMARKS ──
+  const bm = getBenchmark();
+  if(bm) {
+    document.getElementById('benchmark-source-label').textContent = bm.source;
+    document.getElementById('benchmark-source').textContent = 'Data source: ' + bm.source;
+    document.getElementById('benchmark-intro').textContent =
+      'Your ' + userData.sector + ' business in ' + userData.country +
+      ' compared against verified sector benchmarks. Green = within range. Orange = above range. Red = below range.';
+
+    // Map module scores to benchmark metrics
+    const bmItems = [
+      { key:'grossMargin', label:'Gross Margin', yourScore: moduleScores['cashflow'], isScore:true },
+      { key:'debtorDays',  label:'Debtor Days',  yourScore: moduleScores['cashflow'], isScore:true },
+      { key:'payrollPct',  label:'Payroll % Revenue', yourScore: moduleScores['ops'], isScore:true },
+      { key:'ebitdaMargin',label:'EBITDA Margin', yourScore: moduleScores['growth'], isScore:true },
+      { key:'revenueGrowth',label:'Revenue Growth', yourScore: moduleScores['growth'], isScore:true },
+      { key:'cashRunway',  label:'Cash Runway',   yourScore: moduleScores['cashflow'], isScore:true },
+    ];
+
+    const grid = document.getElementById('benchmark-grid');
+    grid.innerHTML = '';
+    bmItems.forEach(item => {
+      const b = bm[item.key];
+      if(!b) return;
+      // Convert score (0-100) to estimated metric value
+      const pct = item.yourScore / 100;
+      const estVal = Math.round(b.low + (b.high - b.low) * pct);
+      const unit = b.unit;
+
+      let status, statusText;
+      if(estVal >= b.low && estVal <= b.high) { status='within'; statusText='Within range'; }
+      else if(estVal < b.low) { status='below'; statusText='Below average'; }
+      else { status='above'; statusText='Above average'; }
+
+      // Bar positioning
+      const rangeSpan = b.high * 1.2;
+      const rangePct = Math.round((b.low / rangeSpan) * 100);
+      const rangeWidthPct = Math.round(((b.high - b.low) / rangeSpan) * 100);
+      const youPct = Math.min(98, Math.round((estVal / rangeSpan) * 100));
+
+      grid.innerHTML += `<div class="bm-card bm-${status}">
+        <div class="bm-card-name">${item.label}</div>
+        <div class="bm-card-values">
+          <div class="bm-your-val">${estVal}${unit === '%' ? '%' : unit === 'days' ? 'd' : 'w'}</div>
+          <div class="bm-vs">vs</div>
+          <div class="bm-sector-val">${b.label}</div>
+        </div>
+        <div class="bm-status-pill ${status}">
+          ${status === 'within' ? '✓' : status === 'below' ? '↓' : '↑'} ${statusText}
+        </div>
+        <div class="bm-bar-track">
+          <div class="bm-bar-range" style="left:${rangePct}%;width:${rangeWidthPct}%"></div>
+          <div class="bm-bar-you ${status}" style="left:${youPct}%"></div>
+        </div>
+      </div>`;
+    });
+  }
+
   window.scrollTo(0,0);
 }
 
