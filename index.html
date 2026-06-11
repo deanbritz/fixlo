@@ -23,42 +23,47 @@
   .nav-tag { font-family:var(--mono); font-size:11px; color:var(--ink-light); text-transform:uppercase; letter-spacing:1px; }
 
   /* ── INTRO ── */
-  #intro-screen { max-width:660px; margin:0 auto; padding:64px 24px 48px; text-align:center; }
-  .eyebrow { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:18px; }
-  .intro-h1 { font-family:var(--serif); font-size:50px; font-weight:600; line-height:1.12; color:var(--ink); margin-bottom:18px; }
+  #intro-screen { display:grid; grid-template-columns:1fr 1fr; min-height:calc(100vh - 57px); }
+  .intro-left { padding:60px 52px; display:flex; flex-direction:column; justify-content:center; background:var(--cream); }
+  .intro-right { background:var(--ink); padding:60px 48px; display:flex; flex-direction:column; justify-content:center; position:relative; overflow:hidden; }
+  .intro-right::before { content:''; position:absolute; bottom:-80px; right:-80px; width:360px; height:360px; background:radial-gradient(circle, rgba(200,82,26,0.15) 0%, transparent 70%); pointer-events:none; }
+  .eyebrow { font-family:var(--mono); font-size:11px; color:var(--accent); letter-spacing:2px; text-transform:uppercase; margin-bottom:18px; display:flex; align-items:center; gap:10px; }
+  .eyebrow::before { content:''; display:inline-block; width:20px; height:1px; background:var(--accent); }
+  .intro-h1 { font-family:var(--serif); font-size:48px; font-weight:600; line-height:1.1; color:var(--ink); margin-bottom:18px; }
   .intro-h1 em { font-style:italic; color:var(--accent); }
-  .intro-sub { font-size:17px; color:var(--ink-light); line-height:1.65; font-weight:300; margin-bottom:36px; }
-  .meta-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-bottom:36px; background:white; border:1.5px solid var(--border); border-radius:12px; overflow:hidden; }
-  .meta-item { padding:20px 16px; text-align:center; border-right:1px solid var(--border); }
+  .intro-sub { font-size:15px; color:var(--ink-light); line-height:1.7; font-weight:300; margin-bottom:32px; border-left:3px solid var(--border); padding-left:16px; }
+  .meta-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-bottom:28px; background:white; border:1.5px solid var(--border); border-radius:10px; overflow:hidden; }
+  .meta-item { padding:16px 10px; text-align:center; border-right:1px solid var(--border); }
   .meta-item:last-child { border-right:none; }
-  .meta-num { font-family:var(--serif); font-size:28px; font-weight:600; color:var(--ink); display:block; line-height:1; margin-bottom:4px; }
-  .meta-label { font-family:var(--mono); font-size:10px; color:var(--ink-light); text-transform:uppercase; letter-spacing:0.5px; }
-
-  .what-you-get { background:white; border:1.5px solid var(--border); border-radius:12px; padding:28px 30px; margin-bottom:28px; text-align:left; }
-  .wyg-title { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--ink-light); margin-bottom:16px; }
-  .wyg-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  .wyg-item { display:flex; gap:12px; align-items:flex-start; }
-  .wyg-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
-  .wyg-text { font-size:13px; color:var(--ink-mid); line-height:1.5; }
-  .wyg-text strong { color:var(--ink); font-weight:500; display:block; margin-bottom:2px; }
-
-  .intro-form { background:white; border:1.5px solid var(--border); border-radius:14px; padding:32px; margin-bottom:16px; text-align:left; }
-  .form-section-label { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--ink-light); margin-bottom:16px; padding-bottom:10px; border-bottom:1px solid var(--border); }
-  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+  .meta-num { font-family:var(--serif); font-size:24px; font-weight:600; color:var(--ink); display:block; line-height:1; margin-bottom:4px; }
+  .meta-label { font-family:var(--mono); font-size:9px; color:var(--ink-light); text-transform:uppercase; letter-spacing:0.5px; }
+  .rp-label { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:rgba(247,244,238,0.35); margin-bottom:18px; }
+  .rp-items { display:flex; flex-direction:column; gap:0; margin-bottom:28px; }
+  .rp-item { display:flex; align-items:flex-start; gap:14px; padding:14px 0; border-bottom:1px solid rgba(247,244,238,0.08); }
+  .rp-item:last-child { border-bottom:none; }
+  .rp-icon { width:34px; height:34px; background:rgba(200,82,26,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .rp-item-title { font-size:13px; font-weight:500; color:var(--cream); margin-bottom:2px; }
+  .rp-item-sub { font-size:11px; color:rgba(247,244,238,0.45); line-height:1.5; }
+  .rp-price-block { background:var(--accent); border-radius:10px; padding:20px 24px; position:relative; z-index:2; }
+  .rp-price-label { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.65); margin-bottom:4px; }
+  .rp-price-amount { font-family:var(--serif); font-size:44px; font-weight:700; color:white; line-height:1; margin-bottom:4px; }
+  .rp-price-note { font-size:12px; color:rgba(255,255,255,0.65); }
+  .intro-form { background:white; border:1.5px solid var(--border); border-radius:12px; padding:26px; margin-bottom:14px; text-align:left; }
+  .form-section-label { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--ink-light); margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border); }
+  .form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
   .fl { display:block; font-size:11px; font-weight:500; color:var(--ink-mid); margin-bottom:6px; font-family:var(--mono); text-transform:uppercase; letter-spacing:0.3px; }
   input[type=text], select {
-    width:100%; padding:12px 14px; border:1.5px solid var(--border); border-radius:8px;
+    width:100%; padding:11px 13px; border:1.5px solid var(--border); border-radius:8px;
     font-family:var(--sans); font-size:14px; color:var(--ink); background:var(--cream);
     transition:border-color 0.2s; appearance:none;
   }
   input:focus, select:focus { outline:none; border-color:var(--accent); background:white; }
   .sw { position:relative; }
   .sw::after { content:'▾'; position:absolute; right:13px; top:50%; transform:translateY(-50%); color:var(--ink-light); pointer-events:none; font-size:11px; }
-
-  .btn-start { width:100%; background:var(--ink); color:var(--cream); border:none; padding:17px; border-radius:10px; font-family:var(--sans); font-size:16px; font-weight:500; cursor:pointer; transition:all 0.25s; margin-top:8px; }
+  .btn-start { width:100%; background:var(--ink); color:var(--cream); border:none; padding:15px; border-radius:9px; font-family:var(--sans); font-size:15px; font-weight:500; cursor:pointer; transition:all 0.25s; margin-top:8px; display:flex; align-items:center; justify-content:center; gap:10px; }
   .btn-start:hover { background:var(--accent); transform:translateY(-1px); box-shadow:0 8px 32px rgba(200,82,26,0.28); }
-  .trust-row { display:flex; justify-content:center; gap:24px; flex-wrap:wrap; }
-  .trust-item { font-family:var(--mono); font-size:11px; color:var(--ink-light); display:flex; align-items:center; gap:5px; }
+  .trust-row { display:flex; justify-content:center; gap:18px; flex-wrap:wrap; }
+  .trust-item { font-family:var(--mono); font-size:10px; color:var(--ink-light); display:flex; align-items:center; gap:5px; }
   .trust-item::before { content:'✓'; color:var(--green); font-size:10px; }
 
   /* ── ASSESSMENT ── */
@@ -314,53 +319,59 @@
 
 <nav>
   <div class="logo">FIX<span>LO</span>™</div>
-  <div class="nav-tag">Business Diagnostic · $97 AUD</div>
+  <div class="nav-tag" id="nav-price-tag">Business Diagnostic</div>
 </nav>
 
 <!-- ══ INTRO ══ -->
 <div id="intro-screen">
-  <div class="eyebrow">Business Diagnostic</div>
-  <h1 class="intro-h1">Find out exactly<br>what to <em>fix first.</em></h1>
-  <p class="intro-sub">20 questions. Scored across 5 areas of your business. A personalised report that tells you what's costing you the most — and exactly what to do about it this week.</p>
-
-  <div class="meta-strip">
-    <div class="meta-item"><span class="meta-num">20</span><span class="meta-label">Questions</span></div>
-    <div class="meta-item"><span class="meta-num">4 min</span><span class="meta-label">To complete</span></div>
-    <div class="meta-item"><span class="meta-num">5</span><span class="meta-label">Areas scored</span></div>
-    <div class="meta-item"><span class="meta-num">3</span><span class="meta-label">Named fixes</span></div>
-  </div>
-
-  <div class="what-you-get">
-    <div class="wyg-title">What you receive</div>
-    <div class="wyg-grid">
-      <div class="wyg-item"><div class="wyg-icon">📊</div><div class="wyg-text"><strong>5-module scorecard</strong>Scored 0–100 with industry context and a benchmark bar for each area.</div></div>
-      <div class="wyg-item"><div class="wyg-icon">🔍</div><div class="wyg-text"><strong>Deep-dive findings</strong>An honest assessment of what your answers reveal about your business right now.</div></div>
-      <div class="wyg-item"><div class="wyg-icon">⚡</div><div class="wyg-text"><strong>3 named actions</strong>Fix 1 for today. Fix 2 for Wednesday. Fix 3 for Friday. Specific tasks, not generic advice.</div></div>
-      <div class="wyg-item"><div class="wyg-icon">📄</div><div class="wyg-text"><strong>Printable report</strong>Save as PDF to refer back to, share with a partner, or bring to your accountant.</div></div>
+  <!-- LEFT PANEL -->
+  <div class="intro-left">
+    <div class="eyebrow">Business Diagnostic</div>
+    <h1 class="intro-h1">Find out exactly<br>what to <em>fix first.</em></h1>
+    <p class="intro-sub">20 questions. Scored across 5 areas of your business. A personalised report that tells you what's costing you the most — and exactly what to do about it this week.</p>
+    <div class="meta-strip">
+      <div class="meta-item"><span class="meta-num">20</span><span class="meta-label">Questions</span></div>
+      <div class="meta-item"><span class="meta-num">4 min</span><span class="meta-label">To complete</span></div>
+      <div class="meta-item"><span class="meta-num">5</span><span class="meta-label">Areas scored</span></div>
+      <div class="meta-item"><span class="meta-num">3</span><span class="meta-label">Fixes</span></div>
+    </div>
+    <div class="intro-form">
+      <div class="form-section-label">Your details</div>
+      <div class="form-row">
+        <div><label class="fl">Your first name</label><input type="text" id="f-name" placeholder="e.g. James" /></div>
+        <div><label class="fl">Business name</label><input type="text" id="f-biz" placeholder="e.g. Meridian Building Co." /></div>
+      </div>
+      <div class="form-row">
+        <div><label class="fl">Industry sector</label><div class="sw"><select id="f-sector"><option value="">Select sector…</option><option>Construction</option><option>Professional Services</option><option>Retail</option><option>Manufacturing</option><option>Hospitality</option><option>Healthcare</option><option>Transport &amp; Logistics</option><option>Finance &amp; Insurance</option></select></div></div>
+        <div><label class="fl">Annual revenue</label><div class="sw"><select id="f-revenue"><option value="">Select range…</option><option>Under $500K</option><option>$500K – $1M</option><option>$1M – $3M</option><option>$3M – $10M</option><option>$10M – $30M</option><option>$30M+</option></select></div></div>
+      </div>
+      <div class="form-row">
+        <div><label class="fl">Team size</label><div class="sw"><select id="f-staff"><option value="">Select…</option><option>1–5</option><option>6–20</option><option>21–50</option><option>51–100</option><option>100+</option></select></div></div>
+        <div><label class="fl">Country</label><div class="sw"><select id="f-country" onchange="updatePriceDisplay(this.value)"><option value="">Select…</option><option value="AU">Australia</option><option value="NZ">New Zealand</option><option value="UK">United Kingdom</option><option value="CA">Canada</option><option value="US">United States</option><option value="ZA">South Africa</option></select></div></div>
+      </div>
+      <button class="btn-start" onclick="startAssessment()">Begin my diagnostic →</button>
+    </div>
+    <div class="trust-row">
+      <span class="trust-item">No login required</span>
+      <span class="trust-item">Instant report</span>
+      <span class="trust-item">Private &amp; secure</span>
+      <span class="trust-item">Save as PDF</span>
     </div>
   </div>
-
-  <div class="intro-form">
-    <div class="form-section-label">Your details</div>
-    <div class="form-row">
-      <div><label class="fl">Your first name</label><input type="text" id="f-name" placeholder="e.g. James" /></div>
-      <div><label class="fl">Business name</label><input type="text" id="f-biz" placeholder="e.g. Meridian Building Co." /></div>
+  <!-- RIGHT PANEL -->
+  <div class="intro-right">
+    <div class="rp-label">What you receive</div>
+    <div class="rp-items">
+      <div class="rp-item"><div class="rp-icon">📊</div><div><div class="rp-item-title">5-module scored diagnostic</div><div class="rp-item-sub">Each area of your business scored 0–100 with honest findings.</div></div></div>
+      <div class="rp-item"><div class="rp-icon">🔍</div><div><div class="rp-item-title">Deep-dive priority findings</div><div class="rp-item-sub">What your answers reveal about where you're losing time and money.</div></div></div>
+      <div class="rp-item"><div class="rp-icon">⚡</div><div><div class="rp-item-title">3 named fixes this week</div><div class="rp-item-sub">Fix 1 today. Fix 2 Wednesday. Fix 3 Friday. Specific tasks, not vague advice.</div></div></div>
+      <div class="rp-item"><div class="rp-icon">📄</div><div><div class="rp-item-title">Printable PDF report</div><div class="rp-item-sub">Save, share with your accountant, or bring to your next planning session.</div></div></div>
     </div>
-    <div class="form-row">
-      <div><label class="fl">Industry sector</label><div class="sw"><select id="f-sector"><option value="">Select sector…</option><option>Construction</option><option>Professional Services</option><option>Retail</option><option>Manufacturing</option><option>Hospitality</option><option>Healthcare</option><option>Transport &amp; Logistics</option><option>Finance &amp; Insurance</option></select></div></div>
-      <div><label class="fl">Annual revenue</label><div class="sw"><select id="f-revenue"><option value="">Select range…</option><option>Under $500K</option><option>$500K – $1M</option><option>$1M – $3M</option><option>$3M – $10M</option><option>$10M – $30M</option><option>$30M+</option></select></div></div>
+    <div class="rp-price-block">
+      <div class="rp-price-label">One-time investment</div>
+      <div class="rp-price-amount" id="price-display">$49 AUD</div>
+      <div class="rp-price-note">No subscription. No follow-up calls. Just your report.</div>
     </div>
-    <div class="form-row">
-      <div><label class="fl">Team size</label><div class="sw"><select id="f-staff"><option value="">Select…</option><option>1–5</option><option>6–20</option><option>21–50</option><option>51–100</option><option>100+</option></select></div></div>
-      <div><label class="fl">Country</label><div class="sw"><select id="f-country"><option value="">Select…</option><option>Australia</option><option>New Zealand</option><option>United Kingdom</option><option>Canada</option></select></div></div>
-    </div>
-    <button class="btn-start" onclick="startAssessment()">Begin my diagnostic →</button>
-  </div>
-  <div class="trust-row">
-    <span class="trust-item">No login required</span>
-    <span class="trust-item">Report delivered instantly</span>
-    <span class="trust-item">Your answers are private</span>
-    <span class="trust-item">Save as PDF anytime</span>
   </div>
 </div>
 
@@ -511,9 +522,9 @@
 
     <!-- UPGRADE -->
     <div class="upgrade-box">
-      <div class="ub-eyebrow">Ready to make this a weekly habit?</div>
-      <h3 class="ub-title">Get your FIXLO brief<br>every <em>Monday morning.</em></h3>
-      <p class="ub-sub">This diagnostic showed you where you stand today. A FIXLO subscription tells you what to fix every single week — automatically, using your live financial data and industry benchmarks.</p>
+      <div class="ub-eyebrow">Want this every Monday, automatically?</div>
+      <h3 class="ub-title">FIXLO Weekly is<br><em>coming soon.</em></h3>
+      <p class="ub-sub">We're building the full subscription — live financial data from your accounting system, weekly benchmark scoring, and your 3 fixes delivered every Monday at 6am. Join the waitlist to be first.</p>
       <div class="ub-features">
         <span class="ub-feat">Weekly 3-fix Monday brief</span>
         <span class="ub-feat">Live Xero / MYOB data</span>
@@ -521,12 +532,12 @@
         <span class="ub-feat">8-week cash forecast</span>
         <span class="ub-feat">Tax &amp; compliance alerts</span>
       </div>
-      <a href="#" class="btn-upgrade" onclick="alert('Redirecting to FIXLO subscription — $129 AUD/month. 14 days free, no credit card required.')">Start my free trial — $129/month →</a>
-      <div class="ub-price-note">14-day free trial · No credit card required · Cancel any time</div>
+      <a href="mailto:hello@fixlo.io?subject=FIXLO Weekly Waitlist" class="btn-upgrade">Join the waitlist →</a>
+      <div class="ub-price-note">No commitment · Be first to know when it launches</div>
     </div>
 
     <div class="report-footer-bar">
-      <div class="rfo-note">FIXLO™ Business Diagnostic &nbsp;·&nbsp; <span id="rf-biz"></span> &nbsp;·&nbsp; Generated <span id="rf-date"></span><br>Results are private and not stored. For business use only.</div>
+      <div class="rfo-note">FIXLO™ Business Diagnostic &nbsp;·&nbsp; <span id="rf-biz"></span> &nbsp;·&nbsp; <span id="rf-country"></span> &nbsp;·&nbsp; Generated <span id="rf-date"></span><br>Results are private and not stored. For business use only.</div>
       <button class="btn-print" onclick="window.print()">Save as PDF</button>
     </div>
   </div>
@@ -601,17 +612,39 @@ function startTimer() {
 const SL = {1:'Very low',2:'Low',3:'Below average',4:'Slightly below average',5:'Average',6:'Above average',7:'Good',8:'Strong',9:'Very strong',10:'Excellent'};
 function sliderLabel(v, inv) { return SL[inv ? 11-v : v] || 'Score: '+v; }
 
+const COUNTRY_DATA = {
+  'AU': { currency:'AUD', symbol:'$', price:'49', label:'$49 AUD', countryName:'Australia' },
+  'NZ': { currency:'NZD', symbol:'$', price:'49', label:'$49 NZD', countryName:'New Zealand' },
+  'UK': { currency:'GBP', symbol:'£', price:'29', label:'£29 GBP', countryName:'United Kingdom' },
+  'CA': { currency:'CAD', symbol:'CA$', price:'49', label:'CA$49', countryName:'Canada' },
+  'US': { currency:'USD', symbol:'$', price:'35', label:'$35 USD', countryName:'United States' },
+  'ZA': { currency:'ZAR', symbol:'R', price:'649', label:'R649 ZAR', countryName:'South Africa' },
+};
+
+function updatePriceDisplay(countryCode) {
+  const data = COUNTRY_DATA[countryCode] || COUNTRY_DATA['AU'];
+  const el = document.getElementById('price-display');
+  if(el) el.textContent = data.label;
+}
+
 function startAssessment() {
   const name = document.getElementById('f-name').value.trim();
   const biz = document.getElementById('f-biz').value.trim();
   const sector = document.getElementById('f-sector').value;
   if(!name||!biz||!sector){alert('Please fill in your name, business name and sector to continue.');return;}
+  const countryCode = document.getElementById('f-country').value || 'AU';
+  const countryInfo = COUNTRY_DATA[countryCode] || COUNTRY_DATA['AU'];
   userData = { name, biz, sector,
     revenue: document.getElementById('f-revenue').value || 'not specified',
     staff: document.getElementById('f-staff').value || 'not specified',
-    country: document.getElementById('f-country').value || 'Australia'
+    country: countryInfo.countryName,
+    countryCode: countryCode,
+    currency: countryInfo.currency,
+    price: countryInfo.label
   };
   document.getElementById('sb-biz').textContent = biz;
+  const navTag = document.getElementById('nav-price-tag');
+  if(navTag) navTag.textContent = 'Business Diagnostic · ' + (COUNTRY_DATA[countryCode]||COUNTRY_DATA['AU']).label;
   document.getElementById('sb-sector').textContent = sector;
   buildSidebar();
   switchScreen('assessment-screen');
@@ -908,6 +941,8 @@ function showReport(reportText, worst, best) {
   document.getElementById('rc-overall-score').innerHTML = overall + '<span class="rc-overall-denom">/100</span>';
   document.getElementById('rc-overall-status').textContent = scoreLabel(overall);
   document.getElementById('rf-biz').textContent = userData.biz;
+  const rfCountry = document.getElementById('rf-country');
+  if(rfCountry) rfCountry.textContent = userData.country;
   document.getElementById('rf-date').textContent = d.toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('rc-meta').innerHTML = [
     {l:'Owner',v:userData.name},{l:'Revenue',v:userData.revenue},{l:'Team',v:userData.staff}
@@ -1016,15 +1051,15 @@ function renderReport(text, worst, best) {
       const sentences = f.desc.split(/[.!?]\s+/).map((s,i,a)=>i<a.length-1?s+'.':s).filter(s=>s.trim().length > 10).slice(0,4);
       const stepsHTML = sentences.map((s,si)=>`<div class="fix-step"><div class="fix-step-num">${si+1}</div><span>${s}</span></div>`).join('');
       fc.innerHTML += `<div class="fix-card">
-        <div class="fix-card-header">
+        <div style="display:flex;align-items:stretch;gap:0;">
           <div class="fix-card-num ${numCls[i]}">${i+1}</div>
-          <div class="fix-card-title-block">
+          <div style="flex:1;padding:16px 20px;background:white;border-bottom:1px solid var(--border);">
             <div class="fix-card-timing">${f.timing}</div>
             <div class="fix-card-title">${f.title}</div>
           </div>
           <div class="fix-card-impact-badge">
             <div class="fix-card-impact-label">Impact</div>
-            <div class="fix-card-impact-val">${f.impact || 'See detail below'}</div>
+            <div class="fix-card-impact-val">${f.impact || 'High impact'}</div>
           </div>
         </div>
         <div class="fix-card-body">
@@ -1042,9 +1077,9 @@ function renderReport(text, worst, best) {
       const title = (lines[0]||'').replace(/^[—\-–]\s*/,'').replace(/^Title:\s*/i,'').trim();
       const body = lines.slice(1).join(' ');
       fc.innerHTML += `<div class="fix-card">
-        <div class="fix-card-header">
+        <div style="display:flex;align-items:stretch;gap:0;">
           <div class="fix-card-num ${numCls[i]}">${i+1}</div>
-          <div class="fix-card-title-block">
+          <div style="flex:1;padding:16px 20px;background:white;border-bottom:1px solid var(--border);">
             <div class="fix-card-timing">${timings[i]}</div>
             <div class="fix-card-title">${title}</div>
           </div>
