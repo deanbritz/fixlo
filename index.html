@@ -979,18 +979,56 @@ const MODULES = [
 
   { id:'cyber', name:'Cyber Security', color:'#DC2626', bg:'#FEF2F2',
     tagline:'How exposed is your business — and does anyone actually know?',
-    intro:'Most SME cyber breaches are not sophisticated attacks. They are unlocked doors. This module helps you sense-test your real-world cyber exposure across access, data, staff behaviour and incident readiness.',
+    intro:'Most SME breaches are not sophisticated attacks. They are unlocked doors. These 6 questions test your real-world posture across the 5 protocols every SME owner can implement today — no IT specialist required. Your answers will generate a specific action plan for your business.',
     questions:[
-      {id:'cy1',type:'choice',text:'When did you last review who has login access to your core business systems — email, accounting, CRM, file storage?',
-        opts:[{e:'✅',l:'In the last 3 months',s:'Active access management',neg:false},{e:'😐',l:'6–12 months ago',s:'Access may have drifted',neg:true},{e:'😬',l:'Over a year ago',s:'High dormant access risk',neg:true},{e:'❓',l:'Never formally reviewed',s:'Critical exposure',neg:true}]},
-      {id:'cy2',type:'choice',text:'Do any former staff, contractors or suppliers still have active logins to your systems?',
-        opts:[{e:'✅',l:'No — access is removed immediately on exit',s:'Clean offboarding process',neg:false},{e:'😐',l:'Mostly — occasional gaps',s:'Some dormant access risk',neg:true},{e:'😬',l:'Probably — we dont have a formal process',s:'Significant exposure',neg:true},{e:'🚨',l:'Yes — definitely some still active',s:'Active breach risk',neg:true}]},
-      {id:'cy3',type:'slider',text:'How confident are you that your team can identify a phishing email or social engineering attempt?',lo:'Not at all confident',hi:'Very confident',default:5},
-      {id:'cy4',type:'choice',text:'How does your business handle passwords for shared accounts — accounting software, social media, cloud tools?',
-        opts:[{e:'🔐',l:'Password manager — unique passwords for everything',s:'Strong credential hygiene',neg:false},{e:'😐',l:'Mix of password manager and some shared passwords',s:'Partial risk',neg:true},{e:'😬',l:'Shared informally via email or messaging',s:'Serious credential risk',neg:true},{e:'🚨',l:'Same passwords reused across multiple systems',s:'Critical vulnerability',neg:true}]},
-      {id:'cy5',type:'choice',text:'If your business data was encrypted by ransomware today, how quickly could you recover without paying?',
-        opts:[{e:'⚡',l:'Within hours — full offsite backups tested regularly',s:'Strong recovery posture',neg:false},{e:'😐',l:'Within a day or two — backups exist but untested',s:'Moderate risk',neg:true},{e:'😬',l:'Days to weeks — backups are inconsistent',s:'High recovery risk',neg:true},{e:'🚨',l:'We would likely have to pay or lose the data',s:'Critical ransomware exposure',neg:true}]},
-      {id:'cy6',type:'slider',text:'How well documented is your response plan if a cyber incident — data breach, ransomware, account takeover — occurred right now?',lo:'No plan exists',hi:'Fully documented and practised',default:3},
+      {id:'cy1',type:'choice',
+        text:'Protocol 1 — Multi-Factor Authentication (MFA): Is MFA currently active on your email, accounting software and financial accounts?',
+        opts:[
+          {e:'✅',l:'Yes — MFA on all critical systems',s:'Strong first line of defence',neg:false},
+          {e:'😐',l:'Partially — on some but not all',s:'Gaps create real exposure',neg:true},
+          {e:'😬',l:'No — but I know I should set it up',s:'Priority action required',neg:true},
+          {e:'❓',l:'I am not sure what MFA is',s:'Immediate setup needed',neg:true}
+        ]},
+      {id:'cy2',type:'choice',
+        text:'Protocol 2 — Automated Backups: Are your business files and data automatically backed up to a secure offsite or cloud location?',
+        opts:[
+          {e:'✅',l:'Yes — daily automated backups, tested quarterly',s:'Ransomware recovery ready',neg:false},
+          {e:'😐',l:'Backups exist but are manual or untested',s:'Moderate recovery risk',neg:true},
+          {e:'😬',l:'Backups are inconsistent or only on local devices',s:'High data loss risk',neg:true},
+          {e:'🚨',l:'No backups in place',s:'Critical — one incident ends the business',neg:true}
+        ]},
+      {id:'cy3',type:'choice',
+        text:'Protocol 3 — Phishing Awareness: Has your team received any training in the last 12 months on identifying phishing emails or social engineering?',
+        opts:[
+          {e:'✅',l:'Yes — formal training, refreshed regularly',s:'Strong human firewall',neg:false},
+          {e:'😐',l:'Informal briefing — nothing structured',s:'Gaps in awareness',neg:true},
+          {e:'😬',l:'No training — we rely on common sense',s:'High human error risk',neg:true},
+          {e:'🚨',l:'Never discussed — team has no guidance',s:'Critical exposure point',neg:true}
+        ]},
+      {id:'cy4',type:'choice',
+        text:'Protocol 4 — Software Updates & Patching: Are operating systems, browsers, email clients and key business software set to update automatically?',
+        opts:[
+          {e:'✅',l:'Yes — automatic updates on all devices',s:'Vulnerabilities closed promptly',neg:false},
+          {e:'😐',l:'Some devices — not consistently across the team',s:'Unpatched devices are entry points',neg:true},
+          {e:'😬',l:'Updates are manual and often delayed',s:'Known vulnerabilities likely present',neg:true},
+          {e:'🚨',l:'Updates are rarely done',s:'Critical — attackers target outdated software',neg:true}
+        ]},
+      {id:'cy5',type:'choice',
+        text:'Protocol 5 — Firewalls & Malware Protection: Does your business have active firewall and endpoint protection (antivirus/anti-malware) on all devices used for work?',
+        opts:[
+          {e:'✅',l:'Yes — hardware firewall and endpoint protection on all devices',s:'Strong network perimeter',neg:false},
+          {e:'😐',l:'Some protection — not consistent across all devices',s:'Gaps in the perimeter',neg:true},
+          {e:'😬',l:'Basic antivirus only — no firewall management',s:'Partial protection',neg:true},
+          {e:'🚨',l:'No active protection in place',s:'Fully exposed network',neg:true}
+        ]},
+      {id:'cy6',type:'choice',
+        text:'Incident Readiness: If a cyber breach happened right now — ransomware, data theft, account takeover — does your team know exactly what to do in the first 60 minutes?',
+        opts:[
+          {e:'✅',l:'Yes — documented plan, team knows their roles',s:'Prepared for rapid response',neg:false},
+          {e:'😐',l:'Rough idea — nothing written down',s:'Response will be chaotic',neg:true},
+          {e:'😬',l:'No plan — we would figure it out under pressure',s:'High damage amplification risk',neg:true},
+          {e:'🚨',l:'No plan and no idea where to start',s:'Critical — incidents escalate fast without a plan',neg:true}
+        ]}
     ]
   }
 ];
@@ -1815,7 +1853,18 @@ THEIR EXACT ANSWERS:
 ${answersSummary}
 
 WEAKEST AREAS: ${worst[0].name} (${moduleScores[worst[0].id]}/100) and ${worst[1].name} (${moduleScores[worst[1].id]}/100)
-NOTE: If Cyber Security scored below 50, treat it as a CRITICAL finding regardless of ranking — cyber exposure creates existential risk for SMEs that outweighs operational inefficiencies.
+NOTE ON CYBER SECURITY MODULE:
+The cyber questions map directly to 5 specific protocols:
+- cy1 = Multi-Factor Authentication (MFA) — tool: Google Authenticator, Duo Security
+- cy2 = Automated Backups — tools: Backblaze, Carbonite, Google Drive
+- cy3 = Phishing Awareness Training — tools: KnowBe4, Cofense
+- cy4 = Software Updates & Patching — automatic OS, browser, antivirus updates
+- cy5 = Firewalls & Malware Protection — hardware firewall + Sophos endpoint
+- cy6 = Incident Response Readiness — 60-minute response plan
+
+If Cyber Security scored below 60, it must appear as a priority area regardless of ranking — a cyber breach can end an SME in 48 hours, which outweighs any operational issue.
+
+When writing cyber fixes, always name the specific protocol (e.g. "Protocol 1 — MFA"), name the exact tool to use (e.g. Google Authenticator, Backblaze, KnowBe4), give a realistic time estimate to implement, and explain in plain language why this specific gap creates real financial or operational risk for a business of this size in this sector.
 STRONGEST AREA: ${best.name} (${moduleScores[best.id]}/100)
 
 Write the report in plain text — no markdown, no asterisks, no hash symbols. Use the exact section headers below.
