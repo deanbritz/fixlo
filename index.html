@@ -760,7 +760,7 @@
   <div class="gen-tagline">Analysing your answers and building your report…</div>
   <div class="gen-bar-wrap"><div class="gen-bar" id="gen-bar"></div></div>
   <ul class="gen-steps">
-    <li class="gen-step" id="gs0"><div class="g-icon" id="gi0">–</div><span>Scoring 5 diagnostic modules</span></li>
+    <li class="gen-step" id="gs0"><div class="g-icon" id="gi0">–</div><span>Scoring 7 diagnostic modules</span></li>
     <li class="gen-step" id="gs1"><div class="g-icon" id="gi1">–</div><span>Benchmarking against <span id="gen-sector-label">your sector</span></span></li>
     <li class="gen-step" id="gs2"><div class="g-icon" id="gi2">–</div><span>Identifying your 2 critical areas</span></li>
     <li class="gen-step" id="gs3"><div class="g-icon" id="gi3">–</div><span>Generating your personalised fix plan</span></li>
@@ -2024,36 +2024,144 @@ Write 3–4 sentences. Name the single highest-leverage action from the three fi
 
 function buildFallback(worst,best) {
   const w0=worst[0],w1=worst[1],s0=moduleScores[w0.id],s1=moduleScores[w1.id];
+
+  // Build cyber-specific fixes if cyber is a priority area
+  function getCyberFixes() {
+    const ans = answers['cyber'] || {};
+    const fixes = [];
+    // Check each protocol answer
+    const cy1 = ans['cy1'];
+    const cy2 = ans['cy2'];
+    const cy3 = ans['cy3'];
+    const cy4 = ans['cy4'];
+    const cy5 = ans['cy5'];
+    const cy6 = ans['cy6'];
+
+    if(!cy1 || cy1.neg) fixes.push({
+      timing:'Fix — Today (15 minutes)',
+      title:'Protocol 1 — Enable Multi-Factor Authentication (MFA)',
+      desc:'Go to Settings in your Gmail, Microsoft 365 or Xero account right now. Enable 2-Step Verification. Download Google Authenticator (free, iOS and Android) or Duo Security. Do email first, then your accounting software, then banking logins. Takes 15 minutes per account.',
+      impact:'Blocks 99.9% of automated account takeover attacks — even if your password is already compromised in a data breach'
+    });
+    if(!cy2 || cy2.neg) fixes.push({
+      timing:'Fix — By Wednesday',
+      title:'Protocol 2 — Set Up Automated Offsite Backups',
+      desc:'Sign up for Backblaze Business Backup (backblaze.com, approx $99 USD/year) or Carbonite (carbonite.com, from $83/year). Install on every computer used for work. Enable daily automatic backups. Set a calendar reminder to test your backup restore once per quarter — an untested backup is not a backup.',
+      impact:'Enables full recovery from ransomware without paying. Average SME ransomware payment is $170,000 AUD — a $99 backup subscription eliminates that risk'
+    });
+    if(!cy3 || cy3.neg) fixes.push({
+      timing:'Fix — By Wednesday',
+      title:'Protocol 3 — Run a Phishing Awareness Session with Your Team',
+      desc:'Book a 30-minute team session this week. Use KnowBe4's free phishing simulation test (knowbe4.com/free-phishing-security-test) to baseline your team — it shows you who would click a malicious link. Cover three rules: never click links in unexpected emails, verify sender addresses carefully, call the sender directly to confirm if unsure.',
+      impact:'91% of cyberattacks start with a phishing email. One trained team member who spots and reports a malicious email can prevent a breach that costs tens of thousands to recover from'
+    });
+    if(!cy4 || cy4.neg) fixes.push({
+      timing:'Fix — By Friday',
+      title:'Protocol 4 — Enable Automatic Updates on All Work Devices',
+      desc:'On Windows: Settings → Windows Update → Automatic Updates on. On Mac: System Settings → General → Software Update → enable Automatic Updates. Do this on every computer and phone used for work. Also enable auto-update in Chrome, your email client and accounting software.',
+      impact:'60% of breaches exploit vulnerabilities that already had a patch available. Automatic updates close the window before attackers find it — zero cost, maximum protection'
+    });
+    if(!cy5 || cy5.neg) fixes.push({
+      timing:'Fix — By Friday',
+      title:'Protocol 5 — Install Endpoint Protection on All Devices',
+      desc:'Download and install Sophos Home Premium (sophos.com, approx $45 AUD/year for 3 devices) or Malwarebytes Business on every work device. Check your office router has its built-in firewall enabled — log in to your router admin page (usually 192.168.1.1) and verify the firewall setting is on.',
+      impact:'Endpoint protection detects and blocks malware and ransomware in real time. A hardware firewall stops malicious traffic before it reaches your devices — two layers of protection for under $50/year'
+    });
+    if(!cy6 || cy6.neg) fixes.push({
+      timing:'Fix — By Friday',
+      title:'Protocol 6 — Write a 1-Page Cyber Incident Response Plan',
+      desc:'Write four things on a single page and post it near every work computer: (1) Who to call first — your IT contact or managed service provider; (2) Isolate — disconnect affected devices from the network immediately; (3) Preserve — do not delete anything, photograph error screens; (4) Report — notify your cyber insurer and, if customer data is involved, the OAIC (Australia) or ICO (UK).',
+      impact:'In a cyber incident the first 60 minutes determine whether you lose hours or weeks of business. A plan prevents panic-driven decisions that turn a contained incident into a catastrophic one'
+    });
+    return fixes.slice(0,3);
+  }
+
+  function getComplianceFixes() {
+    const ans = answers['compliance'] || {};
+    const fixes = [];
+    const co1 = ans['co1'], co2 = ans['co2'], co3 = ans['co3'], co4 = ans['co4'];
+    if(!co1 || co1.neg) fixes.push({
+      timing:'Fix — Today',
+      title:'Tax & Payroll: Audit Your Current ATO/IRD Obligations',
+      desc:'Log into your accounting software and check: (1) Are all BAS/GST returns lodged and paid on time? (2) Are PAYG withholding payments current? (3) Is superannuation paid on time — especially under ATO Payday Super rules from July 2026? If anything is overdue, contact your BAS agent or accountant today. Do not wait for a notice.',
+      impact:'ATO late lodgement penalties start at $313 per period and escalate. Interest on unpaid super compounds daily. Early contact almost always results in a payment plan — late contact results in penalties'
+    });
+    if(!co2 || co2.neg) fixes.push({
+      timing:'Fix — By Wednesday',
+      title:'Employment Contracts: Review and Update All Staff Agreements',
+      desc:'Pull every employment contract from your files. For each one check: (1) Is it signed? (2) Does it correctly state the applicable Modern Award and classification? (3) Does it reflect the employee's current role and pay rate? Any contract that fails these three checks needs to be updated. Contact an employment lawyer or use the Fair Work Commission template library (fairwork.gov.au) for updated templates.',
+      impact:'Fair Work underpayment claims can be backdated up to 6 years. Average underpayment claim cost for an SME is $28,000 AUD including back-pay and penalties — prevention costs a fraction of that'
+    });
+    if(!co3 || co3.neg) fixes.push({
+      timing:'Fix — By Friday',
+      title:'Privacy Policy: Implement a Current Data Handling Policy',
+      desc:'If you collect any customer personal information — names, emails, phone numbers, payment details — you have Privacy Act obligations in Australia or GDPR obligations in the UK. Download the free OAIC Privacy Policy template (oaic.gov.au), customise it for your business in under an hour, and publish it on your website. Add a link to it on any contact form or checkout page.',
+      impact:'OAIC can issue fines up to $2.22 million AUD for serious privacy breaches. A published privacy policy is not just a legal requirement — it builds customer trust and protects you in the event of a data incident'
+    });
+    if(!co4 || co4.neg) fixes.push({
+      timing:'Fix — By Friday',
+      title:'Insurance: Book a Business Insurance Review',
+      desc:'Call your current broker this week and request a coverage review. Ask specifically about: (1) Public liability — do you have minimum $10M cover? (2) Professional indemnity — does it cover your actual services? (3) Workers compensation — are all staff and contractors covered correctly? (4) Cyber insurance — this is now essential for any business holding customer data.',
+      impact:'A single uninsured incident — a client injury, a data breach, a professional error — can exceed $500,000 AUD in costs. Business insurance costs typically range from $2,000–$8,000/year depending on your sector and size'
+    });
+    return fixes.slice(0,2);
+  }
+
+  // Determine which modules are worst and build appropriate fixes
+  let fix1, fix2, fix3;
+  const cyberScore = moduleScores['cyber'] || 50;
+  const complianceScore = moduleScores['compliance'] || 50;
+  const cyberFixes = getCyberFixes();
+  const complianceFixes = getComplianceFixes();
+
+  // If cyber is critical, lead with cyber fix
+  if(cyberScore < 50 && cyberFixes.length > 0) {
+    fix1 = cyberFixes[0];
+    fix2 = cyberFixes[1] || complianceFixes[0] || {timing:'Fix 2 — By Wednesday',title:'Address your '+w0.name+' gaps',desc:'Review your answers in the '+w0.name+' module and identify your single lowest-scoring response. Block 45 minutes Wednesday to address it specifically.',impact:'Moves the needle on your second-weakest area before the week is out'};
+    fix3 = cyberFixes[2] || complianceFixes[0] || {timing:'Fix 3 — By Friday',title:'Set one weekly tracking metric',desc:'Choose one number from this diagnostic that, if improved, would most change your confidence. Check it every Monday.',impact:'Builds the weekly rhythm that prevents these issues recurring'};
+  } else if(complianceScore < 50 && complianceFixes.length > 0) {
+    fix1 = complianceFixes[0];
+    fix2 = cyberFixes[0] || {timing:'Fix 2 — By Wednesday',title:'Address your '+w0.name+' situation',desc:'Review your answers in the '+w0.name+' module. Identify the single lowest-scoring response and block 45 minutes to address it.',impact:'Reduces your highest operational risk area'};
+    fix3 = complianceFixes[1] || {timing:'Fix 3 — By Friday',title:'Set one weekly tracking metric',desc:'Choose one number from this diagnostic that, if improved, would most change your confidence. Check it every Monday.',impact:'Builds the weekly rhythm that prevents these issues recurring'};
+  } else {
+    // Generic operational fixes for non-cyber/compliance priority areas
+    fix1 = {timing:'Fix 1 — Today',title:'Conduct a focused 60-minute review of your '+w0.name,desc:'Block 60 minutes today. Write down the three biggest friction points in '+w0.name+'. For each one, write the root cause in one sentence and the fix in one sentence. Assign each to one person with a deadline. This single step converts a vague problem into three named tasks with owners.',impact:'Converts recurring problems into assigned, time-bound actions — the step most owners skip'};
+    fix2 = {timing:'Fix 2 — By Wednesday',title:'Address the most urgent gap in your '+w1.name,desc:'Review your '+w1.name+' answers and identify the single lowest-scoring question. That answer points directly to the action. Block 45 minutes Wednesday to address it specifically.',impact:'Closes your second-biggest gap before the week is out'};
+    fix3 = {timing:'Fix 3 — By Friday',title:'Implement one metric you will track every week',desc:'Choose the single number from this diagnostic that, if it improved, would most change your confidence. Write it down. Commit to checking it every Monday morning. This is the first step from a one-time diagnostic to a weekly operating rhythm.',impact:'Builds the habit that prevents these same issues from appearing in your next diagnostic'};
+  }
+
+  const fixes = [
+    {timing:fix1.timing||'Fix 1 — Today',title:fix1.title,desc:fix1.desc,impact:fix1.impact},
+    {timing:fix2.timing||'Fix 2 — By Wednesday',title:fix2.title,desc:fix2.desc,impact:fix2.impact},
+    {timing:fix3.timing||'Fix 3 — By Friday',title:fix3.title,desc:fix3.desc,impact:fix3.impact}
+  ];
+
+  // Build fix text for report
+  const fixText = fixes.map((f,i) => `FIX ${i+1} — ${f.timing.replace(/Fix \d — /,'')}
+Title: ${f.title}
+What to do: ${f.desc}
+Impact: ${f.impact}`).join('
+
+');
+
   return `EXECUTIVE SUMMARY
-${userData.name}, this diagnostic identifies two areas where ${userData.biz} is leaving the most value on the table right now: ${w0.name} (${s0}/100) and ${w1.name} (${s1}/100). Both are fixable within 30 days — but they require deliberate action this week.
+${userData.name}, this diagnostic has identified the areas where ${userData.biz} carries the most risk right now. Your two most urgent areas are ${w0.name} (${s0}/100) and ${w1.name} (${s1}/100). The three fixes below are specific, actionable, and can be started this week — no specialist required.
 
 PRIORITY AREA 1: ${w0.name}
-Your answers in ${w0.name} reveal a recurring pattern that is costing the business time and money on a weekly basis. The signals point to a lack of clear systems in the areas that generate the most friction — meaning the same problems get managed repeatedly rather than solved once. At your business size, this likely represents 4–8 hours of avoidable effort per week.
+Your answers in ${w0.name} reveal a pattern that is creating real commercial risk for the business. At your current score of ${s0}/100, this area sits below the threshold where most SMEs in your sector experience compounding problems. The cost is not always visible immediately — but it accumulates weekly in the form of time lost, margin eroded, or exposure created.
 
 PRIORITY AREA 2: ${w1.name}
-The responses in ${w1.name} indicate an area that has been deprioritised — understandably, given the demands of running the business. The risk is real: without attention this week, the gap between where you are and where your sector peers are will continue to widen. This is the area most likely to constrain growth in the next 90 days.
+${w1.name} at ${s1}/100 represents your second most urgent area. Your responses indicate this has been deprioritised — which is understandable given the demands of running the business. However, the risk is that without action this week, the gap between where you are and where your sector peers are will continue to widen.
 
-FIX 1 — TODAY
-Title: Conduct a focused 30-minute audit of your ${w0.name.toLowerCase()} situation
-What to do: Block 30 minutes today. Write down the three biggest friction points in this area. For each one, write the root cause in one sentence and the fix in one sentence. Assign each to one person with a deadline by end of week.
-Impact: Converts a vague problem into three named tasks with owners — the step most owners skip, and why the same problems keep returning.
-
-FIX 2 — BY WEDNESDAY
-Title: Address the most urgent gap in your ${w1.name.toLowerCase()}
-What to do: Review your answers in the ${w1.name} module and identify the single lowest-scoring question. That answer points to the action. Block 45 minutes Wednesday to address it specifically — whether that is a conversation, a system check, or a decision that has been deferred.
-Impact: Moves the needle on your second-weakest area before the week is out, preventing further drift.
-
-FIX 3 — BY FRIDAY
-Title: Choose one number to track every week from this point forward
-What to do: Identify the single metric from this diagnostic — the KPI that, if it improved, would most change your confidence in the business. Write it down. Decide where you will check it each Monday morning. This is the first step from a one-time snapshot to a weekly operating rhythm.
-Impact: Builds the habit that prevents these same issues from appearing in the next diagnostic.
+${fixText}
 
 WHAT IS WORKING
-Your strongest area is ${best.name} (${moduleScores[best.id]}/100), and your answers here suggest this is not by accident. You have built genuine capability in this part of the business. The challenge now is ensuring the weaker areas do not act as a ceiling on what the stronger areas can achieve.
+Your strongest area is ${best.name} (${moduleScores[best.id]}/100). Your answers here suggest genuine capability that has been deliberately built. This is the foundation to protect as you address the priority areas — a business that is strong in ${best.name.toLowerCase()} has a real advantage if it can also tighten up ${w0.name.toLowerCase()}.
 
 7-DAY CHALLENGE
-By next Monday morning: complete Fix 1 today, Fix 2 by Wednesday, and Fix 3 by Friday — then come back and ask yourself whether you did it.`;
+By next Monday: complete ${fix1.title.replace(/Protocol \d — /,'')} today, address ${w1.name} by Wednesday, and implement your weekly tracking metric by Friday. The business owners who close gaps fastest are the ones who act on day one — not day seven.`;
 }
+
 
 function markGen(i, active) {
   const gs = document.getElementById('gs'+i), gi = document.getElementById('gi'+i);
@@ -2154,27 +2262,55 @@ function showReport(reportText, worst, best) {
       else if(estVal < b.low) { status='below'; statusText='Below average'; }
       else { status='above'; statusText='Above average'; }
 
-      // Bar positioning
+      // For score-based metrics (cyber, compliance), flip: low score = below average
+      const isScoreMetric = (item.key === 'cyberScore' || item.key === 'complianceScore');
+      if(isScoreMetric) {
+        // Use raw module score directly instead of estimated value
+        const rawScore = item.yourScore;
+        const displayVal = rawScore + '/100';
+        const scoreStatus = rawScore >= b.high ? 'within' : rawScore >= b.low ? 'above' : 'below';
+        const scoreStatusText = rawScore >= b.high ? 'Strong posture' : rawScore >= b.low ? 'Needs attention' : 'Critical — action required';
+        const youPctScore = Math.min(96, Math.round((rawScore / 100) * 100));
+        grid.innerHTML += \`<div class="bm-card bm-\${scoreStatus}">
+          <div class="bm-card-name">\${item.label}</div>
+          <div class="bm-card-values">
+            <div class="bm-your-val">\${rawScore}</div>
+            <div class="bm-vs">/ 100</div>
+            <div class="bm-sector-val">\${b.label}</div>
+          </div>
+          <div class="bm-status-pill \${scoreStatus}">
+            \${scoreStatus === 'within' ? '✓' : scoreStatus === 'below' ? '↓' : '↑'} \${scoreStatusText}
+          </div>
+          <div class="bm-bar-track">
+            <div class="bm-bar-range" style="left:\${Math.round((b.low/100)*100)}%;width:\${Math.round(((b.high-b.low)/100)*100)}%"></div>
+            <div class="bm-bar-you \${scoreStatus}" style="left:\${youPctScore}%"></div>
+          </div>
+        </div>\`;
+        return;
+      }
+
+      // Bar positioning for financial metrics
       const rangeSpan = b.high * 1.2;
       const rangePct = Math.round((b.low / rangeSpan) * 100);
       const rangeWidthPct = Math.round(((b.high - b.low) / rangeSpan) * 100);
       const youPct = Math.min(98, Math.round((estVal / rangeSpan) * 100));
+      const displayUnit = unit === '%' ? '%' : unit === 'days' ? 'd' : unit === 'wks' ? 'w' : '';
 
-      grid.innerHTML += `<div class="bm-card bm-${status}">
-        <div class="bm-card-name">${item.label}</div>
+      grid.innerHTML += \`<div class="bm-card bm-\${status}">
+        <div class="bm-card-name">\${item.label}</div>
         <div class="bm-card-values">
-          <div class="bm-your-val">${estVal}${unit === '%' ? '%' : unit === 'days' ? 'd' : 'w'}</div>
+          <div class="bm-your-val">\${estVal}\${displayUnit}</div>
           <div class="bm-vs">vs</div>
-          <div class="bm-sector-val">${b.label}</div>
+          <div class="bm-sector-val">\${b.label}</div>
         </div>
-        <div class="bm-status-pill ${status}">
-          ${status === 'within' ? '✓' : status === 'below' ? '↓' : '↑'} ${statusText}
+        <div class="bm-status-pill \${status}">
+          \${status === 'within' ? '✓' : status === 'below' ? '↓' : '↑'} \${statusText}
         </div>
         <div class="bm-bar-track">
-          <div class="bm-bar-range" style="left:${rangePct}%;width:${rangeWidthPct}%"></div>
-          <div class="bm-bar-you ${status}" style="left:${youPct}%"></div>
+          <div class="bm-bar-range" style="left:\${rangePct}%;width:\${rangeWidthPct}%"></div>
+          <div class="bm-bar-you \${status}" style="left:\${youPct}%"></div>
         </div>
-      </div>`;
+      </div>\`;
     });
   }
 
