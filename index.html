@@ -1941,14 +1941,14 @@ ${answersSummary}
 
 WEAKEST AREAS: ${worst[0].name} (${moduleScores[worst[0].id]}/100) and ${worst[1].name} (${moduleScores[worst[1].id]}/100)
 CRITICAL CYBER SECURITY INSTRUCTIONS:
-The cyber module maps directly to 5 actionable protocols. Use the owner's EXACT answers to determine which protocols have failed and write specific fixes for each failure.
+The cyber module maps directly to 5 actionable protocols. Use the owners EXACT answers to determine which protocols have failed and write specific fixes for each failure.
 
 PROTOCOL MAPPING:
 - cy1 answer = MFA status → If not "Yes — MFA on all critical systems": Fix must say "Protocol 1 — Enable Multi-Factor Authentication. Go to Settings in your Gmail/Microsoft 365/Xero account right now. Enable 2-Step Verification. Download Google Authenticator (free, iOS and Android) or Duo Security. Takes 15 minutes per account. Do email first, then accounting software, then banking. Why it works: even if your password is stolen — which happens constantly via data breaches — an attacker cannot access your account without the second factor. This single step blocks 99.9% of automated account takeover attacks."
 
-- cy2 answer = Backup status → If not "Yes — daily automated backups": Fix must say "Protocol 2 — Set Up Automated Backups. Sign up for Backblaze Business Backup ($99 USD/year) or Carbonite (from $83/year). Install on every computer used for work. Enable automatic daily backups. Set a calendar reminder to test your backup restore quarterly — an untested backup is not a backup. Why it works: ransomware attacks encrypt your files and demand payment. With a clean offsite backup, you restore from yesterday's copy and pay nothing. Without one, average ransomware payment for SMEs is $170,000 AUD."
+- cy2 answer = Backup status → If not "Yes — daily automated backups": Fix must say "Protocol 2 — Set Up Automated Backups. Sign up for Backblaze Business Backup ($99 USD/year) or Carbonite (from $83/year). Install on every computer used for work. Enable automatic daily backups. Set a calendar reminder to test your backup restore quarterly — an untested backup is not a backup. Why it works: ransomware attacks encrypt your files and demand payment. With a clean offsite backup, you restore from yesterdays copy and pay nothing. Without one, average ransomware payment for SMEs is $170,000 AUD."
 
-- cy3 answer = Phishing training → If not "Yes — formal training": Fix must say "Protocol 3 — Train Your Team to Spot Phishing. Book a 30-minute team session this week. Use KnowBe4's free phishing test (knowbe4.com/free-phishing-security-test) to baseline your team's awareness — it takes 5 minutes and shows you who would click a malicious link. Key rules to cover: never click links in unexpected emails, verify sender addresses carefully, never enter passwords from an email link, call the sender to confirm if unsure. Why it works: 91% of cyberattacks begin with a phishing email. Your team is both your biggest vulnerability and your most effective defence."
+- cy3 answer = Phishing training → If not "Yes — formal training": Fix must say "Protocol 3 — Train Your Team to Spot Phishing. Book a 30-minute team session this week. Use KnowBe4 free phishing test (knowbe4.com/free-phishing-security-test) to baseline your team awareness — it takes 5 minutes and shows you who would click a malicious link. Key rules to cover: never click links in unexpected emails, verify sender addresses carefully, never enter passwords from an email link, call the sender to confirm if unsure. Why it works: 91% of cyberattacks begin with a phishing email. Your team is both your biggest vulnerability and your most effective defence."
 
 - cy4 answer = Updates/patching → If not "Yes — automatic updates on all devices": Fix must say "Protocol 4 — Enable Automatic Updates on Every Work Device. On Windows: Settings → Windows Update → turn on Automatic Updates. On Mac: System Settings → General → Software Update → enable Automatic Updates. Do this on every computer and phone used for work this week. Enable auto-update in Chrome, Firefox, your email client and accounting software. Why it works: 60% of breaches exploit vulnerabilities that had a patch available. Attackers specifically scan for outdated software. Automatic updates close the window before they find it."
 
@@ -1991,7 +1991,7 @@ WHAT IS WORKING
 Write 4–5 sentences about ${best.name}. Be genuinely specific — what do their answers tell you about why this area is strong? What are they doing right that many businesses in their sector get wrong? Name the commercial advantage this gives them. Acknowledge it warmly but also note what they need to protect or maintain to keep this advantage as they grow.
 
 7-DAY CHALLENGE
-Write 3–4 sentences. Name the single highest-leverage action from the three fixes above. Explain specifically why this one matters most right now for ${userData.biz}. Make it a concrete commitment with a named day and measurable outcome. End with one sentence that connects this week's action to the longer-term trajectory of the business.`;
+Write 3–4 sentences. Name the single highest-leverage action from the three fixes above. Explain specifically why this one matters most right now for ${userData.biz}. Make it a concrete commitment with a named day and measurable outcome. End with one sentence that connects this weeks action to the longer-term trajectory of the business.`;
 
   let reportText = '';
   const apiKey = typeof FIXLO_KEY !== 'undefined' && FIXLO_KEY !== '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' ? FIXLO_KEY : null;
@@ -2089,7 +2089,7 @@ function buildFallback(worst,best) {
     if(!co2 || co2.neg) fixes.push({
       timing:'Fix — By Wednesday',
       title:'Employment Contracts: Review and Update All Staff Agreements',
-      desc:'Pull every employment contract from your files. For each one check: (1) Is it signed? (2) Does it correctly state the applicable Modern Award and classification? (3) Does it reflect the employee's current role and pay rate? Any contract that fails these three checks needs to be updated. Contact an employment lawyer or use the Fair Work Commission template library (fairwork.gov.au) for updated templates.',
+      desc:'Pull every employment contract from your files. For each one check: (1) Is it signed? (2) Does it correctly state the applicable Modern Award and classification? (3) Does it reflect the employees current role and pay rate? Any contract that fails these three checks needs to be updated. Contact an employment lawyer or use the Fair Work Commission template library (fairwork.gov.au) for updated templates.',
       impact:'Fair Work underpayment claims can be backdated up to 6 years. Average underpayment claim cost for an SME is $28,000 AUD including back-pay and penalties — prevention costs a fraction of that'
     });
     if(!co3 || co3.neg) fixes.push({
