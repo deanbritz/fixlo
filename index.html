@@ -1580,25 +1580,13 @@ function buildFallback(worst,best) {
   ];
 
   // Build fix text for report
-  const fixText = fixes.map(function(f,i){ return 'FIX '+(i+1)+' '+f.timing+' TITLE: '+f.title+' ACTION: '+f.desc+' IMPACT: '+f.impact; }).join(' | | | ');
+  const fixText = '__STRUCTURED_FIXES__';
 
-  return `EXECUTIVE SUMMARY
-${userData.name}, this diagnostic has identified the areas where ${userData.biz} carries the most risk right now. Your two most urgent areas are ${w0.name} (${s0}/100) and ${w1.name} (${s1}/100). The three fixes below are specific, actionable, and can be started this week — no specialist required.
-
-PRIORITY AREA 1: ${w0.name}
-Your answers in ${w0.name} reveal a pattern that is creating real commercial risk for the business. At your current score of ${s0}/100, this area sits below the threshold where most SMEs in your sector experience compounding problems. The cost is not always visible immediately — but it accumulates weekly in the form of time lost, margin eroded, or exposure created.
-
-PRIORITY AREA 2: ${w1.name}
-${w1.name} at ${s1}/100 represents your second most urgent area. Your responses indicate this has been deprioritised — which is understandable given the demands of running the business. However, the risk is that without action this week, the gap between where you are and where your sector peers are will continue to widen.
-
-${fixText}
-
-WHAT IS WORKING
-Your strongest area is ${best.name} (${moduleScores[best.id]}/100). Your answers here suggest genuine capability that has been deliberately built. This is the foundation to protect as you address the priority areas — a business that is strong in ${best.name.toLowerCase()} has a real advantage if it can also tighten up ${w0.name.toLowerCase()}.
-
-7-DAY CHALLENGE
-By next Monday: complete ${fix1.title.replace(/Protocol \d — /,'')} today, address ${w1.name} by Wednesday, and implement your weekly tracking metric by Friday. The business owners who close gaps fastest are the ones who act on day one — not day seven.`;
+  // Return structured data for renderReport
+  window._fallbackFixes = fixes;
+  return 'FALLBACK_STRUCTURED';
 }
+
 
 
 function markGen(i, active) {
@@ -1749,99 +1737,136 @@ function buildArc(score, color) {
 }
 
 function renderReport(text, worst, best) {
-  // ── EXECUTIVE SUMMARY ──
-  const esSplit = text.match(/EXECUTIVE SUMMARY\n([\s\S]*?)(?=PRIORITY AREA|$)/i);
-  if(esSplit) document.getElementById('exec-summary-text').textContent = esSplit[1].trim();
+  // Handle structured fallback fixes
+  if(text === 'FALLBACK_STRUCTURED' && window._fallbackFixes) {
+    renderStructuredFixes(window._fallbackFixes, worst, best);
+    return;
+  }
 
-  // ── PRIORITY AREAS ──
-  const pg = document.getElementById('priority-grid');
+  // Parse AI-generated text response
+  var esSplit = text.match(/EXECUTIVE SUMMARY[\s\S]*?(?=PRIORITY AREA|$)/i);
+  if(esSplit) {
+    var esText = esSplit[0].replace(/EXECUTIVE SUMMARY\n?/i,'').trim();
+    document.getElementById('exec-summary-text').textContent = esText;
+  }
+
+  // Parse priority areas
+  var pg = document.getElementById('priority-grid');
   pg.innerHTML = '';
-  ['PRIORITY AREA 1','PRIORITY AREA 2'].forEach((key,i) => {
-    const m = worst[i];
-    const re = new RegExp(key+'[:\\s]+[^\\n]*\\n([\\s\\S]*?)(?=PRIORITY AREA|FIX\\s*1|$)','i');
-    const match = text.match(re);
-    const body = match ? match[1].trim() : 'Loading analysis…';
-    const headerCls = i===0?'p1':'p2';
-    const score = moduleScores[m.id];
-    pg.innerHTML += `<div class="priority-card">
-      <div class="priority-card-header ${headerCls}">
-        <div>
-          <div class="priority-card-num">Priority ${i+1}</div>
-          <div class="priority-card-name">${m.name}</div>
-        </div>
-        <div class="priority-card-score">${score}<span style="font-size:13px;font-weight:400;opacity:0.6">/100</span></div>
-      </div>
-      <div class="priority-card-body">
-        <div class="priority-card-text">${body}</div>
-      </div>
-    </div>`;
+  ['PRIORITY AREA 1','PRIORITY AREA 2'].forEach(function(key, i) {
+    var m = worst[i];
+    var re = new RegExp(key+'[:\\s]+[^\\n]*\\n([\\s\\S]*?)(?=PRIORITY AREA|FIX\\s*1|WHAT IS|$)','i');
+    var match = text.match(re);
+    var body = match ? match[1].trim() : 'See your diagnostic scores above for details on this area.';
+    var headerCls = i === 0 ? 'p1' : 'p2';
+    var score = moduleScores[m.id];
+    pg.innerHTML += '<div class="priority-card">' +
+      '<div class="priority-card-header ' + headerCls + '">' +
+      '<div><div class="priority-card-num">Priority ' + (i+1) + '</div>' +
+      '<div class="priority-card-name">' + m.name + '</div></div>' +
+      '<div class="priority-card-score">' + score + '<span style="font-size:13px;font-weight:400;opacity:0.6">/100</span></div>' +
+      '</div><div class="priority-card-body"><div class="priority-card-text">' + body + '</div></div></div>';
   });
 
-  // ── FIX CARDS ──
-  const fixRegex = /FIX\s*(\d)\s*[—\-–]\s*([^\n]+)\nTitle:\s*([^\n]+)\nWhat to do:\s*([\s\S]*?)(?=Impact:|FIX\s*\d|WHAT IS|7-DAY|$)Impact:\s*([^\n]*)/gi;
-  const fixes = [];
-  let m;
+  // Parse fix cards from AI text
+  var fixRegex = /FIX\s*(\d)\s*[\u2014\-\u2013]\s*([^\n]+)\nTitle:\s*([^\n]+)\nWhat to do:\s*([\s\S]*?)(?=Impact:|FIX\s*\d|WHAT IS|7-DAY|$)Impact:\s*([^\n]*)/gi;
+  var fixes = [];
+  var m;
   while((m = fixRegex.exec(text)) !== null) {
     fixes.push({num:m[1], timing:m[2].trim(), title:m[3].trim(), desc:m[4].trim(), impact:m[5].trim()});
   }
 
-  const numCls = ['fn1','fn2','fn3'];
-  const fc = document.getElementById('fix-cards');
-  fc.innerHTML = '';
-
-  const fixesToRender = fixes.length >= 3 ? fixes.slice(0,3) : null;
-
-  if(fixesToRender) {
-    fixesToRender.forEach((f,i) => {
-      // Split desc into sentences for step-by-step display
-      const sentences = f.desc.split(/[.!?]\s+/).map((s,i,a)=>i<a.length-1?s+'.':s).filter(s=>s.trim().length > 10).slice(0,4);
-      const stepsHTML = sentences.map((s,si)=>`<div class="fix-step"><div class="fix-step-num">${si+1}</div><span>${s}</span></div>`).join('');
-      fc.innerHTML += `<div class="fix-card">
-        <div style="display:flex;align-items:stretch;gap:0;">
-          <div class="fix-card-num ${numCls[i]}">${i+1}</div>
-          <div style="flex:1;padding:16px 20px;background:white;border-bottom:1px solid var(--border);">
-            <div class="fix-card-timing">${f.timing}</div>
-            <div class="fix-card-title">${f.title}</div>
-          </div>
-        </div>
-        <div class="fix-card-body">
-          <div class="fix-card-body-text">${f.desc}</div>
-          ${sentences.length > 1 ? '<div class="fix-steps">' + stepsHTML + '</div>' : ''}
-          ${f.impact ? '<div style="margin-top:16px;padding:14px 16px;background:var(--green-soft);border-radius:8px;border-left:3px solid var(--green);"><div style=\'font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:4px;\'>Impact</div><div style=\'font-family:var(--mono);font-size:12px;color:var(--green);font-weight:600;\'>' + f.impact + '</div></div>' : ''}
-        </div>
-      </div>`;
-    });
+  if(fixes.length >= 1) {
+    renderFixCards(fixes);
   } else {
-    // Loose fallback
-    const parts = text.split(/FIX\s*\d/i).slice(1);
-    const timings = ['Fix 1 — Today','Fix 2 — By Wednesday','Fix 3 — By Friday'];
-    parts.slice(0,3).forEach((p,i) => {
-      const lines = p.trim().split('\n').filter(l=>l.trim());
-      const title = (lines[0]||'').replace(/^[—\-–]\s*/,'').replace(/^Title:\s*/i,'').trim();
-      const body = lines.slice(1).join(' ');
-      fc.innerHTML += `<div class="fix-card">
-        <div style="display:flex;align-items:stretch;gap:0;">
-          <div class="fix-card-num ${numCls[i]}">${i+1}</div>
-          <div style="flex:1;padding:16px 20px;background:white;border-bottom:1px solid var(--border);">
-            <div class="fix-card-timing">${timings[i]}</div>
-            <div class="fix-card-title">${title}</div>
-          </div>
-        </div>
-        <div class="fix-card-body">
-          <div class="fix-card-body-text">${body}</div>
-        </div>
-      </div>`;
-    });
+    // AI response didn't have structured fixes - use fallback
+    if(window._fallbackFixes && window._fallbackFixes.length) {
+      renderFixCards(window._fallbackFixes.map(function(f,i){
+        return {num:i+1, timing:f.timing||('Fix '+(i+1)), title:f.title, desc:f.desc, impact:f.impact};
+      }));
+    }
   }
 
-  // ── WHAT IS WORKING ──
-  const workSplit = text.match(/WHAT IS WORKING\n([\s\S]*?)(?=7-DAY|$)/i);
+  // What is working
+  var workSplit = text.match(/WHAT IS WORKING\n([\s\S]*?)(?=7-DAY|$)/i);
   if(workSplit) document.getElementById('working-text').textContent = workSplit[1].trim();
 
-  // ── 7-DAY CHALLENGE ──
-  const sdSplit = text.match(/7-DAY CHALLENGE\n([\s\S]*?)$/i);
+  // 7-day challenge
+  var sdSplit = text.match(/7-DAY CHALLENGE\n([\s\S]*?)$/i);
   if(sdSplit) document.getElementById('seven-day-text').textContent = sdSplit[1].trim();
 }
-</script>
-</body>
-</html>
+
+function renderStructuredFixes(fixes, worst, best) {
+  // Executive summary
+  var w0 = worst[0], w1 = worst[1];
+  var s0 = moduleScores[w0.id], s1 = moduleScores[w1.id];
+  document.getElementById('exec-summary-text').textContent =
+    userData.name + ', this diagnostic identifies two areas where ' + userData.biz +
+    ' carries the most risk right now: ' + w0.name + ' (' + s0 + '/100) and ' +
+    w1.name + ' (' + s1 + '/100). The three fixes below are specific and actionable — no specialist required.';
+
+  // Priority areas
+  var pg = document.getElementById('priority-grid');
+  pg.innerHTML = '';
+  [w0, w1].forEach(function(m, i) {
+    var score = moduleScores[m.id];
+    var headerCls = i === 0 ? 'p1' : 'p2';
+    var bodyText = i === 0
+      ? 'Your answers reveal a pattern creating real commercial risk. At ' + score + '/100, this area is generating compounding problems that accumulate weekly — in lost time, eroded margin, or growing exposure.'
+      : 'At ' + score + '/100, this area has been deprioritised. Without action this week, the gap between your current position and sector peers will continue to widen.';
+    pg.innerHTML += '<div class="priority-card">' +
+      '<div class="priority-card-header ' + headerCls + '">' +
+      '<div><div class="priority-card-num">Priority ' + (i+1) + '</div>' +
+      '<div class="priority-card-name">' + m.name + '</div></div>' +
+      '<div class="priority-card-score">' + score + '<span style="font-size:13px;font-weight:400;opacity:0.6">/100</span></div>' +
+      '</div><div class="priority-card-body"><div class="priority-card-text">' + bodyText + '</div></div></div>';
+  });
+
+  // Fix cards
+  renderFixCards(fixes.slice(0,3).map(function(f,i){
+    return {num:i+1, timing:f.timing||('Fix '+(i+1)), title:f.title, desc:f.desc, impact:f.impact};
+  }));
+
+  // What is working
+  var bestScore = moduleScores[best.id];
+  document.getElementById('working-text').textContent =
+    'Your strongest area is ' + best.name + ' (' + bestScore + '/100). Your answers here suggest genuine capability that has been deliberately built. Protect this as you address the priority areas above.';
+
+  // 7-day challenge
+  var f1 = fixes[0];
+  document.getElementById('seven-day-text').textContent =
+    'By next Monday: start ' + (f1 ? f1.title : 'Fix 1') + ' today. Address ' + w1.name + ' by Wednesday. Set one weekly tracking metric by Friday. Act on day one — not day seven.';
+}
+
+function renderFixCards(fixes) {
+  var numCls = ['fn1','fn2','fn3'];
+  var timingLabels = ['Fix 1 — Today','Fix 2 — By Wednesday','Fix 3 — By Friday'];
+  var fc = document.getElementById('fix-cards');
+  fc.innerHTML = '';
+  fixes.slice(0,3).forEach(function(f, i) {
+    var timing = f.timing || timingLabels[i];
+    // Clean up timing label
+    timing = timing.replace(/^Fix \d+ — /i,'').replace(/^Fix \d — /i,'').replace(/^\d — /,'').trim();
+    var timingLabel = timingLabels[i];
+
+    var card = '<div class="fix-card">';
+    card += '<div style="display:flex;align-items:stretch;gap:0;">';
+    card += '<div class="fix-card-num ' + numCls[i] + '">' + (i+1) + '</div>';
+    card += '<div style="flex:1;padding:14px 20px;background:white;border-bottom:1px solid var(--border);">';
+    card += '<div class="fix-card-timing">' + timingLabel + '</div>';
+    card += '<div class="fix-card-title">' + f.title + '</div>';
+    card += '</div></div>';
+    card += '<div class="fix-card-body">';
+    card += '<div class="fix-card-body-text">' + f.desc + '</div>';
+    if(f.impact) {
+      card += '<div style="margin-top:14px;padding:12px 16px;background:var(--green-soft);border-radius:8px;border-left:3px solid var(--green);">';
+      card += '<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:4px;">Impact</div>';
+      card += '<div style="font-family:var(--mono);font-size:12px;color:var(--green);font-weight:600;">' + f.impact + '</div>';
+      card += '</div>';
+    }
+    card += '</div></div>';
+    fc.innerHTML += card;
+  });
+}
+
+
