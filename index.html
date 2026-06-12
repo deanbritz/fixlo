@@ -1465,276 +1465,55 @@ Write 3–4 sentences. Name the single highest-leverage action from the three fi
   },5200);
 }
 
-function buildFallback(worst,best) {
-  const w0=worst[0],w1=worst[1],s0=moduleScores[w0.id],s1=moduleScores[w1.id];
+function buildFallback(worst, best) {
+  var w0=worst[0], w1=worst[1];
+  var ans = answers;
 
-  // Build cyber-specific fixes if cyber is a priority area
-  function getCyberFixes() {
-    const ans = answers['cyber'] || {};
-    const fixes = [];
-    // Check each protocol answer
-    const cy1 = ans['cy1'];
-    const cy2 = ans['cy2'];
-    const cy3 = ans['cy3'];
-    const cy4 = ans['cy4'];
-    const cy5 = ans['cy5'];
-    const cy6 = ans['cy6'];
+  // Build fix list based on actual answers
+  var allFixes = [];
 
-    if(!cy1 || cy1.neg) fixes.push({
-      timing:'Fix — Today (15 minutes)',
-      title:'Protocol 1 — Enable Multi-Factor Authentication (MFA)',
-      desc:'Go to Settings in your Gmail, Microsoft 365 or Xero account right now. Enable 2-Step Verification. Download Google Authenticator (free, iOS and Android) or Duo Security. Do email first, then your accounting software, then banking logins. Takes 15 minutes per account.',
-      impact:'Blocks 99.9% of automated account takeover attacks — even if your password is already compromised in a data breach'
-    });
-    if(!cy2 || cy2.neg) fixes.push({
-      timing:'Fix — By Wednesday',
-      title:'Protocol 2 — Set Up Automated Offsite Backups',
-      desc:'Sign up for Backblaze Business Backup (backblaze.com, approx $99 USD/year) or Carbonite (carbonite.com, from $83/year). Install on every computer used for work. Enable daily automatic backups. Set a calendar reminder to test your backup restore once per quarter — an untested backup is not a backup.',
-      impact:'Enables full recovery from ransomware without paying. Average SME ransomware payment is $170,000 AUD — a $99 backup subscription eliminates that risk'
-    });
-    if(!cy3 || cy3.neg) fixes.push({
-      timing:'Fix — By Wednesday',
-      title:'Protocol 3 — Run a Phishing Awareness Session with Your Team',
-      desc:'Book a 30-minute team session this week. Use KnowBe4 free phishing simulation test (knowbe4.com/free-phishing-security-test) to baseline your team — it shows you who would click a malicious link. Cover three rules: never click links in unexpected emails, verify sender addresses carefully, call the sender directly to confirm if unsure.',
-      impact:'91% of cyberattacks start with a phishing email. One trained team member who spots and reports a malicious email can prevent a breach that costs tens of thousands to recover from'
-    });
-    if(!cy4 || cy4.neg) fixes.push({
-      timing:'Fix — By Friday',
-      title:'Protocol 4 — Enable Automatic Updates on All Work Devices',
-      desc:'On Windows: Settings → Windows Update → Automatic Updates on. On Mac: System Settings → General → Software Update → enable Automatic Updates. Do this on every computer and phone used for work. Also enable auto-update in Chrome, your email client and accounting software.',
-      impact:'60% of breaches exploit vulnerabilities that already had a patch available. Automatic updates close the window before attackers find it — zero cost, maximum protection'
-    });
-    if(!cy5 || cy5.neg) fixes.push({
-      timing:'Fix — By Friday',
-      title:'Protocol 5 — Install Endpoint Protection on All Devices',
-      desc:'Download and install Sophos Home Premium (sophos.com, approx $45 AUD/year for 3 devices) or Malwarebytes Business on every work device. Check your office router has its built-in firewall enabled — log in to your router admin page (usually 192.168.1.1) and verify the firewall setting is on.',
-      impact:'Endpoint protection detects and blocks malware and ransomware in real time. A hardware firewall stops malicious traffic before it reaches your devices — two layers of protection for under $50/year'
-    });
-    if(!cy6 || cy6.neg) fixes.push({
-      timing:'Fix — By Friday',
-      title:'Protocol 6 — Write a 1-Page Cyber Incident Response Plan',
-      desc:'Write four things on a single page and post it near every work computer: (1) Who to call first — your IT contact or managed service provider; (2) Isolate — disconnect affected devices from the network immediately; (3) Preserve — do not delete anything, photograph error screens; (4) Report — notify your cyber insurer and, if customer data is involved, the OAIC (Australia) or ICO (UK).',
-      impact:'In a cyber incident the first 60 minutes determine whether you lose hours or weeks of business. A plan prevents panic-driven decisions that turn a contained incident into a catastrophic one'
-    });
-    return fixes.slice(0,3);
-  }
+  // Cyber fixes
+  var cy = answers['cyber'] || {};
+  if(!cy['cy1'] || cy['cy1'].neg) allFixes.push({zone:'cyber', timing:'Fix 1 — Today', title:'Protocol 1: Enable Multi-Factor Authentication (MFA)', desc:'Go to Settings in your Gmail, Microsoft 365 or Xero account right now. Enable 2-Step Verification. Download Google Authenticator (free, iOS and Android) or Duo Security. Do email first, then your accounting software, then banking logins. Takes 15 minutes per account.', impact:'Blocks 99.9% of automated account takeover attacks — even if your password is already compromised'});
+  if(!cy['cy2'] || cy['cy2'].neg) allFixes.push({zone:'cyber', timing:'Fix 1 — Today', title:'Protocol 2: Set Up Automated Offsite Backups', desc:'Sign up for Backblaze Business Backup (backblaze.com, approx $99 USD/year) or Carbonite (carbonite.com, from $83/year). Install on every work computer. Enable daily automatic backups. Set a quarterly calendar reminder to test your restore.', impact:'Enables full recovery from ransomware without paying. Average SME ransomware payment: $170,000 AUD'});
+  if(!cy['cy3'] || cy['cy3'].neg) allFixes.push({zone:'cyber', timing:'Fix 2 — By Wednesday', title:'Protocol 3: Run a Phishing Awareness Session', desc:'Book a 30-minute team session this week. Use KnowBe4 free phishing simulation test (knowbe4.com/free-phishing-security-test) to show who would click a malicious link. Teach three rules: never click links in unexpected emails, verify sender addresses, call sender to confirm if unsure.', impact:'91% of cyberattacks start with a phishing email. One trained team member can prevent a breach costing tens of thousands'});
+  if(!cy['cy4'] || cy['cy4'].neg) allFixes.push({zone:'cyber', timing:'Fix 2 — By Wednesday', title:'Protocol 4: Enable Automatic Updates on All Devices', desc:'On Windows: Settings > Windows Update > Automatic Updates. On Mac: System Settings > General > Software Update > enable Automatic Updates. Do this on every computer and phone used for work. Also enable auto-update in Chrome and your accounting software.', impact:'60% of breaches exploit vulnerabilities that already had a patch available. Automatic updates close the window at zero cost'});
+  if(!cy['cy5'] || cy['cy5'].neg) allFixes.push({zone:'cyber', timing:'Fix 3 — By Friday', title:'Protocol 5: Install Endpoint Protection on All Devices', desc:'Download Sophos Home Premium (sophos.com, approx $45 AUD/year for 3 devices) or Malwarebytes Business on every work device. Log in to your router admin page (usually 192.168.1.1) and verify the firewall is enabled.', impact:'Endpoint protection detects ransomware and malware in real time. Hardware firewall stops malicious traffic before it reaches your devices'});
+  if(!cy['cy6'] || cy['cy6'].neg) allFixes.push({zone:'cyber', timing:'Fix 3 — By Friday', title:'Protocol 6: Write a 1-Page Incident Response Plan', desc:'Write four things and post near every work computer: (1) Who to call first — your IT contact; (2) Isolate — disconnect affected devices immediately; (3) Preserve — do not delete anything, photograph error screens; (4) Report — notify your cyber insurer and OAIC (AU) or ICO (UK) if customer data is involved.', impact:'In a cyber incident the first 60 minutes determine whether you lose hours or weeks. A plan prevents panic decisions that turn a contained incident into a catastrophe'});
 
-  function getComplianceFixes() {
-    const ans = answers['compliance'] || {};
-    const fixes = [];
-    const co1 = ans['co1'], co2 = ans['co2'], co3 = ans['co3'], co4 = ans['co4'];
-    if(!co1 || co1.neg) fixes.push({
-      timing:'Fix — Today',
-      title:'Tax & Payroll: Audit Your Current ATO/IRD Obligations',
-      desc:'Log into your accounting software and check: (1) Are all BAS/GST returns lodged and paid on time? (2) Are PAYG withholding payments current? (3) Is superannuation paid on time — especially under ATO Payday Super rules from July 2026? If anything is overdue, contact your BAS agent or accountant today. Do not wait for a notice.',
-      impact:'ATO late lodgement penalties start at $313 per period and escalate. Interest on unpaid super compounds daily. Early contact almost always results in a payment plan — late contact results in penalties'
-    });
-    if(!co2 || co2.neg) fixes.push({
-      timing:'Fix — By Wednesday',
-      title:'Employment Contracts: Review and Update All Staff Agreements',
-      desc:'Pull every employment contract from your files. For each one check: (1) Is it signed? (2) Does it correctly state the applicable Modern Award and classification? (3) Does it reflect the employees current role and pay rate? Any contract that fails these three checks needs to be updated. Contact an employment lawyer or use the Fair Work Commission template library (fairwork.gov.au) for updated templates.',
-      impact:'Fair Work underpayment claims can be backdated up to 6 years. Average underpayment claim cost for an SME is $28,000 AUD including back-pay and penalties — prevention costs a fraction of that'
-    });
-    if(!co3 || co3.neg) fixes.push({
-      timing:'Fix — By Friday',
-      title:'Privacy Policy: Implement a Current Data Handling Policy',
-      desc:'If you collect any customer personal information — names, emails, phone numbers, payment details — you have Privacy Act obligations in Australia or GDPR obligations in the UK. Download the free OAIC Privacy Policy template (oaic.gov.au), customise it for your business in under an hour, and publish it on your website. Add a link to it on any contact form or checkout page.',
-      impact:'OAIC can issue fines up to $2.22 million AUD for serious privacy breaches. A published privacy policy is not just a legal requirement — it builds customer trust and protects you in the event of a data incident'
-    });
-    if(!co4 || co4.neg) fixes.push({
-      timing:'Fix — By Friday',
-      title:'Insurance: Book a Business Insurance Review',
-      desc:'Call your current broker this week and request a coverage review. Ask specifically about: (1) Public liability — do you have minimum $10M cover? (2) Professional indemnity — does it cover your actual services? (3) Workers compensation — are all staff and contractors covered correctly? (4) Cyber insurance — this is now essential for any business holding customer data.',
-      impact:'A single uninsured incident — a client injury, a data breach, a professional error — can exceed $500,000 AUD in costs. Business insurance costs typically range from $2,000–$8,000/year depending on your sector and size'
-    });
-    return fixes.slice(0,2);
-  }
+  // Compliance fixes
+  var co = answers['compliance'] || {};
+  if(!co['co1'] || co['co1'].neg) allFixes.push({zone:'compliance', timing:'Fix 1 — Today', title:'Tax and Payroll: Audit Your Current Obligations', desc:'Log into your accounting software and check: (1) Are all BAS/GST returns lodged and paid? (2) Are PAYG withholding payments current? (3) Is superannuation paid on time? If anything is overdue, contact your BAS agent or accountant today — do not wait for a notice.', impact:'ATO late lodgement penalties start at $313 per period. Early contact almost always results in a payment plan — late contact results in penalties'});
+  if(!co['co2'] || co['co2'].neg) allFixes.push({zone:'compliance', timing:'Fix 2 — By Wednesday', title:'Employment Contracts: Review All Staff Agreements', desc:'Pull every employment contract. For each check: (1) Is it signed? (2) Does it state the correct Award and classification? (3) Does it reflect current role and pay rate? Use Fair Work Commission templates (fairwork.gov.au) to update any that fail these checks.', impact:'Fair Work underpayment claims can be backdated up to 6 years. Average SME underpayment claim cost: $28,000 AUD including back-pay and penalties'});
+  if(!co['co3'] || co['co3'].neg) allFixes.push({zone:'compliance', timing:'Fix 3 — By Friday', title:'Privacy Policy: Implement a Current Data Handling Policy', desc:'Download the free OAIC Privacy Policy template (oaic.gov.au), customise for your business in under an hour, and publish on your website. Add a link to it on any contact form or checkout page. Required if you collect any customer personal information.', impact:'OAIC can issue fines up to $2.22 million AUD for serious privacy breaches. A published privacy policy also builds customer trust'});
 
-  // Determine which modules are worst and build appropriate fixes
-  let fix1, fix2, fix3;
-  const cyberScore = moduleScores['cyber'] || 50;
-  const complianceScore = moduleScores['compliance'] || 50;
-  const cyberFixes = getCyberFixes();
-  const complianceFixes = getComplianceFixes();
+  // Operational fixes for other weak areas
+  var ops = answers['ops'] || {};
+  var cash = answers['cashflow'] || {};
+  allFixes.push({zone:'ops', timing:'Fix 1 — Today', title:'Identify and document your single biggest recurring problem', desc:'Pick the problem your team solves most often. Write the root cause in one sentence and the fix in one sentence. Assign it to one person with a deadline by end of week. This single step prevents the same problem consuming hours every month.', impact:'Reduces recurring time cost and creates accountability for permanent resolution'});
+  allFixes.push({zone:'cashflow', timing:'Fix 2 — By Wednesday', title:'Review your cash position and debtor list', desc:'Open your accounting software and check: current bank balance, any invoices overdue by more than 30 days, and committed outgoings for the next 60 days. If cash runway is under 8 weeks, chase your three oldest outstanding invoices today.', impact:'Proactive debtor management recovers cash faster and prevents the need for emergency financing'});
 
-  // If cyber is critical, lead with cyber fix
-  if(cyberScore < 50 && cyberFixes.length > 0) {
-    fix1 = cyberFixes[0];
-    fix2 = cyberFixes[1] || complianceFixes[0] || {timing:'Fix 2 — By Wednesday',title:'Address your '+w0.name+' gaps',desc:'Review your answers in the '+w0.name+' module and identify your single lowest-scoring response. Block 45 minutes Wednesday to address it specifically.',impact:'Moves the needle on your second-weakest area before the week is out'};
-    fix3 = cyberFixes[2] || complianceFixes[0] || {timing:'Fix 3 — By Friday',title:'Set one weekly tracking metric',desc:'Choose one number from this diagnostic that, if improved, would most change your confidence. Check it every Monday.',impact:'Builds the weekly rhythm that prevents these issues recurring'};
-  } else if(complianceScore < 50 && complianceFixes.length > 0) {
-    fix1 = complianceFixes[0];
-    fix2 = cyberFixes[0] || {timing:'Fix 2 — By Wednesday',title:'Address your '+w0.name+' situation',desc:'Review your answers in the '+w0.name+' module. Identify the single lowest-scoring response and block 45 minutes to address it.',impact:'Reduces your highest operational risk area'};
-    fix3 = complianceFixes[1] || {timing:'Fix 3 — By Friday',title:'Set one weekly tracking metric',desc:'Choose one number from this diagnostic that, if improved, would most change your confidence. Check it every Monday.',impact:'Builds the weekly rhythm that prevents these issues recurring'};
-  } else {
-    // Generic operational fixes for non-cyber/compliance priority areas
-    fix1 = {timing:'Fix 1 — Today',title:'Conduct a focused 60-minute review of your '+w0.name,desc:'Block 60 minutes today. Write down the three biggest friction points in '+w0.name+'. For each one, write the root cause in one sentence and the fix in one sentence. Assign each to one person with a deadline. This single step converts a vague problem into three named tasks with owners.',impact:'Converts recurring problems into assigned, time-bound actions — the step most owners skip'};
-    fix2 = {timing:'Fix 2 — By Wednesday',title:'Address the most urgent gap in your '+w1.name,desc:'Review your '+w1.name+' answers and identify the single lowest-scoring question. That answer points directly to the action. Block 45 minutes Wednesday to address it specifically.',impact:'Closes your second-biggest gap before the week is out'};
-    fix3 = {timing:'Fix 3 — By Friday',title:'Implement one metric you will track every week',desc:'Choose the single number from this diagnostic that, if it improved, would most change your confidence. Write it down. Commit to checking it every Monday morning. This is the first step from a one-time diagnostic to a weekly operating rhythm.',impact:'Builds the habit that prevents these same issues from appearing in your next diagnostic'};
-  }
+  // Select top 3 fixes prioritising worst modules
+  var selected = [];
+  var worstIds = worst.map(function(m){ return m.id; });
 
-  const fixes = [
-    {timing:fix1.timing||'Fix 1 — Today',title:fix1.title,desc:fix1.desc,impact:fix1.impact},
-    {timing:fix2.timing||'Fix 2 — By Wednesday',title:fix2.title,desc:fix2.desc,impact:fix2.impact},
-    {timing:fix3.timing||'Fix 3 — By Friday',title:fix3.title,desc:fix3.desc,impact:fix3.impact}
-  ];
+  // First: fixes from worst modules
+  allFixes.forEach(function(f) {
+    if(selected.length < 3 && worstIds.indexOf(f.zone) >= 0) selected.push(f);
+  });
+  // Fill remaining slots
+  allFixes.forEach(function(f) {
+    if(selected.length < 3 && selected.indexOf(f) < 0) selected.push(f);
+  });
 
-  // Build fix text for report
-  const fixText = '__STRUCTURED_FIXES__';
+  // Set timing labels correctly
+  var timings = ['Fix 1 — Today', 'Fix 2 — By Wednesday', 'Fix 3 — By Friday'];
+  selected = selected.slice(0,3).map(function(f,i){ return Object.assign({}, f, {timing: timings[i]}); });
 
-  // Return structured data for renderReport
-  window._fallbackFixes = fixes;
+  window._fallbackFixes = selected;
   return 'FALLBACK_STRUCTURED';
 }
 
-
-
-function markGen(i, active) {
-  const gs = document.getElementById('gs'+i), gi = document.getElementById('gi'+i);
-  if(active) { gs.classList.add('active'); gi.innerHTML='<div class="spinner"></div>'; }
-  else { gs.classList.remove('active'); gs.classList.add('done'); gi.innerHTML='✓'; gi.style.cssText='background:var(--green);border-color:var(--green);color:white;font-size:9px;'; }
-}
-
-// ══ SHOW REPORT ══
-function showReport(reportText, worst, best) {
-  switchScreen('report-screen');
-  const d = new Date();
-  const overall = Math.round(MODULES.reduce((a,m)=>a+moduleScores[m.id],0)/MODULES.length);
-
-  // Cover
-  document.getElementById('rc-biz-name').textContent = userData.biz;
-  document.getElementById('rc-sector-label').textContent = userData.sector + ' · ' + userData.country;
-  document.getElementById('rc-date').textContent = 'Generated ' + d.toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('rc-overall-score').innerHTML = overall + '<span class="rc-overall-denom">/100</span>';
-  document.getElementById('rc-overall-status').textContent = scoreLabel(overall);
-  document.getElementById('rf-biz').textContent = userData.biz;
-  const rfCountry = document.getElementById('rf-country');
-  if(rfCountry) rfCountry.textContent = userData.country;
-  document.getElementById('rf-date').textContent = d.toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
-  document.getElementById('rc-meta').innerHTML = [
-    {l:'Owner',v:userData.name},{l:'Revenue',v:userData.revenue},{l:'Team',v:userData.staff}
-  ].map(x=>`<div class="rc-meta-item"><div class="rc-meta-label">${x.l}</div><div class="rc-meta-val">${x.v}</div></div>`).join('');
-
-  // Scorecard tiles with SVG arc gauges
-  const grid = document.getElementById('scores-grid');
-  grid.innerHTML = '';
-  MODULES.forEach(m => {
-    const s = moduleScores[m.id];
-    const cls = scoreClass(s);
-    const sc = cls[0];
-    const arc = buildArc(s, m.color);
-    grid.innerHTML += `<div class="score-tile ${cls}">
-      <div class="score-tile-flag ${cls}"></div>
-      <div class="score-tile-name">${m.name}</div>
-      ${arc}
-      <div class="score-tile-num ${sc}">${s}</div>
-      <div class="score-tile-status">${scoreLabel(s)}</div>
-    </div>`;
-  });
-
-  // Radar bars
-  const bars = document.getElementById('radar-bars');
-  bars.innerHTML = '';
-  MODULES.forEach(m => {
-    const s = moduleScores[m.id];
-    const col = s>=70?'var(--green)':s>=45?'var(--amber)':'var(--accent)';
-    const sc = s>=70?'g':s>=45?'w':'c';
-    bars.innerHTML += `<div class="radar-bar-row">
-      <div class="radar-bar-label">${m.name}</div>
-      <div class="radar-bar-track"><div class="radar-bar-fill" style="width:${s}%;background:${col}"></div></div>
-      <div class="radar-bar-score score-tile-num ${sc}">${s}</div>
-    </div>`;
-  });
-
-  // Working section
-  document.getElementById('working-title').textContent = 'Strongest Area: ' + best.name;
-  document.getElementById('working-score').textContent = moduleScores[best.id] + '/100';
-
-  renderReport(reportText, worst, best);
-
-  // ── RENDER BENCHMARKS ──
-  const bm = getBenchmark();
-  if(bm) {
-    document.getElementById('benchmark-source-label').textContent = bm.source;
-    document.getElementById('benchmark-source').textContent = 'Data source: ' + bm.source;
-    document.getElementById('benchmark-intro').textContent =
-      'Your ' + userData.sector + ' business in ' + userData.country +
-      ' compared against verified sector benchmarks. Green = within range. Orange = above range. Red = below range.';
-
-    // Map module scores to benchmark metrics
-    const bmItems = [
-      { key:'grossMargin', label:'Gross Margin', yourScore: moduleScores['cashflow'], isScore:true },
-      { key:'debtorDays',  label:'Debtor Days',  yourScore: moduleScores['cashflow'], isScore:true },
-      { key:'payrollPct',  label:'Payroll % Revenue', yourScore: moduleScores['ops'], isScore:true },
-      { key:'ebitdaMargin',label:'EBITDA Margin', yourScore: moduleScores['growth'], isScore:true },
-      { key:'revenueGrowth',label:'Revenue Growth', yourScore: moduleScores['growth'], isScore:true },
-      { key:'cashRunway',  label:'Cash Runway',   yourScore: moduleScores['cashflow'], isScore:true },
-      { key:'cyberScore',  label:'Cyber Posture', yourScore: moduleScores['cyber'], isScore:true },
-      { key:'complianceScore', label:'Compliance', yourScore: moduleScores['compliance'], isScore:true },
-    ];
-
-    const grid = document.getElementById('benchmark-grid');
-    grid.innerHTML = '';
-    bmItems.forEach(function(item) {
-      var b = bm[item.key];
-      if(!b) return;
-      var pct = item.yourScore / 100;
-      var estVal = Math.round(b.low + (b.high - b.low) * pct);
-      var isScore = (item.key === 'cyberScore' || item.key === 'complianceScore');
-
-      var status, statusText, displayVal, youPct;
-      if(isScore) {
-        var raw = item.yourScore;
-        status = raw >= b.high ? 'within' : raw >= b.low ? 'above' : 'below';
-        statusText = raw >= b.high ? 'Strong' : raw >= b.low ? 'Needs attention' : 'Critical';
-        displayVal = raw + '/100';
-        youPct = Math.min(96, raw);
-      } else {
-        status = estVal >= b.low && estVal <= b.high ? 'within' : estVal < b.low ? 'below' : 'above';
-        statusText = status === 'within' ? 'Within range' : status === 'below' ? 'Below average' : 'Above average';
-        var u = b.unit === '%' ? '%' : b.unit === 'days' ? 'd' : b.unit === 'wks' ? 'w' : '';
-        displayVal = estVal + u;
-        var span = b.high * 1.2;
-        youPct = Math.min(96, Math.round((estVal / span) * 100));
-      }
-
-      var arrow = status === 'within' ? '&#10003;' : status === 'below' ? '&#8595;' : '&#8593;';
-      var rangeLeft = isScore ? Math.round((b.low/100)*100) : Math.round((b.low/(b.high*1.2))*100);
-      var rangeW = isScore ? Math.round(((b.high-b.low)/100)*100) : Math.round(((b.high-b.low)/(b.high*1.2))*100);
-
-      var card = '<div class="bm-card bm-' + status + '">';
-      card += '<div class="bm-card-name">' + item.label + '</div>';
-      card += '<div class="bm-card-values">';
-      card += '<div class="bm-your-val">' + displayVal + '</div>';
-      card += '<div class="bm-vs">vs</div>';
-      card += '<div class="bm-sector-val">' + b.label + '</div>';
-      card += '</div>';
-      card += '<div class="bm-status-pill ' + status + '">' + arrow + ' ' + statusText + '</div>';
-      card += '<div class="bm-bar-track">';
-      card += '<div class="bm-bar-range" style="left:' + rangeLeft + '%;width:' + rangeW + '%"></div>';
-      card += '<div class="bm-bar-you ' + status + '" style="left:' + youPct + '%"></div>';
-      card += '</div></div>';
-      grid.innerHTML += card;
-    });
-  }
-
-  window.scrollTo(0,0);
-}
-
-function buildArc(score, color) {
-  const r = 28, cx = 36, cy = 36;
-  const circ = 2 * Math.PI * r;
-  const pct = score / 100;
-  const dash = pct * circ;
-  const gap = circ - dash;
-  const trackColor = '#E8E4DC';
-  return `<svg class="score-tile-gauge" width="72" height="72" viewBox="0 0 72 72">
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${trackColor}" stroke-width="6"/>
-    <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="6"
-      stroke-dasharray="${dash} ${gap}" stroke-linecap="round"
-      transform="rotate(-90 ${cx} ${cy})" style="transition:stroke-dasharray 1s ease"/>
-  </svg>`;
-}
 
 function renderReport(text, worst, best) {
   // Handle structured fallback fixes
