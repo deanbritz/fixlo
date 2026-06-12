@@ -1181,6 +1181,15 @@ function scoreClass(s){return s>=70?'good':s>=45?'warning':'critical';}
 function scoreLabel(s){return s>=70?'Strong':s>=45?'Needs attention':'Critical';}
 
 // ══ GENERATE ══
+
+function markGen(i, active) {
+  var gs = document.getElementById('gs'+i);
+  var gi = document.getElementById('gi'+i);
+  if(!gs || !gi) return;
+  if(active) { gs.classList.add('active'); gi.innerHTML='<div class="spinner"></div>'; }
+  else { gs.classList.remove('active'); gs.classList.add('done'); gi.innerHTML='&#10003;'; gi.style.cssText='background:var(--green);border-color:var(--green);color:white;font-size:9px;'; }
+}
+
 async function generateReport() {
   clearInterval(timerInterval);
   MODULES.forEach(m=>{moduleScores[m.id]=calcScore(m.id);});
