@@ -1417,7 +1417,7 @@ PRIORITY AREA 1: ${worst[0].name}
 Write 5–6 sentences minimum. Explain exactly what their answers reveal about this area of the business. Reference their specific responses — what did they say and what does it actually mean for a ${userData.sector} business at their revenue level? Quantify the cost in time or money. Explain what happens if this is not addressed in the next 30 days. Be specific about the commercial consequences — lost margin, staff time wasted, revenue at risk, compliance exposure, or customer churn. This must feel like an advisor who has seen this pattern many times and knows exactly what it leads to.
 
 PRIORITY AREA 2: ${worst[1].name}
-Same depth and format as Priority Area 1. Minimum 5–6 sentences. Different commercial angle — don't repeat the same type of finding. Dig into what the answers reveal that the owner may not have fully recognised themselves.
+Same depth and format as Priority Area 1. Minimum 5–6 sentences. Different commercial angle — do not repeat the same type of finding. Dig into what the answers reveal that the owner may not have fully recognised themselves.
 
 FIX 1 — TODAY
 Title: [A specific, named, concrete action — not a category, an actual task]
@@ -1495,7 +1495,7 @@ function buildFallback(worst,best) {
     if(!cy3 || cy3.neg) fixes.push({
       timing:'Fix — By Wednesday',
       title:'Protocol 3 — Run a Phishing Awareness Session with Your Team',
-      desc:'Book a 30-minute team session this week. Use KnowBe4's free phishing simulation test (knowbe4.com/free-phishing-security-test) to baseline your team — it shows you who would click a malicious link. Cover three rules: never click links in unexpected emails, verify sender addresses carefully, call the sender directly to confirm if unsure.',
+      desc:'Book a 30-minute team session this week. Use KnowBe4 free phishing simulation test (knowbe4.com/free-phishing-security-test) to baseline your team — it shows you who would click a malicious link. Cover three rules: never click links in unexpected emails, verify sender addresses carefully, call the sender directly to confirm if unsure.',
       impact:'91% of cyberattacks start with a phishing email. One trained team member who spots and reports a malicious email can prevent a breach that costs tens of thousands to recover from'
     });
     if(!cy4 || cy4.neg) fixes.push({
@@ -1580,12 +1580,7 @@ function buildFallback(worst,best) {
   ];
 
   // Build fix text for report
-  const fixText = fixes.map((f,i) => `FIX ${i+1} — ${f.timing.replace(/Fix \d — /,'')}
-Title: ${f.title}
-What to do: ${f.desc}
-Impact: ${f.impact}`).join('
-
-');
+  const fixText = fixes.map(function(f,i){ return 'FIX '+(i+1)+' '+f.timing+' TITLE: '+f.title+' ACTION: '+f.desc+' IMPACT: '+f.impact; }).join(' | | | ');
 
   return `EXECUTIVE SUMMARY
 ${userData.name}, this diagnostic has identified the areas where ${userData.biz} carries the most risk right now. Your two most urgent areas are ${w0.name} (${s0}/100) and ${w1.name} (${s1}/100). The three fixes below are specific, actionable, and can be started this week — no specialist required.
@@ -1692,68 +1687,46 @@ function showReport(reportText, worst, best) {
 
     const grid = document.getElementById('benchmark-grid');
     grid.innerHTML = '';
-    bmItems.forEach(item => {
-      const b = bm[item.key];
+    bmItems.forEach(function(item) {
+      var b = bm[item.key];
       if(!b) return;
-      // Convert score (0-100) to estimated metric value
-      const pct = item.yourScore / 100;
-      const estVal = Math.round(b.low + (b.high - b.low) * pct);
-      const unit = b.unit;
+      var pct = item.yourScore / 100;
+      var estVal = Math.round(b.low + (b.high - b.low) * pct);
+      var isScore = (item.key === 'cyberScore' || item.key === 'complianceScore');
 
-      let status, statusText;
-      if(estVal >= b.low && estVal <= b.high) { status='within'; statusText='Within range'; }
-      else if(estVal < b.low) { status='below'; statusText='Below average'; }
-      else { status='above'; statusText='Above average'; }
-
-      // For score-based metrics (cyber, compliance), flip: low score = below average
-      const isScoreMetric = (item.key === 'cyberScore' || item.key === 'complianceScore');
-      if(isScoreMetric) {
-        // Use raw module score directly instead of estimated value
-        const rawScore = item.yourScore;
-        const displayVal = rawScore + '/100';
-        const scoreStatus = rawScore >= b.high ? 'within' : rawScore >= b.low ? 'above' : 'below';
-        const scoreStatusText = rawScore >= b.high ? 'Strong posture' : rawScore >= b.low ? 'Needs attention' : 'Critical — action required';
-        const youPctScore = Math.min(96, Math.round((rawScore / 100) * 100));
-        grid.innerHTML += \`<div class="bm-card bm-\${scoreStatus}">
-          <div class="bm-card-name">\${item.label}</div>
-          <div class="bm-card-values">
-            <div class="bm-your-val">\${rawScore}</div>
-            <div class="bm-vs">/ 100</div>
-            <div class="bm-sector-val">\${b.label}</div>
-          </div>
-          <div class="bm-status-pill \${scoreStatus}">
-            \${scoreStatus === 'within' ? '✓' : scoreStatus === 'below' ? '↓' : '↑'} \${scoreStatusText}
-          </div>
-          <div class="bm-bar-track">
-            <div class="bm-bar-range" style="left:\${Math.round((b.low/100)*100)}%;width:\${Math.round(((b.high-b.low)/100)*100)}%"></div>
-            <div class="bm-bar-you \${scoreStatus}" style="left:\${youPctScore}%"></div>
-          </div>
-        </div>\`;
-        return;
+      var status, statusText, displayVal, youPct;
+      if(isScore) {
+        var raw = item.yourScore;
+        status = raw >= b.high ? 'within' : raw >= b.low ? 'above' : 'below';
+        statusText = raw >= b.high ? 'Strong' : raw >= b.low ? 'Needs attention' : 'Critical';
+        displayVal = raw + '/100';
+        youPct = Math.min(96, raw);
+      } else {
+        status = estVal >= b.low && estVal <= b.high ? 'within' : estVal < b.low ? 'below' : 'above';
+        statusText = status === 'within' ? 'Within range' : status === 'below' ? 'Below average' : 'Above average';
+        var u = b.unit === '%' ? '%' : b.unit === 'days' ? 'd' : b.unit === 'wks' ? 'w' : '';
+        displayVal = estVal + u;
+        var span = b.high * 1.2;
+        youPct = Math.min(96, Math.round((estVal / span) * 100));
       }
 
-      // Bar positioning for financial metrics
-      const rangeSpan = b.high * 1.2;
-      const rangePct = Math.round((b.low / rangeSpan) * 100);
-      const rangeWidthPct = Math.round(((b.high - b.low) / rangeSpan) * 100);
-      const youPct = Math.min(98, Math.round((estVal / rangeSpan) * 100));
-      const displayUnit = unit === '%' ? '%' : unit === 'days' ? 'd' : unit === 'wks' ? 'w' : '';
+      var arrow = status === 'within' ? '&#10003;' : status === 'below' ? '&#8595;' : '&#8593;';
+      var rangeLeft = isScore ? Math.round((b.low/100)*100) : Math.round((b.low/(b.high*1.2))*100);
+      var rangeW = isScore ? Math.round(((b.high-b.low)/100)*100) : Math.round(((b.high-b.low)/(b.high*1.2))*100);
 
-      grid.innerHTML += \`<div class="bm-card bm-\${status}">
-        <div class="bm-card-name">\${item.label}</div>
-        <div class="bm-card-values">
-          <div class="bm-your-val">\${estVal}\${displayUnit}</div>
-          <div class="bm-vs">vs</div>
-          <div class="bm-sector-val">\${b.label}</div>
-        </div>
-        <div class="bm-status-pill \${status}">
-          \${status === 'within' ? '✓' : status === 'below' ? '↓' : '↑'} \${statusText}
-        </div>
-        <div class="bm-bar-track">
-          <div class="bm-bar-range" style="left:\${rangePct}%;width:\${rangeWidthPct}%"></div>
-          <div class="bm-bar-you \${status}" style="left:\${youPct}%"></div>
-        </div>
-      </div>\`;
+      var card = '<div class="bm-card bm-' + status + '">';
+      card += '<div class="bm-card-name">' + item.label + '</div>';
+      card += '<div class="bm-card-values">';
+      card += '<div class="bm-your-val">' + displayVal + '</div>';
+      card += '<div class="bm-vs">vs</div>';
+      card += '<div class="bm-sector-val">' + b.label + '</div>';
+      card += '</div>';
+      card += '<div class="bm-status-pill ' + status + '">' + arrow + ' ' + statusText + '</div>';
+      card += '<div class="bm-bar-track">';
+      card += '<div class="bm-bar-range" style="left:' + rangeLeft + '%;width:' + rangeW + '%"></div>';
+      card += '<div class="bm-bar-you ' + status + '" style="left:' + youPct + '%"></div>';
+      card += '</div></div>';
+      grid.innerHTML += card;
     });
   }
 
