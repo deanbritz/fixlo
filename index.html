@@ -581,7 +581,7 @@
 
 <nav>
   <div class="logo">FIX<span>LO</span>™</div>
-  <div class="nav-tag" id="nav-price-tag">Business Diagnostic</div>
+  <div class="nav-tag" id="nav-price-tag"><strong>Business Diagnostic</strong></div>
 </nav>
 
 <!-- ══ INTRO ══ -->
@@ -591,7 +591,7 @@
     <div class="wl-logo">FIX<span>LO</span>™</div>
     <div class="wl-content">
       <div class="wl-tagline">Find out exactly<br>what to <em>fix first.</em></div>
-      <div class="wl-sub">20 questions. 4 minutes. A personalised report with 3 named actions you can act on this week.</div>
+      <div class="wl-sub">24 questions. 5 minutes. A personalised report with 3 named actions you can act on this week.</div>
       <div class="wl-steps">
         <div class="wl-step wl-active" id="wl-s0"><div class="wl-step-num">1</div><div class="wl-step-text">Your location &amp; currency</div></div>
         <div class="wl-step" id="wl-s1"><div class="wl-step-num">2</div><div class="wl-step-text">About your business</div></div>
@@ -975,6 +975,23 @@ const MODULES = [
       {id:'di3',type:'slider',text:'How much time per week does your team spend on tasks that could realistically be automated?',lo:'Almost none',hi:'Several hours',default:4,invert:true},
       {id:'di4',type:'choice',text:'If a core system went down today, how quickly could your business adapt?',opts:[{e:'⚡',l:'Immediately — clear backup',s:'Strong resilience',neg:false},{e:'😐',l:'Within a day',s:'Minor disruption',neg:false},{e:'😬',l:'Takes several days',s:'Real vulnerability',neg:true},{e:'🚨',l:'Major disruption',s:'Single point of failure',neg:true}]},
     ]
+  },
+
+  { id:'cyber', name:'Cyber Security', color:'#DC2626', bg:'#FEF2F2',
+    tagline:'How exposed is your business — and does anyone actually know?',
+    intro:'Most SME cyber breaches are not sophisticated attacks. They are unlocked doors. This module helps you sense-test your real-world cyber exposure across access, data, staff behaviour and incident readiness.',
+    questions:[
+      {id:'cy1',type:'choice',text:'When did you last review who has login access to your core business systems — email, accounting, CRM, file storage?',
+        opts:[{e:'✅',l:'In the last 3 months',s:'Active access management',neg:false},{e:'😐',l:'6–12 months ago',s:'Access may have drifted',neg:true},{e:'😬',l:'Over a year ago',s:'High dormant access risk',neg:true},{e:'❓',l:'Never formally reviewed',s:'Critical exposure',neg:true}]},
+      {id:'cy2',type:'choice',text:'Do any former staff, contractors or suppliers still have active logins to your systems?',
+        opts:[{e:'✅',l:'No — access is removed immediately on exit',s:'Clean offboarding process',neg:false},{e:'😐',l:'Mostly — occasional gaps',s:'Some dormant access risk',neg:true},{e:'😬',l:'Probably — we don't have a formal process',s:'Significant exposure',neg:true},{e:'🚨',l:'Yes — definitely some still active',s:'Active breach risk',neg:true}]},
+      {id:'cy3',type:'slider',text:'How confident are you that your team can identify a phishing email or social engineering attempt?',lo:'Not at all confident',hi:'Very confident',default:5},
+      {id:'cy4',type:'choice',text:'How does your business handle passwords for shared accounts — accounting software, social media, cloud tools?',
+        opts:[{e:'🔐',l:'Password manager — unique passwords for everything',s:'Strong credential hygiene',neg:false},{e:'😐',l:'Mix of password manager and some shared passwords',s:'Partial risk',neg:true},{e:'😬',l:'Shared informally via email or messaging',s:'Serious credential risk',neg:true},{e:'🚨',l:'Same passwords reused across multiple systems',s:'Critical vulnerability',neg:true}]},
+      {id:'cy5',type:'choice',text:'If your business data was encrypted by ransomware today, how quickly could you recover without paying?',
+        opts:[{e:'⚡',l:'Within hours — full offsite backups tested regularly',s:'Strong recovery posture',neg:false},{e:'😐',l:'Within a day or two — backups exist but untested',s:'Moderate risk',neg:true},{e:'😬',l:'Days to weeks — backups are inconsistent',s:'High recovery risk',neg:true},{e:'🚨',l:'We would likely have to pay or lose the data',s:'Critical ransomware exposure',neg:true}]},
+      {id:'cy6',type:'slider',text:'How well documented is your response plan if a cyber incident — data breach, ransomware, account takeover — occurred right now?',lo:'No plan exists',hi:'Fully documented and practised',default:3},
+    ]
   }
 ];
 
@@ -1010,6 +1027,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:6,  avg:10, high:15, label:'6–15%', unit:'%' },
       revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1019,6 +1037,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:5,  avg:9,  high:14, label:'5–14%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1028,6 +1047,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:5,  avg:9,  high:13, label:'5–13%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'HMRC/ONS Construction Sector Data 2024'
     },
     CA: {
@@ -1037,6 +1057,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:5,  avg:9,  high:14, label:'5–14%', unit:'%' },
       revenueGrowth:  { low:2,  avg:5,  high:9,  label:'2–9%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:13, label:'4–13 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1046,6 +1067,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:6,  avg:10, high:15, label:'6–15%', unit:'%' },
       revenueGrowth:  { low:2,  avg:6,  high:11, label:'2–11%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'IBISWorld US Construction 2024'
     },
     ZA: {
@@ -1055,6 +1077,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:4,  avg:8,  high:12, label:'4–12%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:10, label:'3–10 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'StatsSA / CIDB Construction Report 2024'
     }
   },
@@ -1068,6 +1091,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:10, avg:18, high:28, label:'10–28%', unit:'%' },
       revenueGrowth:  { low:3,  avg:7,  high:14, label:'3–14%', unit:'%' },
       cashRunway:     { low:6,  avg:10, high:16, label:'6–16 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1077,6 +1101,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:9,  avg:16, high:26, label:'9–26%', unit:'%' },
       revenueGrowth:  { low:2,  avg:6,  high:12, label:'2–12%', unit:'%' },
       cashRunway:     { low:5,  avg:9,  high:15, label:'5–15 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1086,6 +1111,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:10, avg:17, high:26, label:'10–26%', unit:'%' },
       revenueGrowth:  { low:2,  avg:6,  high:12, label:'2–12%', unit:'%' },
       cashRunway:     { low:5,  avg:9,  high:15, label:'5–15 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'HMRC/ONS Professional Services 2024'
     },
     CA: {
@@ -1095,6 +1121,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:10, avg:17, high:26, label:'10–26%', unit:'%' },
       revenueGrowth:  { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
       cashRunway:     { low:6,  avg:10, high:16, label:'6–16 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1104,6 +1131,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:12, avg:20, high:30, label:'12–30%', unit:'%' },
       revenueGrowth:  { low:3,  avg:8,  high:15, label:'3–15%', unit:'%' },
       cashRunway:     { low:6,  avg:11, high:18, label:'6–18 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'IBISWorld US Professional Services 2024'
     },
     ZA: {
@@ -1113,6 +1141,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:8,  avg:14, high:22, label:'8–22%', unit:'%' },
       revenueGrowth:  { low:2,  avg:6,  high:12, label:'2–12%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:13, label:'4–13 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'StatsSA Service Sector Report 2024'
     }
   },
@@ -1126,6 +1155,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:3,  avg:7,  high:12, label:'3–12%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1135,6 +1165,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:3,  avg:6,  high:11, label:'3–11%', unit:'%' },
       revenueGrowth:  { low:1,  avg:3,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1144,6 +1175,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:3,  avg:6,  high:11, label:'3–11%', unit:'%' },
       revenueGrowth:  { low:1,  avg:3,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'HMRC/ONS Retail Sector 2024'
     },
     CA: {
@@ -1153,6 +1185,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:3,  avg:6,  high:11, label:'3–11%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1162,6 +1195,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:3,  avg:7,  high:12, label:'3–12%', unit:'%' },
       revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'IBISWorld US Retail 2024'
     },
     ZA: {
@@ -1171,6 +1205,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       revenueGrowth:  { low:1,  avg:3,  high:7,  label:'1–7%', unit:'%' },
       cashRunway:     { low:2,  avg:6,  high:10, label:'2–10 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'StatsSA Retail Trade Survey 2024'
     }
   },
@@ -1184,6 +1219,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:6,  avg:11, high:18, label:'6–18%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1193,6 +1229,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:5,  avg:10, high:16, label:'5–16%', unit:'%' },
       revenueGrowth:  { low:1,  avg:3,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:13, label:'3–13 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1202,6 +1239,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:5,  avg:10, high:16, label:'5–16%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'HMRC/ONS Manufacturing 2024'
     },
     CA: {
@@ -1211,6 +1249,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:5,  avg:10, high:17, label:'5–17%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:3,  avg:8,  high:13, label:'3–13 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1220,6 +1259,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:6,  avg:12, high:20, label:'6–20%', unit:'%' },
       revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       cashRunway:     { low:4,  avg:9,  high:15, label:'4–15 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'IBISWorld US Manufacturing 2024'
     },
     ZA: {
@@ -1229,6 +1269,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:4,  avg:8,  high:14, label:'4–14%', unit:'%' },
       revenueGrowth:  { low:1,  avg:3,  high:7,  label:'1–7%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:11, label:'3–11 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'StatsSA Manufacturing Survey 2024'
     }
   },
@@ -1242,6 +1283,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:5,  avg:10, high:18, label:'5–18%', unit:'%' },
       revenueGrowth:  { low:1,  avg:5,  high:12, label:'1–12%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:10, label:'3–10 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1251,6 +1293,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:4,  avg:9,  high:16, label:'4–16%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:10, label:'1–10%', unit:'%' },
       cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1260,6 +1303,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:4,  avg:9,  high:16, label:'4–16%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:10, label:'1–10%', unit:'%' },
       cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'HMRC/ONS Hospitality 2024'
     },
     CA: {
@@ -1269,6 +1313,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:4,  avg:9,  high:16, label:'4–16%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:10, label:'1–10%', unit:'%' },
       cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1278,6 +1323,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:5,  avg:10, high:18, label:'5–18%', unit:'%' },
       revenueGrowth:  { low:2,  avg:6,  high:13, label:'2–13%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:10, label:'3–10 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'IBISWorld US Hospitality 2024'
     },
     ZA: {
@@ -1287,6 +1333,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:2,  avg:4,  high:8,  label:'2–8 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'StatsSA Tourism & Hospitality 2024'
     }
   },
@@ -1300,6 +1347,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:8,  avg:15, high:24, label:'8–24%', unit:'%' },
       revenueGrowth:  { low:3,  avg:7,  high:14, label:'3–14%', unit:'%' },
       cashRunway:     { low:5,  avg:9,  high:15, label:'5–15 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1309,6 +1357,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:7,  avg:13, high:22, label:'7–22%', unit:'%' },
       revenueGrowth:  { low:3,  avg:6,  high:12, label:'3–12%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1318,6 +1367,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:7,  avg:14, high:22, label:'7–22%', unit:'%' },
       revenueGrowth:  { low:3,  avg:6,  high:12, label:'3–12%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'HMRC/ONS Healthcare 2024'
     },
     CA: {
@@ -1327,6 +1377,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:7,  avg:14, high:23, label:'7–23%', unit:'%' },
       revenueGrowth:  { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
       cashRunway:     { low:4,  avg:9,  high:15, label:'4–15 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1336,6 +1387,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:8,  avg:16, high:26, label:'8–26%', unit:'%' },
       revenueGrowth:  { low:4,  avg:8,  high:15, label:'4–15%', unit:'%' },
       cashRunway:     { low:5,  avg:10, high:16, label:'5–16 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'IBISWorld US Healthcare 2024'
     },
     ZA: {
@@ -1345,6 +1397,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:6,  avg:11, high:18, label:'6–18%', unit:'%' },
       revenueGrowth:  { low:3,  avg:6,  high:12, label:'3–12%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'StatsSA Health & Social Services 2024'
     }
   },
@@ -1358,6 +1411,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:5,  avg:10, high:16, label:'5–16%', unit:'%' },
       revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1367,6 +1421,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:4,  avg:9,  high:15, label:'4–15%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:11, label:'3–11 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1376,6 +1431,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:4,  avg:9,  high:15, label:'4–15%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:11, label:'3–11 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'HMRC/ONS Transport 2024'
     },
     CA: {
@@ -1385,6 +1441,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:4,  avg:9,  high:15, label:'4–15%', unit:'%' },
       revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1394,6 +1451,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:5,  avg:11, high:18, label:'5–18%', unit:'%' },
       revenueGrowth:  { low:2,  avg:5,  high:11, label:'2–11%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:13, label:'4–13 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'IBISWorld US Transport & Logistics 2024'
     },
     ZA: {
@@ -1403,6 +1461,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:3,  avg:7,  high:12, label:'3–12%', unit:'%' },
       revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'StatsSA Transport Survey 2024'
     }
   },
@@ -1416,6 +1475,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:15, avg:24, high:35, label:'15–35%', unit:'%' },
       revenueGrowth:  { low:3,  avg:8,  high:15, label:'3–15%', unit:'%' },
       cashRunway:     { low:8,  avg:14, high:22, label:'8–22 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1425,6 +1485,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:14, avg:22, high:33, label:'14–33%', unit:'%' },
       revenueGrowth:  { low:2,  avg:7,  high:13, label:'2–13%', unit:'%' },
       cashRunway:     { low:7,  avg:13, high:20, label:'7–20 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1434,6 +1495,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:14, avg:23, high:34, label:'14–34%', unit:'%' },
       revenueGrowth:  { low:2,  avg:7,  high:14, label:'2–14%', unit:'%' },
       cashRunway:     { low:7,  avg:13, high:21, label:'7–21 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'HMRC/ONS Financial Services 2024'
     },
     CA: {
@@ -1443,6 +1505,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:14, avg:23, high:34, label:'14–34%', unit:'%' },
       revenueGrowth:  { low:3,  avg:7,  high:14, label:'3–14%', unit:'%' },
       cashRunway:     { low:7,  avg:13, high:21, label:'7–21 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1452,6 +1515,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:16, avg:26, high:38, label:'16–38%', unit:'%' },
       revenueGrowth:  { low:3,  avg:8,  high:16, label:'3–16%', unit:'%' },
       cashRunway:     { low:8,  avg:15, high:24, label:'8–24 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'IBISWorld US Financial Services 2024'
     },
     ZA: {
@@ -1461,6 +1525,7 @@ const BENCHMARKS = {
       ebitdaMargin:   { low:12, avg:20, high:30, label:'12–30%', unit:'%' },
       revenueGrowth:  { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
       cashRunway:     { low:6,  avg:11, high:18, label:'6–18 wks', unit:'wks' },
+      cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
       source: 'StatsSA Financial Services 2024'
     }
   }
@@ -1715,7 +1780,7 @@ async function generateReport() {
     }).join('\n');
   }).join('\n\n');
 
-  const prompt = `You are a highly experienced business advisor with 25 years of SME consulting experience across ${userData.sector}. You have just completed a detailed diagnostic assessment of ${userData.biz} and you are now writing a premium paid report for ${userData.name}. This owner has paid $97 for this report and expects the kind of sharp, specific, commercially-grounded advice they would get from a senior consultant charging $500/hour.
+  const prompt = `You are a highly experienced business advisor with 25 years of SME consulting experience across ${userData.sector}, including cyber security risk assessment for SMEs. You have just completed a detailed diagnostic assessment of ${userData.biz} and you are now writing a premium paid report for ${userData.name}. This owner has paid $97 for this report and expects the kind of sharp, specific, commercially-grounded advice they would get from a senior consultant charging $500/hour.
 
 CRITICAL RULES:
 - Never write generic advice. Every sentence must be specific to THIS business, THIS sector, THESE answers.
@@ -1750,6 +1815,7 @@ THEIR EXACT ANSWERS:
 ${answersSummary}
 
 WEAKEST AREAS: ${worst[0].name} (${moduleScores[worst[0].id]}/100) and ${worst[1].name} (${moduleScores[worst[1].id]}/100)
+NOTE: If Cyber Security scored below 50, treat it as a CRITICAL finding regardless of ranking — cyber exposure creates existential risk for SMEs that outweighs operational inefficiencies.
 STRONGEST AREA: ${best.name} (${moduleScores[best.id]}/100)
 
 Write the report in plain text — no markdown, no asterisks, no hash symbols. Use the exact section headers below.
@@ -1922,6 +1988,7 @@ function showReport(reportText, worst, best) {
       { key:'ebitdaMargin',label:'EBITDA Margin', yourScore: moduleScores['growth'], isScore:true },
       { key:'revenueGrowth',label:'Revenue Growth', yourScore: moduleScores['growth'], isScore:true },
       { key:'cashRunway',  label:'Cash Runway',   yourScore: moduleScores['cashflow'], isScore:true },
+      { key:'cyberScore',  label:'Cyber Posture', yourScore: moduleScores['cyber'], isScore:true },
     ];
 
     const grid = document.getElementById('benchmark-grid');
