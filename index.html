@@ -591,7 +591,7 @@
     <div class="wl-logo">FIX<span>LO</span>™</div>
     <div class="wl-content">
       <div class="wl-tagline">Find out exactly<br>what to <em>fix first.</em></div>
-      <div class="wl-sub">24 questions. 5 minutes. A personalised report with 3 named actions you can act on this week.</div>
+      <div class="wl-sub">28 questions. 6 minutes. A personalised report with 3 named actions you can act on this week.</div>
       <div class="wl-steps">
         <div class="wl-step wl-active" id="wl-s0"><div class="wl-step-num">1</div><div class="wl-step-text">Your location &amp; currency</div></div>
         <div class="wl-step" id="wl-s1"><div class="wl-step-num">2</div><div class="wl-step-text">About your business</div></div>
@@ -801,7 +801,7 @@
     <div class="section-band">
       <span class="section-band-num">01</span>
       <span class="section-band-title">Diagnostic Scorecard</span>
-      <span class="section-band-sub">5 modules · scored 0–100</span>
+      <span class="section-band-sub">7 modules · scored 0–100</span>
     </div>
     <div class="scorecard-section">
       <div class="scorecard-grid" id="scores-grid"></div>
@@ -1030,6 +1030,45 @@ const MODULES = [
           {e:'🚨',l:'No plan and no idea where to start',s:'Critical — incidents escalate fast without a plan',neg:true}
         ]}
     ]
+  },
+
+  { id:'compliance', name:'Compliance & Legal Risk', color:'#0369A1', bg:'#EFF6FF',
+    tagline:'Are you unknowingly exposed to fines, penalties or legal liability?',
+    intro:'Compliance failures rarely announce themselves. They accumulate quietly — missed obligations, outdated contracts, payroll errors — until a regulator, employee or client surfaces them. These questions identify your highest-risk compliance gaps right now.',
+    questions:[
+      {id:'co1',type:'choice',
+        text:'Tax & Payroll Compliance: Are your BAS/GST returns, PAYG withholding and superannuation payments fully up to date with no outstanding lodgements?',
+        opts:[
+          {e:'✅',l:'Yes — fully up to date and reconciled',s:'Strong compliance posture',neg:false},
+          {e:'😐',l:'Mostly — minor items still to confirm',s:'Low risk, action needed',neg:true},
+          {e:'😬',l:'Partially — some catching up required',s:'Penalty exposure building',neg:true},
+          {e:'🚨',l:'No — this is an area I am concerned about',s:'Urgent — ATO penalties apply',neg:true}
+        ]},
+      {id:'co2',type:'choice',
+        text:'Employment Contracts & Awards: Are all your staff employed under current, signed contracts that correctly reflect their award rate, classification and entitlements?',
+        opts:[
+          {e:'✅',l:'Yes — all contracts current and signed',s:'Protected against underpayment claims',neg:false},
+          {e:'😐',l:'Most — some older or unsigned contracts',s:'Partial exposure',neg:true},
+          {e:'😬',l:'Contracts are outdated or were never updated',s:'Underpayment risk',neg:true},
+          {e:'🚨',l:'No formal contracts in place',s:'Critical legal exposure',neg:true}
+        ]},
+      {id:'co3',type:'choice',
+        text:'Data Privacy (Privacy Act / GDPR): Does your business collect, store or share customer personal information — and do you have a current privacy policy that covers how it is handled?',
+        opts:[
+          {e:'✅',l:'Yes — privacy policy in place and reviewed in last 12 months',s:'Compliant data handling',neg:false},
+          {e:'😐',l:'Policy exists but has not been reviewed recently',s:'May not reflect current obligations',neg:true},
+          {e:'😬',l:'No formal policy — we handle data informally',s:'Regulatory exposure',neg:true},
+          {e:'🚨',l:'Not sure what obligations apply to us',s:'Urgent review required',neg:true}
+        ]},
+      {id:'co4',type:'choice',
+        text:'Business Insurance: Does your business hold current and adequate public liability, professional indemnity and/or workers compensation insurance?',
+        opts:[
+          {e:'✅',l:'Yes — all relevant policies current and reviewed annually',s:'Well protected',neg:false},
+          {e:'😐',l:'Some policies — may have gaps in coverage',s:'Partial exposure',neg:true},
+          {e:'😬',l:'Basic insurance only — coverage may be inadequate',s:'Underinsured risk',neg:true},
+          {e:'🚨',l:'No current business insurance',s:'Critical financial exposure',neg:true}
+        ]}
+    ]
   }
 ];
 
@@ -1066,6 +1105,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1076,6 +1116,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1086,6 +1127,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'HMRC/ONS Construction Sector Data 2024'
     },
     CA: {
@@ -1096,6 +1138,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:5,  high:9,  label:'2–9%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:13, label:'4–13 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1106,6 +1149,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:6,  high:11, label:'2–11%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'IBISWorld US Construction 2024'
     },
     ZA: {
@@ -1116,6 +1160,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:10, label:'3–10 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'StatsSA / CIDB Construction Report 2024'
     }
   },
@@ -1130,6 +1175,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:7,  high:14, label:'3–14%', unit:'%' },
       cashRunway:     { low:6,  avg:10, high:16, label:'6–16 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1140,6 +1186,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:6,  high:12, label:'2–12%', unit:'%' },
       cashRunway:     { low:5,  avg:9,  high:15, label:'5–15 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1150,6 +1197,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:6,  high:12, label:'2–12%', unit:'%' },
       cashRunway:     { low:5,  avg:9,  high:15, label:'5–15 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'HMRC/ONS Professional Services 2024'
     },
     CA: {
@@ -1160,6 +1208,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
       cashRunway:     { low:6,  avg:10, high:16, label:'6–16 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1170,6 +1219,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:8,  high:15, label:'3–15%', unit:'%' },
       cashRunway:     { low:6,  avg:11, high:18, label:'6–18 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'IBISWorld US Professional Services 2024'
     },
     ZA: {
@@ -1180,6 +1230,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:6,  high:12, label:'2–12%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:13, label:'4–13 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'StatsSA Service Sector Report 2024'
     }
   },
@@ -1194,6 +1245,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1204,6 +1256,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:3,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1214,6 +1267,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:3,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'HMRC/ONS Retail Sector 2024'
     },
     CA: {
@@ -1224,6 +1278,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1234,6 +1289,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'IBISWorld US Retail 2024'
     },
     ZA: {
@@ -1244,6 +1300,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:3,  high:7,  label:'1–7%', unit:'%' },
       cashRunway:     { low:2,  avg:6,  high:10, label:'2–10 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'StatsSA Retail Trade Survey 2024'
     }
   },
@@ -1258,6 +1315,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1268,6 +1326,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:3,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:13, label:'3–13 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1278,6 +1337,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'HMRC/ONS Manufacturing 2024'
     },
     CA: {
@@ -1288,6 +1348,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:3,  avg:8,  high:13, label:'3–13 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1298,6 +1359,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       cashRunway:     { low:4,  avg:9,  high:15, label:'4–15 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'IBISWorld US Manufacturing 2024'
     },
     ZA: {
@@ -1308,6 +1370,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:3,  high:7,  label:'1–7%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:11, label:'3–11 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'StatsSA Manufacturing Survey 2024'
     }
   },
@@ -1322,6 +1385,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:5,  high:12, label:'1–12%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:10, label:'3–10 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1332,6 +1396,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:10, label:'1–10%', unit:'%' },
       cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1342,6 +1407,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:10, label:'1–10%', unit:'%' },
       cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'HMRC/ONS Hospitality 2024'
     },
     CA: {
@@ -1352,6 +1418,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:10, label:'1–10%', unit:'%' },
       cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1362,6 +1429,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:6,  high:13, label:'2–13%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:10, label:'3–10 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'IBISWorld US Hospitality 2024'
     },
     ZA: {
@@ -1372,6 +1440,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:2,  avg:4,  high:8,  label:'2–8 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'StatsSA Tourism & Hospitality 2024'
     }
   },
@@ -1386,6 +1455,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:7,  high:14, label:'3–14%', unit:'%' },
       cashRunway:     { low:5,  avg:9,  high:15, label:'5–15 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1396,6 +1466,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:6,  high:12, label:'3–12%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1406,6 +1477,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:6,  high:12, label:'3–12%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:14, label:'4–14 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'HMRC/ONS Healthcare 2024'
     },
     CA: {
@@ -1416,6 +1488,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
       cashRunway:     { low:4,  avg:9,  high:15, label:'4–15 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1426,6 +1499,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:4,  avg:8,  high:15, label:'4–15%', unit:'%' },
       cashRunway:     { low:5,  avg:10, high:16, label:'5–16 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'IBISWorld US Healthcare 2024'
     },
     ZA: {
@@ -1436,6 +1510,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:6,  high:12, label:'3–12%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'StatsSA Health & Social Services 2024'
     }
   },
@@ -1450,6 +1525,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1460,6 +1536,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:11, label:'3–11 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1470,6 +1547,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:9,  label:'1–9%', unit:'%' },
       cashRunway:     { low:3,  avg:6,  high:11, label:'3–11 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'HMRC/ONS Transport 2024'
     },
     CA: {
@@ -1480,6 +1558,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:5,  high:10, label:'2–10%', unit:'%' },
       cashRunway:     { low:3,  avg:7,  high:12, label:'3–12 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1490,6 +1569,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:5,  high:11, label:'2–11%', unit:'%' },
       cashRunway:     { low:4,  avg:8,  high:13, label:'4–13 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'IBISWorld US Transport & Logistics 2024'
     },
     ZA: {
@@ -1500,6 +1580,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:1,  avg:4,  high:8,  label:'1–8%', unit:'%' },
       cashRunway:     { low:2,  avg:5,  high:9,  label:'2–9 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'StatsSA Transport Survey 2024'
     }
   },
@@ -1514,6 +1595,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:8,  high:15, label:'3–15%', unit:'%' },
       cashRunway:     { low:8,  avg:14, high:22, label:'8–22 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'ATO Business Benchmarks 2024'
     },
     NZ: {
@@ -1524,6 +1606,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:7,  high:13, label:'2–13%', unit:'%' },
       cashRunway:     { low:7,  avg:13, high:20, label:'7–20 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Stats NZ Business Demography 2024'
     },
     UK: {
@@ -1534,6 +1617,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:2,  avg:7,  high:14, label:'2–14%', unit:'%' },
       cashRunway:     { low:7,  avg:13, high:21, label:'7–21 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'HMRC/ONS Financial Services 2024'
     },
     CA: {
@@ -1544,6 +1628,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:7,  high:14, label:'3–14%', unit:'%' },
       cashRunway:     { low:7,  avg:13, high:21, label:'7–21 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'Statistics Canada FPD 2024'
     },
     US: {
@@ -1554,6 +1639,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:8,  high:16, label:'3–16%', unit:'%' },
       cashRunway:     { low:8,  avg:15, high:24, label:'8–24 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'IBISWorld US Financial Services 2024'
     },
     ZA: {
@@ -1564,6 +1650,7 @@ const BENCHMARKS = {
       revenueGrowth:  { low:3,  avg:7,  high:13, label:'3–13%', unit:'%' },
       cashRunway:     { low:6,  avg:11, high:18, label:'6–18 wks', unit:'wks' },
       cyberScore:     { low:30, avg:55, high:80, label:'30–80 pts', unit:' pts' },
+      complianceScore: { low:40, avg:65, high:90, label:'40–90 pts', unit:' pts' },
       source: 'StatsSA Financial Services 2024'
     }
   }
@@ -1853,18 +1940,29 @@ THEIR EXACT ANSWERS:
 ${answersSummary}
 
 WEAKEST AREAS: ${worst[0].name} (${moduleScores[worst[0].id]}/100) and ${worst[1].name} (${moduleScores[worst[1].id]}/100)
-NOTE ON CYBER SECURITY MODULE:
-The cyber questions map directly to 5 specific protocols:
-- cy1 = Multi-Factor Authentication (MFA) — tool: Google Authenticator, Duo Security
-- cy2 = Automated Backups — tools: Backblaze, Carbonite, Google Drive
-- cy3 = Phishing Awareness Training — tools: KnowBe4, Cofense
-- cy4 = Software Updates & Patching — automatic OS, browser, antivirus updates
-- cy5 = Firewalls & Malware Protection — hardware firewall + Sophos endpoint
-- cy6 = Incident Response Readiness — 60-minute response plan
+CRITICAL CYBER SECURITY INSTRUCTIONS:
+The cyber module maps directly to 5 actionable protocols. Use the owner's EXACT answers to determine which protocols have failed and write specific fixes for each failure.
 
-If Cyber Security scored below 60, it must appear as a priority area regardless of ranking — a cyber breach can end an SME in 48 hours, which outweighs any operational issue.
+PROTOCOL MAPPING:
+- cy1 answer = MFA status → If not "Yes — MFA on all critical systems": Fix must say "Protocol 1 — Enable Multi-Factor Authentication. Go to Settings in your Gmail/Microsoft 365/Xero account right now. Enable 2-Step Verification. Download Google Authenticator (free, iOS and Android) or Duo Security. Takes 15 minutes per account. Do email first, then accounting software, then banking. Why it works: even if your password is stolen — which happens constantly via data breaches — an attacker cannot access your account without the second factor. This single step blocks 99.9% of automated account takeover attacks."
 
-When writing cyber fixes, always name the specific protocol (e.g. "Protocol 1 — MFA"), name the exact tool to use (e.g. Google Authenticator, Backblaze, KnowBe4), give a realistic time estimate to implement, and explain in plain language why this specific gap creates real financial or operational risk for a business of this size in this sector.
+- cy2 answer = Backup status → If not "Yes — daily automated backups": Fix must say "Protocol 2 — Set Up Automated Backups. Sign up for Backblaze Business Backup ($99 USD/year) or Carbonite (from $83/year). Install on every computer used for work. Enable automatic daily backups. Set a calendar reminder to test your backup restore quarterly — an untested backup is not a backup. Why it works: ransomware attacks encrypt your files and demand payment. With a clean offsite backup, you restore from yesterday's copy and pay nothing. Without one, average ransomware payment for SMEs is $170,000 AUD."
+
+- cy3 answer = Phishing training → If not "Yes — formal training": Fix must say "Protocol 3 — Train Your Team to Spot Phishing. Book a 30-minute team session this week. Use KnowBe4's free phishing test (knowbe4.com/free-phishing-security-test) to baseline your team's awareness — it takes 5 minutes and shows you who would click a malicious link. Key rules to cover: never click links in unexpected emails, verify sender addresses carefully, never enter passwords from an email link, call the sender to confirm if unsure. Why it works: 91% of cyberattacks begin with a phishing email. Your team is both your biggest vulnerability and your most effective defence."
+
+- cy4 answer = Updates/patching → If not "Yes — automatic updates on all devices": Fix must say "Protocol 4 — Enable Automatic Updates on Every Work Device. On Windows: Settings → Windows Update → turn on Automatic Updates. On Mac: System Settings → General → Software Update → enable Automatic Updates. Do this on every computer and phone used for work this week. Enable auto-update in Chrome, Firefox, your email client and accounting software. Why it works: 60% of breaches exploit vulnerabilities that had a patch available. Attackers specifically scan for outdated software. Automatic updates close the window before they find it."
+
+- cy5 answer = Firewall/malware → If not "Yes — hardware firewall and endpoint protection": Fix must say "Protocol 5 — Install Endpoint Protection on All Devices. Download and install Sophos Home Premium (sophos.com, from $45 AUD/year for 3 devices) or Malwarebytes Business on every work device by Friday. Check your office router has its built-in firewall enabled — login to your router admin page (usually 192.168.1.1) and verify firewall is on. Why it works: endpoint protection detects and blocks malware, ransomware and suspicious behaviour in real time. A hardware firewall stops malicious traffic before it reaches your devices. Together they create a two-layer perimeter."
+
+- cy6 answer = Incident response → If not "Yes — documented plan": Fix must say "Protocol 6 — Write a 1-Page Incident Response Plan by Friday. It needs only 4 things: (1) Who to call first — your IT contact or managed service provider; (2) Isolate — disconnect affected devices from the network immediately; (3) Preserve — do not delete anything, take photos of error screens; (4) Report — notify your cyber insurer and, if customer data is involved, the relevant privacy regulator (OAIC in Australia, ICO in UK). Post this on the wall near every computer. Why it works: in a cyber incident, the first 60 minutes determine whether you lose hours or weeks of business. A plan prevents panic-driven decisions that make breaches worse."
+
+COMPLIANCE MODULE NOTES:
+- co1 = Tax/payroll compliance → If deficient: reference ATO penalties, suggest BAS agent review
+- co2 = Employment contracts → If deficient: reference Fair Work underpayment risks, suggest employment lawyer review
+- co3 = Privacy policy → If deficient: reference Privacy Act/GDPR obligations, suggest free OAIC template
+- co4 = Insurance → If deficient: reference financial exposure, suggest broker review
+
+If EITHER Cyber Security OR Compliance scored below 60, they must be treated as CRITICAL priority areas — regulatory and cyber failures can end an SME faster than any operational or financial issue.
 STRONGEST AREA: ${best.name} (${moduleScores[best.id]}/100)
 
 Write the report in plain text — no markdown, no asterisks, no hash symbols. Use the exact section headers below.
@@ -2038,6 +2136,7 @@ function showReport(reportText, worst, best) {
       { key:'revenueGrowth',label:'Revenue Growth', yourScore: moduleScores['growth'], isScore:true },
       { key:'cashRunway',  label:'Cash Runway',   yourScore: moduleScores['cashflow'], isScore:true },
       { key:'cyberScore',  label:'Cyber Posture', yourScore: moduleScores['cyber'], isScore:true },
+      { key:'complianceScore', label:'Compliance', yourScore: moduleScores['compliance'], isScore:true },
     ];
 
     const grid = document.getElementById('benchmark-grid');
