@@ -336,7 +336,7 @@
 
 <nav>
   <div class="logo">FIX<span>LO</span>™</div>
-  <div class="nav-tag">Business Diagnostic · $97 AUD</div>
+  <div class="nav-tag">Business Diagnostic · $49 AUD</div>
 </nav>
 
 <!-- ══ INTRO ══ -->
@@ -517,7 +517,7 @@
   <div class="gen-tagline">Analysing your answers and building your report…</div>
   <div class="gen-bar-wrap"><div class="gen-bar" id="gen-bar"></div></div>
   <ul class="gen-steps">
-    <li class="gen-step" id="gs0"><div class="g-icon" id="gi0">–</div><span>Scoring 5 diagnostic modules</span></li>
+    <li class="gen-step" id="gs0"><div class="g-icon" id="gi0">–</div><span>Scoring 7 diagnostic modules</span></li>
     <li class="gen-step" id="gs1"><div class="g-icon" id="gi1">–</div><span>Benchmarking against <span id="gen-sector-label">your sector</span></span></li>
     <li class="gen-step" id="gs2"><div class="g-icon" id="gi2">–</div><span>Identifying your 2 critical areas</span></li>
     <li class="gen-step" id="gs3"><div class="g-icon" id="gi3">–</div><span>Generating your personalised fix plan</span></li>
@@ -1209,7 +1209,7 @@ async function generateReport() {
     }).join('\n');
   }).join('\n\n');
 
-  const prompt = `You are a highly experienced business advisor with 25 years of SME consulting experience across ${userData.sector}, including cyber security risk assessment for SMEs. You have just completed a detailed diagnostic assessment of ${userData.biz} and you are now writing a premium paid report for ${userData.name}. This owner has paid $97 for this report and expects the kind of sharp, specific, commercially-grounded advice they would get from a senior consultant charging $500/hour.
+  const prompt = `You are a highly experienced business advisor with 25 years of SME consulting experience across ${userData.sector}, including cyber security risk assessment for SMEs. You have just completed a detailed diagnostic assessment of ${userData.biz} and you are now writing a premium paid report for ${userData.name}. This owner has paid $49 for this report and expects the kind of sharp, specific, commercially-grounded advice they would get from a senior consultant charging $500/hour.
 
 CRITICAL RULES:
 - Never write generic advice. Every sentence must be specific to THIS business, THIS sector, THESE answers.
@@ -1287,28 +1287,30 @@ Write 3–4 sentences. Name the single highest-leverage action from the three fi
 
   if(apiKey) {
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages',{
+      var ctrl = new AbortController();
+      var tid = setTimeout(function(){ ctrl.abort(); }, 15000);
+      var res = await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
-        headers:{'Content-Type':'application/json'},
+        signal: ctrl.signal,
+        headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
         body:JSON.stringify({
           model:'claude-sonnet-4-20250514',
           max_tokens:2500,
           messages:[{role:'user',content:prompt}]
         })
       });
-      const data = await res.json();
-      reportText = data.content?.[0]?.text || buildFallback(worst,best);
+      clearTimeout(tid);
+      var data = await res.json();
+      reportText = data.content && data.content[0] && data.content[0].text ? data.content[0].text : buildFallback(worst,best);
     } catch(e){ reportText = buildFallback(worst,best); }
   } else {
-    await new Promise(r=>setTimeout(r,2200));
+    await new Promise(function(r){ setTimeout(r, 2200); });
     reportText = buildFallback(worst,best);
   }
 
-  setTimeout(()=>{
-    markGen(4,false);
-    document.getElementById('gen-bar').style.width='100%';
-    setTimeout(()=>showReport(reportText,worst,best),600);
-  },5200);
+  markGen(4,false);
+  document.getElementById('gen-bar').style.width='100%';
+  setTimeout(function(){ showReport(reportText,worst,best); }, 800);
 }
 
 function buildFallback(worst, best) {
