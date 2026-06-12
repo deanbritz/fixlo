@@ -1291,32 +1291,18 @@ Write 4–5 sentences about ${best.name}. Be genuinely specific — what do thei
 7-DAY CHALLENGE
 Write 3–4 sentences. Name the single highest-leverage action from the three fixes above. Explain specifically why this one matters most right now for ${userData.biz}. Make it a concrete commitment with a named day and measurable outcome. End with one sentence that connects this weeks action to the longer-term trajectory of the business.`;
 
-  let reportText = '';
-  const apiKey = typeof FIXLO_KEY !== 'undefined' && FIXLO_KEY !== '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' ? FIXLO_KEY : null;
+  var reportText = '';
+  // Use structured fallback (API temporarily disabled for reliability)
+  reportText = buildFallback(worst,best);
 
-  if(apiKey) {
-    try {
-      var ctrl = new AbortController();
-      var tid = setTimeout(function(){ ctrl.abort(); }, 15000);
-      var res = await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        signal: ctrl.signal,
-        headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-        body:JSON.stringify({
-          model:'claude-sonnet-4-20250514',
-          max_tokens:2500,
-          messages:[{role:'user',content:prompt}]
-        })
-      });
-      clearTimeout(tid);
-      var data = await res.json();
-      reportText = data.content && data.content[0] && data.content[0].text ? data.content[0].text : buildFallback(worst,best);
-    } catch(e){ reportText = buildFallback(worst,best); }
-  } else {
-    await new Promise(function(r){ setTimeout(r, 2200); });
-    reportText = buildFallback(worst,best);
-  }
 
+  // Safety net - force report after 8 seconds no matter what
+  setTimeout(function(){
+    if(document.getElementById('report-screen').style.display !== 'block') {
+      console.log('Safety timeout - forcing report');
+      showReport(reportText || buildFallback(worst,best), worst, best);
+    }
+  }, 8000);
   markGen(4,false);
   document.getElementById('gen-bar').style.width='100%';
   setTimeout(function(){ showReport(reportText,worst,best); }, 800);
