@@ -231,7 +231,7 @@
  .rc-date { font-family:var(--mono); font-size:10px; color:rgba(247,244,238,0.3); margin-top:8px; }
  .section-band { background:var(--cream-deep); border-bottom:1px solid var(--border); padding:14px 48px; display:flex; align-items:center; gap:12px; }
  .section-band-num { font-family:var(--mono); font-size:11px; color:var(--accent); font-weight:500; }
- .section-band-title { font-family:var(--serif); font-size:18px; font-weight:600; color:var(--ink); }
+ .section-band-title { font-family:var(--serif); font-size:24px; font-weight:700; color:var(--ink); }
  .section-band-sub { font-size:12px; color:var(--ink-light); margin-left:auto; font-family:var(--mono); }
  .scorecard-section { padding:40px 48px; border-bottom:1px solid var(--border); }
  .scorecard-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:0; border:1.5px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:24px; }
@@ -272,8 +272,8 @@
  .priority-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:24px; }
  .priority-card { border:1.5px solid var(--border); border-radius:10px; overflow:hidden; }
  .priority-card-header { padding:18px 22px; display:flex; align-items:center; justify-content:space-between; }
- .priority-card-header.p1 { background:var(--accent); }
- .priority-card-header.p2 { background:var(--amber); }
+ .priority-card-header.p1 { background:var(--ink); }
+ .priority-card-header.p2 { background:var(--ink); }
  .priority-card-num { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.7); }
  .priority-card-name { font-size:15px; font-weight:600; color:white; }
  .priority-card-score { font-family:var(--mono); font-size:22px; font-weight:700; color:rgba(255,255,255,0.9); }
@@ -761,7 +761,7 @@
     <div class="section-band">
       <span class="section-band-num">04</span>
       <span class="section-band-title">Priority Areas</span>
-      <span class="section-band-sub">Where to focus first</span>
+      <span class="section-band-sub" style="color:var(--ink);font-weight:500;">Where to focus first</span>
     </div>
     <div class="priority-section">
       <div class="priority-grid" id="priority-grid"></div>
