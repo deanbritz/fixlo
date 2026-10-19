@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FIXLO™ — Business Diagnostic</title>
+<title>FIXLO™, Business Diagnostic</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -323,20 +323,63 @@
     .section-band, .scorecard-section, .priority-section, .fixes-section, .working-section, .challenge-section { break-inside:avoid; }
     @page { margin:12mm; size:A4; }
   }
+
+  /* ── FIXLO v2 ── */
+  .rc-delta { font-family:var(--mono); font-size:11px; color:rgba(247,244,238,0.55); margin-top:8px; }
+  .fix-steps { margin:14px 0 0; padding-left:18px; display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--ink-mid); line-height:1.6; }
+  .fix-meta { display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:14px; padding-top:12px; border-top:1px solid var(--border); font-family:var(--mono); font-size:11px; color:var(--ink-light); line-height:1.6; }
+  .days-section { padding:32px 48px 40px; border-bottom:1px solid var(--border); }
+  .days-lead { font-size:14px; color:var(--ink-mid); line-height:1.7; margin-bottom:18px; max-width:640px; }
+  .days-list { border:1px solid var(--border); border-radius:10px; background:white; overflow:hidden; }
+  .day-row { display:grid; grid-template-columns:150px 1fr; gap:16px; padding:14px 18px; border-top:1px solid var(--border); }
+  .day-row:first-child { border-top:0; }
+  .day-label { font-family:var(--mono); font-size:11px; color:var(--ink-light); line-height:1.5; }
+  .day-label b { display:block; font-family:var(--serif); font-size:17px; color:var(--ink); }
+  .day-tasks { display:flex; flex-direction:column; gap:8px; min-width:0; }
+  .day-task { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--ink-mid); line-height:1.55; cursor:pointer; }
+  .day-task input { margin-top:3px; accent-color:var(--accent); }
+  .day-task.done span { text-decoration:line-through; color:var(--ink-light); }
+  .days-actions { display:flex; flex-wrap:wrap; gap:12px; align-items:center; margin-top:18px; }
+  .btn-days { background:var(--accent); color:white; border:1px solid var(--accent); padding:11px 20px; border-radius:6px; font-family:var(--sans); font-size:13px; font-weight:500; cursor:pointer; }
+  .btn-days.ghost { background:transparent; color:var(--accent); }
+  .copy-msg { font-size:12px; color:var(--green); }
+  .findings-section { padding:32px 48px 40px; border-bottom:1px solid var(--border); }
+  .findings-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .finding-card { background:white; border:1px solid var(--border); border-radius:10px; padding:16px 18px; min-width:0; }
+  .finding-head { display:flex; justify-content:space-between; align-items:center; gap:10px; font-family:var(--serif); font-size:16px; font-weight:600; margin-bottom:10px; }
+  .finding-score { font-family:var(--mono); font-size:12px; padding:2px 8px; border-radius:99px; }
+  .finding-score.good { background:var(--green-soft); color:var(--green); }
+  .finding-score.warning { background:#FFF4DC; color:var(--amber); }
+  .finding-score.critical { background:var(--accent-soft); color:var(--accent); }
+  .finding-card ul { padding-left:18px; display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--ink-mid); line-height:1.6; }
+  .finding-card p { font-size:13px; color:var(--ink-light); line-height:1.6; }
+  @media (max-width:700px) { .days-section, .findings-section { padding:24px 20px 28px; } .day-row { grid-template-columns:1fr; gap:6px; } }
+  @media print { .days-actions { display:none !important; } .day-row, .finding-card { break-inside:avoid; } }
+
+  .numbers-block { border:1.5px dashed var(--border); border-radius:10px; padding:20px; background:white; }
+  .numbers-note { font-size:13px; color:var(--ink-light); line-height:1.6; margin:6px 0 14px; }
+  .numbers-fields { display:flex; flex-direction:column; gap:14px; }
+  .num-field { display:flex; flex-direction:column; gap:6px; }
+  .num-label { font-size:13px; font-weight:500; color:var(--ink); }
+  .num-hint { font-size:12px; color:var(--ink-light); line-height:1.5; }
+  .numbers-section { padding:32px 48px 36px; border-bottom:1px solid var(--border); }
+  .numbers-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; }
+  .num-tile { background:white; border:1px solid var(--border); border-radius:10px; padding:16px 18px; min-width:0; }
+  .num-tile-label { font-family:var(--mono); font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--ink-light); }
+  .num-tile-val { font-family:var(--serif); font-size:34px; font-weight:700; margin:4px 0 6px; font-variant-numeric:tabular-nums; }
+  .num-tile-cmp { font-family:var(--mono); font-size:11px; margin-bottom:6px; }
+  .num-tile-note { font-size:12px; color:var(--ink-mid); line-height:1.55; }
+  .numbers-foot { font-size:12px; color:var(--ink-light); margin-top:14px; line-height:1.6; }
+  @media (max-width:700px) { .numbers-section { padding:24px 20px 28px; } }
 </style>
 </head>
 <body>
 
-<!-- ── PASTE YOUR KEY HERE — ONE PLACE ONLY ── -->
-<script>
-  const FIXLO_KEY = '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';
-  // Get your key at console.anthropic.com → API Keys
-  // Replace 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 with your key (starts with sk-ant-)
-</script>
+<!-- API key removed. Never put a secret key in a public page. -->
 
 <nav>
   <div class="logo">FIX<span>LO</span>™</div>
-  <div class="nav-tag">Business Diagnostic · $49 AUD</div>
+  <div class="nav-tag" id="nav-price-tag">Business Diagnostic</div>
 </nav>
 
 <!-- ══ INTRO ══ -->
@@ -346,7 +389,7 @@
     <div class="wl-logo">FIX<span>LO</span>™</div>
     <div class="wl-content">
       <div class="wl-tagline">Find out exactly<br>what to <em>fix first.</em></div>
-      <div class="wl-sub">28 questions. 6 minutes. A personalised report with 3 named actions you can act on this week.</div>
+      <div class="wl-sub">25 questions. About 6 minutes. A personalised report with 3 named actions you can act on this week.</div>
       <div class="wl-steps">
         <div class="wl-step wl-active" id="wl-s0"><div class="wl-step-num">1</div><div class="wl-step-text">Your location &amp; currency</div></div>
         <div class="wl-step" id="wl-s1"><div class="wl-step-num">2</div><div class="wl-step-text">About your business</div></div>
@@ -371,32 +414,17 @@
         <div class="wp-dot wp-inactive"></div>
       </div>
       <div class="wp-title">Where are you<br><em>based?</em></div>
-      <div class="wp-sub">We use your location to set the right currency and benchmarks for your industry.</div>
+      <div class="wp-sub">We use your location to set the right currency and the tax, privacy and employment rules in your report.</div>
       <div class="country-grid">
-        <div class="country-card" onclick="selectCountry(this,'AU','$49 AUD','AUD')" data-code="AU">
-          <span class="cc-flag">🇦🇺</span>
-          <div class="cc-name">Australia</div>
-          <div class="cc-currency">AUD · $49</div>
-        </div>
         <div class="country-card" onclick="selectCountry(this,'NZ','$49 NZD','NZD')" data-code="NZ">
           <span class="cc-flag">🇳🇿</span>
           <div class="cc-name">New Zealand</div>
           <div class="cc-currency">NZD · $49</div>
         </div>
-        <div class="country-card" onclick="selectCountry(this,'UK','£29 GBP','GBP')" data-code="UK">
-          <span class="cc-flag">🇬🇧</span>
-          <div class="cc-name">United Kingdom</div>
-          <div class="cc-currency">GBP · £29</div>
-        </div>
-        <div class="country-card" onclick="selectCountry(this,'CA','CA$49','CAD')" data-code="CA">
-          <span class="cc-flag">🇨🇦</span>
-          <div class="cc-name">Canada</div>
-          <div class="cc-currency">CAD · CA$49</div>
-        </div>
-        <div class="country-card" onclick="selectCountry(this,'US','$35 USD','USD')" data-code="US">
-          <span class="cc-flag">🇺🇸</span>
-          <div class="cc-name">United States</div>
-          <div class="cc-currency">USD · $35</div>
+        <div class="country-card" onclick="selectCountry(this,'AU','$49 AUD','AUD')" data-code="AU">
+          <span class="cc-flag">🇦🇺</span>
+          <div class="cc-name">Australia</div>
+          <div class="cc-currency">AUD · $49</div>
         </div>
         <div class="country-card" onclick="selectCountry(this,'ZA','R649 ZAR','ZAR')" data-code="ZA">
           <span class="cc-flag">🇿🇦</span>
@@ -422,7 +450,7 @@
         <div class="wp-dot wp-active"></div>
       </div>
       <div class="wp-title">About your<br><em>business</em></div>
-      <div class="wp-sub">This personalises your report and benchmarks you against the right industry data.</div>
+      <div class="wp-sub">This personalises your report.</div>
       <div class="wf-row">
         <div class="wf-group">
           <label class="wf-label">Your first name</label>
@@ -480,11 +508,11 @@
       </div>
       <div class="wp-btn-row">
         <button class="wp-btn-back" onclick="goStep1()">← Back</button>
-        <button class="wp-btn-next" onclick="startAssessment()">Begin my diagnostic →</button>
+        <button class="wp-btn-next" onclick="payAndBegin()" id="begin-btn">Begin my diagnostic →</button>
       </div>
       <div class="wp-trust">
         <span class="wp-trust-item">Save as PDF anytime</span>
-        <span class="wp-trust-item">Results not stored</span>
+        <span class="wp-trust-item">Answers stay on this device</span>
       </div>
     </div>
 
@@ -518,9 +546,9 @@
   <div class="gen-bar-wrap"><div class="gen-bar" id="gen-bar"></div></div>
   <ul class="gen-steps">
     <li class="gen-step" id="gs0"><div class="g-icon" id="gi0">–</div><span>Scoring 7 diagnostic modules</span></li>
-    <li class="gen-step" id="gs1"><div class="g-icon" id="gi1">–</div><span>Benchmarking against <span id="gen-sector-label">your sector</span></span></li>
-    <li class="gen-step" id="gs2"><div class="g-icon" id="gi2">–</div><span>Identifying your 2 critical areas</span></li>
-    <li class="gen-step" id="gs3"><div class="g-icon" id="gi3">–</div><span>Generating your personalised fix plan</span></li>
+    <li class="gen-step" id="gs1"><div class="g-icon" id="gi1">–</div><span>Reading your answers for <span id="gen-sector-label">your sector</span></span></li>
+    <li class="gen-step" id="gs2"><div class="g-icon" id="gi2">–</div><span>Putting cash first, then your biggest risks</span></li>
+    <li class="gen-step" id="gs3"><div class="g-icon" id="gi3">–</div><span>Building your seven-day plan</span></li>
     <li class="gen-step" id="gs4"><div class="g-icon" id="gi4">–</div><span>Compiling your full report</span></li>
   </ul>
 </div>
@@ -528,7 +556,7 @@
 <!-- ══ REPORT ══ -->
 <div id="report-screen">
   <div class="btn-print-bar">
-    <div class="btn-print-bar-note">Your diagnostic report is ready — <strong>save it as PDF to keep a copy</strong></div>
+    <div class="btn-print-bar-note">Your diagnostic report is ready, <strong>save it as PDF to keep a copy</strong></div>
     <button class="btn-print" onclick="window.print()">⬇ Save as PDF</button>
   </div>
   <div class="report-page">
@@ -549,8 +577,9 @@
       </div>
       <div class="rc-right">
         <div class="rc-overall-label">Overall Score</div>
-        <div class="rc-overall-score" id="rc-overall-score">—<span class="rc-overall-denom">/100</span></div>
+        <div class="rc-overall-score" id="rc-overall-score">0<span class="rc-overall-denom">/100</span></div>
         <div class="rc-overall-status" id="rc-overall-status">Calculating…</div>
+        <div class="rc-delta" id="rc-delta"></div>
       </div>
     </div>
 
@@ -578,16 +607,17 @@
       <div class="radar-bars" id="radar-bars"></div>
     </div>
 
-    <!-- SECTION 1B: BENCHMARK SCORECARD -->
-    <div class="section-band">
-      <span class="section-band-num">02</span>
-      <span class="section-band-title">Industry Benchmark Comparison</span>
-      <span class="section-band-sub" id="benchmark-source-label">Sector benchmarks</span>
-    </div>
-    <div class="benchmark-section">
-      <p class="benchmark-intro" id="benchmark-intro">Comparing your diagnostic scores against verified industry data for your sector and country.</p>
-      <div class="benchmark-grid" id="benchmark-grid"></div>
-      <div class="benchmark-source" id="benchmark-source"></div>
+    <!-- SECTION 2: YOUR NUMBERS (only shown when the owner enters figures) -->
+    <div id="numbers-wrap" style="display:none;">
+      <div class="section-band">
+        <span class="section-band-num">02</span>
+        <span class="section-band-title">Your Numbers</span>
+        <span class="section-band-sub">From the figures you entered</span>
+      </div>
+      <div class="numbers-section">
+        <div class="numbers-grid" id="numbers-grid"></div>
+        <p class="numbers-foot" id="numbers-foot"></p>
+      </div>
     </div>
 
     <!-- SECTION 3: EXECUTIVE SUMMARY -->
@@ -617,7 +647,7 @@
     <div class="section-band">
       <span class="section-band-num">05</span>
       <span class="section-band-title">Your 3 Fixes This Week</span>
-      <span class="section-band-sub">Specific · actionable · this week</span>
+      <span class="section-band-sub">Cash first · then your biggest risks</span>
     </div>
     <div class="fixes-section" id="fix-cards"></div>
 
@@ -631,37 +661,41 @@
       <div class="working-text" id="working-text">Loading…</div>
     </div>
 
-    <!-- SECTION 6: 7-DAY CHALLENGE -->
+    <!-- SECTION 5: SEVEN DAYS -->
     <div class="section-band">
       <span class="section-band-num">06</span>
-      <span class="section-band-title">Your 7-Day Challenge</span>
-      <span class="section-band-sub">One commitment · maximum leverage</span>
+      <span class="section-band-title">Your Seven Days</span>
+      <span class="section-band-sub">Three fixes · one week · tick them off</span>
     </div>
-    <div class="challenge-section">
-      <div class="challenge-box">
-        <div>
-          <div class="challenge-label">Commit to this by next Monday</div>
-          <div class="challenge-text" id="seven-day-text">Loading…</div>
-        </div>
-        <div class="challenge-countdown">
-          <div class="challenge-days">7</div>
-          <div class="challenge-days-label">days to act</div>
-        </div>
+    <div class="days-section">
+      <p class="days-lead" id="seven-day-text">Loading…</p>
+      <div class="days-list" id="days-list"></div>
+      <div class="days-actions">
+        <button class="btn-days" type="button" onclick="copyPlan()">Copy my 7-day plan</button>
+        <button class="btn-days ghost" type="button" onclick="retakeDiagnostic()">Retake next week</button>
+        <span class="copy-msg" id="copy-msg" role="status"></span>
       </div>
     </div>
+
+    <!-- SECTION 6: FINDINGS -->
+    <div class="section-band">
+      <span class="section-band-num">07</span>
+      <span class="section-band-title">What Your Answers Tell Us</span>
+      <span class="section-band-sub">Plain English · module by module</span>
+    </div>
+    <div class="findings-section"><div class="findings-grid" id="findings-grid"></div></div>
 
     <!-- UPGRADE -->
     <!-- REPEAT USE MESSAGE -->
     <div style="background:var(--cream-deep);border-top:1px solid var(--border);padding:28px 48px;text-align:center;">
       <p style="font-size:14px;color:var(--ink-mid);line-height:1.7;max-width:560px;margin:0 auto;">
-        <strong>Getting value from this?</strong> You can run a fresh diagnostic any time your situation changes —
-        or upgrade to <strong>FIXLO Weekly</strong> and get it automatically every Monday with live data from your accounting system.
+        <strong>Getting value from this?</strong> Retake it next week to get your next three fixes and see your scores move. Your previous results are kept on this device.
       </p>
     </div>
     <div class="upgrade-box">
       <div class="ub-eyebrow">Want this every Monday, automatically?</div>
       <h3 class="ub-title">FIXLO Weekly is<br><em>coming soon.</em></h3>
-      <p class="ub-sub">We're building the full subscription — live financial data from your accounting system, weekly benchmark scoring, and your 3 fixes delivered every Monday at 6am. Join the waitlist to be first.</p>
+      <p class="ub-sub">We're building the full subscription, live financial data from your accounting system, weekly benchmark scoring, and your 3 fixes delivered every Monday at 6am. Join the waitlist to be first.</p>
       <div class="ub-features">
         <span class="ub-feat">Weekly 3-fix Monday brief</span>
         <span class="ub-feat">Live Xero / MYOB data</span>
@@ -674,7 +708,7 @@
     </div>
 
     <div class="report-footer-bar">
-      <div class="rfo-note">FIXLO™ Business Diagnostic &nbsp;·&nbsp; <span id="rf-biz"></span> &nbsp;·&nbsp; <span id="rf-country"></span> &nbsp;·&nbsp; Generated <span id="rf-date"></span><br>Results are private and not stored. For business use only.</div>
+      <div class="rfo-note">FIXLO™ Business Diagnostic &nbsp;·&nbsp; <span id="rf-biz"></span> &nbsp;·&nbsp; <span id="rf-country"></span> &nbsp;·&nbsp; Generated <span id="rf-date"></span><br>Your answers are kept only in this browser. Scores come from your own answers and are not compared with other businesses.<br>This is not legal, tax or financial advice. For business use only.</div>
       <button class="btn-print" onclick="window.print()">Save as PDF</button>
     </div>
   </div>
@@ -685,9 +719,8 @@
 const MODULES = [
   { id:'cashflow', name:'Cash & Financial Health', color:'#C8521A', bg:'#F4EDE6',
     tagline:'The foundation everything else rests on.',
-    intro:'Assesses your cash visibility, margin health, debtor management and financial awareness — the areas that most directly determine whether your business survives and grows.',
+    intro:'Assesses your cash visibility, margin health, debtor management and financial awareness, the areas that most directly determine whether your business survives and grows.',
     questions:[
-      {id:'cf1',type:'slider',text:'How clear is your picture of your current cash position — right now, today?',lo:'No idea',hi:'Crystal clear',default:5},
       {id:'cf2',type:'choice',text:'When did you last know exactly how many weeks of cash runway you have?',opts:[{e:'😬',l:'Never or rarely',s:'No regular tracking',neg:true},{e:'📅',l:'Quarterly review',s:'Reactive, not proactive',neg:true},{e:'📊',l:'Monthly check',s:'Reasonable visibility',neg:false},{e:'⚡',l:'Weekly or daily',s:'Strong cash awareness',neg:false}]},
       {id:'cf3',type:'slider',text:'How confident are you that your gross margin is at or above your industry average?',lo:'Not at all',hi:'Very confident',default:5},
       {id:'cf4',type:'choice',text:'How long does it typically take to collect payment after invoicing?',opts:[{e:'✅',l:'Under 30 days',s:'Strong debtor management',neg:false},{e:'😐',l:'30–45 days',s:'Room to improve',neg:false},{e:'😬',l:'45–60 days',s:'Cash drag building',neg:true},{e:'🚨',l:'Over 60 days',s:'Significant cash risk',neg:true}]},
@@ -695,17 +728,16 @@ const MODULES = [
   },
   { id:'ops', name:'Operations & Delivery', color:'#C07800', bg:'#FFFBEB',
     tagline:'Where time and money leak without being noticed.',
-    intro:'Identifies friction, rework, bottlenecks and approval delays that cost your business hours and margin every week — often without the owner ever seeing it directly.',
+    intro:'Identifies friction, rework, bottlenecks and approval delays that cost your business hours and margin every week, often without the owner ever seeing it directly.',
     questions:[
-      {id:'op1',type:'slider',text:'How much time does your team spend solving problems they\'ve already solved before?',lo:'Almost none',hi:'Significant hours weekly',default:4,invert:true},
       {id:'op2',type:'choice',text:'How quickly do decisions typically get made when a client or project needs one?',opts:[{e:'⚡',l:'Same day, usually',s:'Fast and decisive',neg:false},{e:'📋',l:'A few days',s:'Manageable but slow',neg:false},{e:'⏳',l:'A week or more',s:'Slows delivery',neg:true},{e:'🔄',l:'Often deferred',s:'Decision bottleneck',neg:true}]},
       {id:'op3',type:'slider',text:'How often do you personally have to step in to fix something your team should handle?',lo:'Rarely',hi:'Constantly',default:5,invert:true},
-      {id:'op4',type:'choice',text:'How common is rework — delivering something that then has to be redone?',opts:[{e:'✅',l:'Very rare',s:'Strong first-time quality',neg:false},{e:'😐',l:'Occasionally',s:'Some quality gaps',neg:false},{e:'😬',l:'Fairly common',s:'Rework cost building',neg:true},{e:'🚨',l:'Weekly occurrence',s:'Major operations problem',neg:true}]},
+      {id:'op4',type:'choice',text:'How often does your team re-solve old problems, or redo work that then has to be fixed?',opts:[{e:'✅',l:'Very rare',s:'Strong first-time quality',neg:false},{e:'😐',l:'Occasionally',s:'Some gaps',neg:false},{e:'😬',l:'Fairly common',s:'Time and margin leaking',neg:true},{e:'🚨',l:'Every week',s:'Major operations problem',neg:true}]},
     ]
   },
   { id:'team', name:'People & Capacity', color:'#2D6A4F', bg:'#EAF2ED',
     tagline:'Whether your team is a lever or a ceiling.',
-    intro:'Examines team capacity, key-person dependency, staff engagement and role clarity — the factors that determine whether your people are amplifying or constraining what\'s possible.',
+    intro:'Examines team capacity, key-person dependency, staff engagement and role clarity, the factors that determine whether your people are amplifying or constraining what\'s possible.',
     questions:[
       {id:'tm1',type:'slider',text:'How well does your current team capacity match the workload you\'re taking on right now?',lo:'Chronically understaffed',hi:'Well matched',default:5},
       {id:'tm2',type:'choice',text:'When a key team member is away, how does the business cope?',opts:[{e:'✅',l:'Runs smoothly',s:'Good systems in place',neg:false},{e:'😐',l:'Minor disruption',s:'Some dependency',neg:false},{e:'😬',l:'Significant disruption',s:'High key-person risk',neg:true},{e:'🚨',l:'Near breakdown',s:'Critical dependency',neg:true}]},
@@ -715,7 +747,7 @@ const MODULES = [
   },
   { id:'growth', name:'Revenue & Growth', color:'#3B82F6', bg:'#EFF6FF',
     tagline:'Whether growth is happening by design or by accident.',
-    intro:'Looks at pipeline health, pricing confidence, follow-up discipline and revenue source clarity — the signals that determine whether your growth trajectory is intentional or fragile.',
+    intro:'Looks at pipeline health, pricing confidence, follow-up discipline and revenue source clarity, the signals that determine whether your growth trajectory is intentional or fragile.',
     questions:[
       {id:'gr1',type:'slider',text:'How confident are you about your revenue for the next 90 days?',lo:'Very uncertain',hi:'Very confident',default:5},
       {id:'gr2',type:'choice',text:'When did you last formally review and adjust your pricing?',opts:[{e:'✅',l:'In the last 3 months',s:'Active pricing strategy',neg:false},{e:'😐',l:'6–12 months ago',s:'Drifting behind market',neg:true},{e:'😬',l:'Over a year ago',s:'Likely underpriced',neg:true},{e:'❓',l:'Never formally reviewed',s:'Significant margin risk',neg:true}]},
@@ -725,104 +757,98 @@ const MODULES = [
   },
   { id:'digital', name:'Systems & Digital Tools', color:'#7C3AED', bg:'#F5F3FF',
     tagline:'Whether your tools work for you or against you.',
-    intro:'Detects tool drag, software waste, manual workarounds and system fragility — the digital friction that quietly costs your business time and money every single week.',
+    intro:'Detects tool drag, software waste, manual workarounds and system fragility, the digital friction that quietly costs your business time and money every single week.',
     questions:[
-      {id:'di1',type:'slider',text:'How well do your core systems work together without manual workarounds?',lo:'Lots of manual work',hi:'Mostly seamless',default:5},
-      {id:'di2',type:'choice',text:'How many paid tools does your business subscribe to that are rarely or never used?',opts:[{e:'✅',l:'None — we audit regularly',s:'Clean, efficient stack',neg:false},{e:'😐',l:'1–2 tools',s:'Minor waste',neg:false},{e:'😬',l:'3–4 tools',s:'Meaningful monthly cost',neg:true},{e:'🚨',l:'5 or more',s:'Significant waste',neg:true}]},
-      {id:'di3',type:'slider',text:'How much time per week does your team spend on tasks that could realistically be automated?',lo:'Almost none',hi:'Several hours',default:4,invert:true},
-      {id:'di4',type:'choice',text:'If a core system went down today, how quickly could your business adapt?',opts:[{e:'⚡',l:'Immediately — clear backup',s:'Strong resilience',neg:false},{e:'😐',l:'Within a day',s:'Minor disruption',neg:false},{e:'😬',l:'Takes several days',s:'Real vulnerability',neg:true},{e:'🚨',l:'Major disruption',s:'Single point of failure',neg:true}]},
+      {id:'di1',type:'slider',text:'How well do your systems work together without manual copying, re-keying or repeat admin?',lo:'Lots of manual work',hi:'Mostly seamless',default:5},
+      {id:'di2',type:'choice',text:'How many paid tools does your business subscribe to that are rarely or never used?',opts:[{e:'✅',l:'None, we audit regularly',s:'Clean, efficient stack',neg:false},{e:'😐',l:'1–2 tools',s:'Minor waste',neg:false},{e:'😬',l:'3–4 tools',s:'Meaningful monthly cost',neg:true},{e:'🚨',l:'5 or more',s:'Significant waste',neg:true}]},
     ]
   },
 
   { id:'cyber', name:'Cyber Security', color:'#DC2626', bg:'#FEF2F2',
-    tagline:'How exposed is your business — and does anyone actually know?',
-    intro:'Most SME breaches are not sophisticated attacks. They are unlocked doors. These 6 questions test your real-world posture across the 5 protocols every SME owner can implement today — no IT specialist required. Your answers will generate a specific action plan for your business.',
+    tagline:'How exposed is your business, and does anyone actually know?',
+    intro:'Most SME breaches are not sophisticated attacks. They are unlocked doors. These 5 questions test your real-world posture across the core protocols every SME owner can implement today, no IT specialist required. Your answers will generate a specific action plan for your business.',
     questions:[
       {id:'cy1',type:'choice',
-        text:'Protocol 1 — Multi-Factor Authentication (MFA): Is MFA currently active on your email, accounting software and financial accounts?',
+        text:'Protocol 1 · Multi-Factor Authentication (MFA): Is MFA currently active on your email, accounting software and financial accounts?',
         opts:[
-          {e:'✅',l:'Yes — MFA on all critical systems',s:'Strong first line of defence',neg:false},
-          {e:'😐',l:'Partially — on some but not all',s:'Gaps create real exposure',neg:true},
-          {e:'😬',l:'No — but I know I should set it up',s:'Priority action required',neg:true},
+          {e:'✅',l:'Yes, MFA on all critical systems',s:'Strong first line of defence',neg:false},
+          {e:'😐',l:'Partially, on some but not all',s:'Gaps create real exposure',neg:true},
+          {e:'😬',l:'No, but I know I should set it up',s:'Priority action required',neg:true},
           {e:'❓',l:'I am not sure what MFA is',s:'Immediate setup needed',neg:true}
         ]},
       {id:'cy2',type:'choice',
-        text:'Protocol 2 — Automated Backups: Are your business files and data automatically backed up to a secure offsite or cloud location?',
+        text:'Protocol 2 · Backups and Recovery: Are your business files and data automatically backed up to a secure offsite or cloud location, so you could be working again within a day if a core system failed?',
         opts:[
-          {e:'✅',l:'Yes — daily automated backups, tested quarterly',s:'Ransomware recovery ready',neg:false},
+          {e:'✅',l:'Yes, daily automated backups, tested quarterly',s:'Ransomware recovery ready',neg:false},
           {e:'😐',l:'Backups exist but are manual or untested',s:'Moderate recovery risk',neg:true},
           {e:'😬',l:'Backups are inconsistent or only on local devices',s:'High data loss risk',neg:true},
-          {e:'🚨',l:'No backups in place',s:'Critical — one incident ends the business',neg:true}
+          {e:'🚨',l:'No backups in place',s:'Critical, one incident ends the business',neg:true}
         ]},
       {id:'cy3',type:'choice',
-        text:'Protocol 3 — Phishing Awareness: Has your team received any training in the last 12 months on identifying phishing emails or social engineering?',
+        text:'Protocol 3 · Phishing Awareness: Has your team received any training in the last 12 months on identifying phishing emails or social engineering?',
         opts:[
-          {e:'✅',l:'Yes — formal training, refreshed regularly',s:'Strong human firewall',neg:false},
-          {e:'😐',l:'Informal briefing — nothing structured',s:'Gaps in awareness',neg:true},
-          {e:'😬',l:'No training — we rely on common sense',s:'High human error risk',neg:true},
-          {e:'🚨',l:'Never discussed — team has no guidance',s:'Critical exposure point',neg:true}
+          {e:'✅',l:'Yes, formal training, refreshed regularly',s:'Strong human firewall',neg:false},
+          {e:'😐',l:'Informal briefing, nothing structured',s:'Gaps in awareness',neg:true},
+          {e:'😬',l:'No training, we rely on common sense',s:'High human error risk',neg:true},
+          {e:'🚨',l:'Never discussed, team has no guidance',s:'Critical exposure point',neg:true}
         ]},
       {id:'cy4',type:'choice',
-        text:'Protocol 4 — Software Updates & Patching: Are operating systems, browsers, email clients and key business software set to update automatically?',
+        text:'Protocol 4 · Updates and Protection: Does every work device update automatically and have active malware protection, with your router firewall switched on?',
         opts:[
-          {e:'✅',l:'Yes — automatic updates on all devices',s:'Vulnerabilities closed promptly',neg:false},
-          {e:'😐',l:'Some devices — not consistently across the team',s:'Unpatched devices are entry points',neg:true},
-          {e:'😬',l:'Updates are manual and often delayed',s:'Known vulnerabilities likely present',neg:true},
-          {e:'🚨',l:'Updates are rarely done',s:'Critical — attackers target outdated software',neg:true}
-        ]},
-      {id:'cy5',type:'choice',
-        text:'Protocol 5 — Firewalls & Malware Protection: Does your business have active firewall and endpoint protection (antivirus/anti-malware) on all devices used for work?',
-        opts:[
-          {e:'✅',l:'Yes — hardware firewall and endpoint protection on all devices',s:'Strong network perimeter',neg:false},
-          {e:'😐',l:'Some protection — not consistent across all devices',s:'Gaps in the perimeter',neg:true},
-          {e:'😬',l:'Basic antivirus only — no firewall management',s:'Partial protection',neg:true},
-          {e:'🚨',l:'No active protection in place',s:'Fully exposed network',neg:true}
+          {e:'✅',l:'Yes, every device is updated and protected',s:'Doors closed promptly',neg:false},
+          {e:'😐',l:'Some devices, not consistently across the team',s:'Unprotected devices are entry points',neg:true},
+          {e:'😬',l:'Updates are manual and protection is basic',s:'Known weaknesses likely present',neg:true},
+          {e:'🚨',l:'Rarely updated and no active protection',s:'Critical, attackers target outdated devices',neg:true}
         ]},
       {id:'cy6',type:'choice',
-        text:'Incident Readiness: If a cyber breach happened right now — ransomware, data theft, account takeover — does your team know exactly what to do in the first 60 minutes?',
+        text:'Incident Readiness: If a cyber breach happened right now, ransomware, data theft, account takeover, does your team know exactly what to do in the first 60 minutes?',
         opts:[
-          {e:'✅',l:'Yes — documented plan, team knows their roles',s:'Prepared for rapid response',neg:false},
-          {e:'😐',l:'Rough idea — nothing written down',s:'Response will be chaotic',neg:true},
-          {e:'😬',l:'No plan — we would figure it out under pressure',s:'High damage amplification risk',neg:true},
-          {e:'🚨',l:'No plan and no idea where to start',s:'Critical — incidents escalate fast without a plan',neg:true}
+          {e:'✅',l:'Yes, documented plan, team knows their roles',s:'Prepared for rapid response',neg:false},
+          {e:'😐',l:'Rough idea, nothing written down',s:'Response will be chaotic',neg:true},
+          {e:'😬',l:'No plan, we would figure it out under pressure',s:'High damage amplification risk',neg:true},
+          {e:'🚨',l:'No plan and no idea where to start',s:'Critical, incidents escalate fast without a plan',neg:true}
         ]}
     ]
   },
 
   { id:'compliance', name:'Compliance & Legal Risk', color:'#0369A1', bg:'#EFF6FF',
     tagline:'Are you unknowingly exposed to fines, penalties or legal liability?',
-    intro:'Compliance failures rarely announce themselves. They accumulate quietly — missed obligations, outdated contracts, payroll errors — until a regulator, employee or client surfaces them. These questions identify your highest-risk compliance gaps right now.',
+    intro:'Compliance failures rarely announce themselves. They accumulate quietly, missed obligations, outdated contracts, payroll errors, until a regulator, employee or client surfaces them. These questions identify your highest-risk compliance gaps right now.',
     questions:[
       {id:'co1',type:'choice',
-        text:'Tax & Payroll Compliance: Are your BAS/GST returns, PAYG withholding and superannuation payments fully up to date with no outstanding lodgements?',
+        text:'Tax & Payroll Compliance: Are your tax and payroll returns and payments fully up to date with nothing outstanding?',
+        textBy:{NZ:'Tax & Payroll Compliance: Are your GST returns, PAYE and provisional tax fully up to date with nothing outstanding?',AU:'Tax & Payroll Compliance: Are your BAS (GST and PAYG withholding) and super payments fully up to date? Since 1 July 2026, super must be paid with wages.',ZA:'Tax & Payroll Compliance: Are your VAT returns, monthly EMP201 (PAYE, UIF and SDL) and provisional tax fully up to date with nothing outstanding?'},
         opts:[
-          {e:'✅',l:'Yes — fully up to date and reconciled',s:'Strong compliance posture',neg:false},
-          {e:'😐',l:'Mostly — minor items still to confirm',s:'Low risk, action needed',neg:true},
-          {e:'😬',l:'Partially — some catching up required',s:'Penalty exposure building',neg:true},
-          {e:'🚨',l:'No — this is an area I am concerned about',s:'Urgent — ATO penalties apply',neg:true}
+          {e:'✅',l:'Yes, fully up to date and reconciled',s:'Strong compliance posture',neg:false},
+          {e:'😐',l:'Mostly, minor items still to confirm',s:'Low risk, action needed',neg:true},
+          {e:'😬',l:'Partially, some catching up required',s:'Penalty exposure building',neg:true},
+          {e:'🚨',l:'No, this is an area I am concerned about',s:'Urgent, penalties and interest build up',neg:true}
         ]},
       {id:'co2',type:'choice',
-        text:'Employment Contracts & Awards: Are all your staff employed under current, signed contracts that correctly reflect their award rate, classification and entitlements?',
+        text:'Employment Agreements: Are all your staff employed under current, signed agreements that reflect their role, pay and entitlements?',
+        textBy:{AU:'Employment Contracts & Awards: Are all your staff employed under current, signed contracts that correctly reflect their award rate, classification and entitlements?'},
         opts:[
-          {e:'✅',l:'Yes — all contracts current and signed',s:'Protected against underpayment claims',neg:false},
-          {e:'😐',l:'Most — some older or unsigned contracts',s:'Partial exposure',neg:true},
+          {e:'✅',l:'Yes, all contracts current and signed',s:'Protected against underpayment claims',neg:false},
+          {e:'😐',l:'Most, some older or unsigned contracts',s:'Partial exposure',neg:true},
           {e:'😬',l:'Contracts are outdated or were never updated',s:'Underpayment risk',neg:true},
           {e:'🚨',l:'No formal contracts in place',s:'Critical legal exposure',neg:true}
         ]},
       {id:'co3',type:'choice',
-        text:'Data Privacy (Privacy Act / GDPR): Does your business collect, store or share customer personal information — and do you have a current privacy policy that covers how it is handled?',
+        text:'Data Privacy: Does your business collect, store or share customer personal information, and do you have a current privacy policy that covers how it is handled?',
+        textBy:{NZ:'Data Privacy (Privacy Act 2020): Does your business collect, store or share customer personal information, and do you have a current privacy policy that covers how it is handled?',AU:'Data Privacy (Privacy Act 1988): Does your business collect, store or share customer personal information, and do you have a current privacy policy that covers how it is handled?',ZA:'Data Privacy (POPIA): Does your business collect, store or share customer personal information, and do you have a current privacy policy and a registered Information Officer?'},
         opts:[
-          {e:'✅',l:'Yes — privacy policy in place and reviewed in last 12 months',s:'Compliant data handling',neg:false},
+          {e:'✅',l:'Yes, privacy policy in place and reviewed in last 12 months',s:'Compliant data handling',neg:false},
           {e:'😐',l:'Policy exists but has not been reviewed recently',s:'May not reflect current obligations',neg:true},
-          {e:'😬',l:'No formal policy — we handle data informally',s:'Regulatory exposure',neg:true},
+          {e:'😬',l:'No formal policy, we handle data informally',s:'Regulatory exposure',neg:true},
           {e:'🚨',l:'Not sure what obligations apply to us',s:'Urgent review required',neg:true}
         ]},
       {id:'co4',type:'choice',
-        text:'Business Insurance: Does your business hold current and adequate public liability, professional indemnity and/or workers compensation insurance?',
+        text:'Business Insurance: Does your business hold current and adequate public liability and professional indemnity insurance?',
+        textBy:{AU:'Business Insurance: Does your business hold current and adequate public liability, professional indemnity and workers compensation insurance?',ZA:'Business Insurance: Does your business hold current and adequate public liability and professional indemnity insurance, and are you registered with the Compensation Fund (COIDA) if you employ staff?'},
         opts:[
-          {e:'✅',l:'Yes — all relevant policies current and reviewed annually',s:'Well protected',neg:false},
-          {e:'😐',l:'Some policies — may have gaps in coverage',s:'Partial exposure',neg:true},
-          {e:'😬',l:'Basic insurance only — coverage may be inadequate',s:'Underinsured risk',neg:true},
+          {e:'✅',l:'Yes, all relevant policies current and reviewed annually',s:'Well protected',neg:false},
+          {e:'😐',l:'Some policies, may have gaps in coverage',s:'Partial exposure',neg:true},
+          {e:'😬',l:'Basic insurance only, coverage may be inadequate',s:'Underinsured risk',neg:true},
           {e:'🚨',l:'No current business insurance',s:'Critical financial exposure',neg:true}
         ]}
     ]
@@ -830,7 +856,7 @@ const MODULES = [
 ];
 
 // ══ STATE ══
-let userData = {}, answers = {}, currentModule = 0, moduleScores = {};
+let userData = {}, answers = {}, currentModule = 0, moduleScores = {}, userNumbers = {};
 let startTime = Date.now(), timerInterval = null;
 
 function startTimer() {
@@ -844,128 +870,18 @@ const SL = {1:'Very low',2:'Low',3:'Below average',4:'Slightly below average',5:
 function sliderLabel(v, inv) { return SL[inv ? 11-v : v] || 'Score: '+v; }
 
 
-const BENCHMARKS = {
-  'Construction':{
-    AU:{
-      grossMargin:{ low:22, avg:28, high:35,label:'22–35%',unit:'%' }, debtorDays:{ low:30, avg:42, high:55,label:'30–55 days',unit:'days' }, payrollPct:{ low:28, avg:34, high:42,label:'28–42%',unit:'%' }, ebitdaMargin:{ low:6, avg:10, high:15,label:'6–15%',unit:'%' }, revenueGrowth:{ low:2, avg:5, high:10,label:'2–10%',unit:'%' }, cashRunway:{ low:4, avg:8, high:14,label:'4–14 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'ATO Business Benchmarks 2024'
-    }, NZ:{
-      grossMargin:{ low:20, avg:26, high:33,label:'20–33%',unit:'%' }, debtorDays:{ low:32, avg:44, high:58,label:'32–58 days',unit:'days' }, payrollPct:{ low:28, avg:35, high:43,label:'28–43%',unit:'%' }, ebitdaMargin:{ low:5, avg:9, high:14,label:'5–14%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:9,label:'1–9%',unit:'%' }, cashRunway:{ low:3, avg:7, high:12,label:'3–12 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Stats NZ Business Demography 2024'
-    }, UK:{
-      grossMargin:{ low:18, avg:25, high:32,label:'18–32%',unit:'%' }, debtorDays:{ low:35, avg:48, high:65,label:'35–65 days',unit:'days' }, payrollPct:{ low:30, avg:38, high:46,label:'30–46%',unit:'%' }, ebitdaMargin:{ low:5, avg:9, high:13,label:'5–13%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:8,label:'1–8%',unit:'%' }, cashRunway:{ low:3, avg:7, high:12,label:'3–12 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'HMRC/ONS Construction Sector Data 2024'
-    }, CA:{
-      grossMargin:{ low:20, avg:27, high:34,label:'20–34%',unit:'%' }, debtorDays:{ low:30, avg:43, high:56,label:'30–56 days',unit:'days' }, payrollPct:{ low:29, avg:36, high:44,label:'29–44%',unit:'%' }, ebitdaMargin:{ low:5, avg:9, high:14,label:'5–14%',unit:'%' }, revenueGrowth:{ low:2, avg:5, high:9,label:'2–9%',unit:'%' }, cashRunway:{ low:4, avg:8, high:13,label:'4–13 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Statistics Canada FPD 2024'
-    }, US:{
-      grossMargin:{ low:20, avg:28, high:36,label:'20–36%',unit:'%' }, debtorDays:{ low:28, avg:40, high:55,label:'28–55 days',unit:'days' }, payrollPct:{ low:27, avg:35, high:43,label:'27–43%',unit:'%' }, ebitdaMargin:{ low:6, avg:10, high:15,label:'6–15%',unit:'%' }, revenueGrowth:{ low:2, avg:6, high:11,label:'2–11%',unit:'%' }, cashRunway:{ low:4, avg:8, high:14,label:'4–14 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'IBISWorld US Construction 2024'
-    }, ZA:{
-      grossMargin:{ low:15, avg:22, high:30,label:'15–30%',unit:'%' }, debtorDays:{ low:40, avg:55, high:75,label:'40–75 days',unit:'days' }, payrollPct:{ low:30, avg:40, high:50,label:'30–50%',unit:'%' }, ebitdaMargin:{ low:4, avg:8, high:12,label:'4–12%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:8,label:'1–8%',unit:'%' }, cashRunway:{ low:3, avg:6, high:10,label:'3–10 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'StatsSA / CIDB Construction Report 2024'
-    }
-  }, 'Professional Services':{
-    AU:{
-      grossMargin:{ low:50, avg:60, high:72,label:'50–72%',unit:'%' }, debtorDays:{ low:25, avg:38, high:52,label:'25–52 days',unit:'days' }, payrollPct:{ low:50, avg:60, high:70,label:'50–70%',unit:'%' }, ebitdaMargin:{ low:10, avg:18, high:28,label:'10–28%',unit:'%' }, revenueGrowth:{ low:3, avg:7, high:14,label:'3–14%',unit:'%' }, cashRunway:{ low:6, avg:10, high:16,label:'6–16 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'ATO Business Benchmarks 2024'
-    }, NZ:{
-      grossMargin:{ low:48, avg:58, high:70,label:'48–70%',unit:'%' }, debtorDays:{ low:26, avg:40, high:54,label:'26–54 days',unit:'days' }, payrollPct:{ low:50, avg:60, high:70,label:'50–70%',unit:'%' }, ebitdaMargin:{ low:9, avg:16, high:26,label:'9–26%',unit:'%' }, revenueGrowth:{ low:2, avg:6, high:12,label:'2–12%',unit:'%' }, cashRunway:{ low:5, avg:9, high:15,label:'5–15 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Stats NZ Business Demography 2024'
-    }, UK:{
-      grossMargin:{ low:48, avg:58, high:70,label:'48–70%',unit:'%' }, debtorDays:{ low:28, avg:42, high:58,label:'28–58 days',unit:'days' }, payrollPct:{ low:50, avg:62, high:72,label:'50–72%',unit:'%' }, ebitdaMargin:{ low:10, avg:17, high:26,label:'10–26%',unit:'%' }, revenueGrowth:{ low:2, avg:6, high:12,label:'2–12%',unit:'%' }, cashRunway:{ low:5, avg:9, high:15,label:'5–15 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'HMRC/ONS Professional Services 2024'
-    }, CA:{
-      grossMargin:{ low:48, avg:58, high:70,label:'48–70%',unit:'%' }, debtorDays:{ low:26, avg:40, high:55,label:'26–55 days',unit:'days' }, payrollPct:{ low:50, avg:61, high:71,label:'50–71%',unit:'%' }, ebitdaMargin:{ low:10, avg:17, high:26,label:'10–26%',unit:'%' }, revenueGrowth:{ low:3, avg:7, high:13,label:'3–13%',unit:'%' }, cashRunway:{ low:6, avg:10, high:16,label:'6–16 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Statistics Canada FPD 2024'
-    }, US:{
-      grossMargin:{ low:50, avg:62, high:74,label:'50–74%',unit:'%' }, debtorDays:{ low:24, avg:36, high:50,label:'24–50 days',unit:'days' }, payrollPct:{ low:50, avg:62, high:72,label:'50–72%',unit:'%' }, ebitdaMargin:{ low:12, avg:20, high:30,label:'12–30%',unit:'%' }, revenueGrowth:{ low:3, avg:8, high:15,label:'3–15%',unit:'%' }, cashRunway:{ low:6, avg:11, high:18,label:'6–18 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'IBISWorld US Professional Services 2024'
-    }, ZA:{
-      grossMargin:{ low:40, avg:52, high:65,label:'40–65%',unit:'%' }, debtorDays:{ low:30, avg:48, high:65,label:'30–65 days',unit:'days' }, payrollPct:{ low:48, avg:58, high:68,label:'48–68%',unit:'%' }, ebitdaMargin:{ low:8, avg:14, high:22,label:'8–22%',unit:'%' }, revenueGrowth:{ low:2, avg:6, high:12,label:'2–12%',unit:'%' }, cashRunway:{ low:4, avg:8, high:13,label:'4–13 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'StatsSA Service Sector Report 2024'
-    }
-  }, 'Retail':{
-    AU:{
-      grossMargin:{ low:30, avg:42, high:55,label:'30–55%',unit:'%' }, debtorDays:{ low:0, avg:5, high:15,label:'0–15 days',unit:'days' }, payrollPct:{ low:14, avg:20, high:28,label:'14–28%',unit:'%' }, ebitdaMargin:{ low:3, avg:7, high:12,label:'3–12%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:9,label:'1–9%',unit:'%' }, cashRunway:{ low:4, avg:8, high:14,label:'4–14 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'ATO Business Benchmarks 2024'
-    }, NZ:{
-      grossMargin:{ low:28, avg:40, high:52,label:'28–52%',unit:'%' }, debtorDays:{ low:0, avg:5, high:14,label:'0–14 days',unit:'days' }, payrollPct:{ low:14, avg:20, high:27,label:'14–27%',unit:'%' }, ebitdaMargin:{ low:3, avg:6, high:11,label:'3–11%',unit:'%' }, revenueGrowth:{ low:1, avg:3, high:8,label:'1–8%',unit:'%' }, cashRunway:{ low:3, avg:7, high:12,label:'3–12 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Stats NZ Business Demography 2024'
-    }, UK:{
-      grossMargin:{ low:28, avg:40, high:54,label:'28–54%',unit:'%' }, debtorDays:{ low:0, avg:6, high:18,label:'0–18 days',unit:'days' }, payrollPct:{ low:12, avg:18, high:26,label:'12–26%',unit:'%' }, ebitdaMargin:{ low:3, avg:6, high:11,label:'3–11%',unit:'%' }, revenueGrowth:{ low:1, avg:3, high:8,label:'1–8%',unit:'%' }, cashRunway:{ low:3, avg:7, high:12,label:'3–12 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'HMRC/ONS Retail Sector 2024'
-    }, CA:{
-      grossMargin:{ low:28, avg:40, high:53,label:'28–53%',unit:'%' }, debtorDays:{ low:0, avg:5, high:14,label:'0–14 days',unit:'days' }, payrollPct:{ low:13, avg:19, high:27,label:'13–27%',unit:'%' }, ebitdaMargin:{ low:3, avg:6, high:11,label:'3–11%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:9,label:'1–9%',unit:'%' }, cashRunway:{ low:3, avg:7, high:12,label:'3–12 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Statistics Canada FPD 2024'
-    }, US:{
-      grossMargin:{ low:30, avg:43, high:56,label:'30–56%',unit:'%' }, debtorDays:{ low:0, avg:4, high:12,label:'0–12 days',unit:'days' }, payrollPct:{ low:12, avg:18, high:26,label:'12–26%',unit:'%' }, ebitdaMargin:{ low:3, avg:7, high:12,label:'3–12%',unit:'%' }, revenueGrowth:{ low:2, avg:5, high:10,label:'2–10%',unit:'%' }, cashRunway:{ low:4, avg:8, high:14,label:'4–14 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'IBISWorld US Retail 2024'
-    }, ZA:{
-      grossMargin:{ low:22, avg:34, high:46,label:'22–46%',unit:'%' }, debtorDays:{ low:0, avg:8, high:20,label:'0–20 days',unit:'days' }, payrollPct:{ low:10, avg:16, high:24,label:'10–24%',unit:'%' }, ebitdaMargin:{ low:2, avg:5, high:10,label:'2–10%',unit:'%' }, revenueGrowth:{ low:1, avg:3, high:7,label:'1–7%',unit:'%' }, cashRunway:{ low:2, avg:6, high:10,label:'2–10 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'StatsSA Retail Trade Survey 2024'
-    }
-  }, 'Manufacturing':{
-    AU:{
-      grossMargin:{ low:20, avg:30, high:42,label:'20–42%',unit:'%' }, debtorDays:{ low:28, avg:40, high:55,label:'28–55 days',unit:'days' }, payrollPct:{ low:22, avg:30, high:40,label:'22–40%',unit:'%' }, ebitdaMargin:{ low:6, avg:11, high:18,label:'6–18%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:9,label:'1–9%',unit:'%' }, cashRunway:{ low:4, avg:8, high:14,label:'4–14 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'ATO Business Benchmarks 2024'
-    }, NZ:{
-      grossMargin:{ low:18, avg:28, high:40,label:'18–40%',unit:'%' }, debtorDays:{ low:28, avg:42, high:56,label:'28–56 days',unit:'days' }, payrollPct:{ low:22, avg:30, high:40,label:'22–40%',unit:'%' }, ebitdaMargin:{ low:5, avg:10, high:16,label:'5–16%',unit:'%' }, revenueGrowth:{ low:1, avg:3, high:8,label:'1–8%',unit:'%' }, cashRunway:{ low:3, avg:7, high:13,label:'3–13 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Stats NZ Business Demography 2024'
-    }, UK:{
-      grossMargin:{ low:18, avg:28, high:40,label:'18–40%',unit:'%' }, debtorDays:{ low:30, avg:44, high:60,label:'30–60 days',unit:'days' }, payrollPct:{ low:22, avg:32, high:42,label:'22–42%',unit:'%' }, ebitdaMargin:{ low:5, avg:10, high:16,label:'5–16%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:8,label:'1–8%',unit:'%' }, cashRunway:{ low:3, avg:7, high:12,label:'3–12 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'HMRC/ONS Manufacturing 2024'
-    }, CA:{
-      grossMargin:{ low:18, avg:28, high:40,label:'18–40%',unit:'%' }, debtorDays:{ low:28, avg:40, high:55,label:'28–55 days',unit:'days' }, payrollPct:{ low:22, avg:31, high:41,label:'22–41%',unit:'%' }, ebitdaMargin:{ low:5, avg:10, high:17,label:'5–17%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:9,label:'1–9%',unit:'%' }, cashRunway:{ low:3, avg:8, high:13,label:'3–13 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Statistics Canada FPD 2024'
-    }, US:{
-      grossMargin:{ low:20, avg:32, high:44,label:'20–44%',unit:'%' }, debtorDays:{ low:26, avg:38, high:52,label:'26–52 days',unit:'days' }, payrollPct:{ low:20, avg:29, high:39,label:'20–39%',unit:'%' }, ebitdaMargin:{ low:6, avg:12, high:20,label:'6–20%',unit:'%' }, revenueGrowth:{ low:2, avg:5, high:10,label:'2–10%',unit:'%' }, cashRunway:{ low:4, avg:9, high:15,label:'4–15 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'IBISWorld US Manufacturing 2024'
-    }, ZA:{
-      grossMargin:{ low:14, avg:22, high:34,label:'14–34%',unit:'%' }, debtorDays:{ low:35, avg:50, high:68,label:'35–68 days',unit:'days' }, payrollPct:{ low:20, avg:30, high:42,label:'20–42%',unit:'%' }, ebitdaMargin:{ low:4, avg:8, high:14,label:'4–14%',unit:'%' }, revenueGrowth:{ low:1, avg:3, high:7,label:'1–7%',unit:'%' }, cashRunway:{ low:3, avg:6, high:11,label:'3–11 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'StatsSA Manufacturing Survey 2024'
-    }
-  }, 'Hospitality':{
-    AU:{
-      grossMargin:{ low:55, avg:65, high:75,label:'55–75%',unit:'%' }, debtorDays:{ low:0, avg:3, high:10,label:'0–10 days',unit:'days' }, payrollPct:{ low:28, avg:36, high:46,label:'28–46%',unit:'%' }, ebitdaMargin:{ low:5, avg:10, high:18,label:'5–18%',unit:'%' }, revenueGrowth:{ low:1, avg:5, high:12,label:'1–12%',unit:'%' }, cashRunway:{ low:3, avg:6, high:10,label:'3–10 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'ATO Business Benchmarks 2024'
-    }, NZ:{
-      grossMargin:{ low:52, avg:62, high:73,label:'52–73%',unit:'%' }, debtorDays:{ low:0, avg:3, high:10,label:'0–10 days',unit:'days' }, payrollPct:{ low:27, avg:35, high:45,label:'27–45%',unit:'%' }, ebitdaMargin:{ low:4, avg:9, high:16,label:'4–16%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:10,label:'1–10%',unit:'%' }, cashRunway:{ low:2, avg:5, high:9,label:'2–9 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Stats NZ Business Demography 2024'
-    }, UK:{
-      grossMargin:{ low:50, avg:62, high:74,label:'50–74%',unit:'%' }, debtorDays:{ low:0, avg:4, high:12,label:'0–12 days',unit:'days' }, payrollPct:{ low:26, avg:34, high:44,label:'26–44%',unit:'%' }, ebitdaMargin:{ low:4, avg:9, high:16,label:'4–16%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:10,label:'1–10%',unit:'%' }, cashRunway:{ low:2, avg:5, high:9,label:'2–9 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'HMRC/ONS Hospitality 2024'
-    }, CA:{
-      grossMargin:{ low:52, avg:63, high:74,label:'52–74%',unit:'%' }, debtorDays:{ low:0, avg:3, high:10,label:'0–10 days',unit:'days' }, payrollPct:{ low:27, avg:35, high:45,label:'27–45%',unit:'%' }, ebitdaMargin:{ low:4, avg:9, high:16,label:'4–16%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:10,label:'1–10%',unit:'%' }, cashRunway:{ low:2, avg:5, high:9,label:'2–9 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Statistics Canada FPD 2024'
-    }, US:{
-      grossMargin:{ low:55, avg:65, high:76,label:'55–76%',unit:'%' }, debtorDays:{ low:0, avg:2, high:8,label:'0–8 days',unit:'days' }, payrollPct:{ low:26, avg:34, high:44,label:'26–44%',unit:'%' }, ebitdaMargin:{ low:5, avg:10, high:18,label:'5–18%',unit:'%' }, revenueGrowth:{ low:2, avg:6, high:13,label:'2–13%',unit:'%' }, cashRunway:{ low:3, avg:6, high:10,label:'3–10 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'IBISWorld US Hospitality 2024'
-    }, ZA:{
-      grossMargin:{ low:45, avg:57, high:70,label:'45–70%',unit:'%' }, debtorDays:{ low:0, avg:4, high:12,label:'0–12 days',unit:'days' }, payrollPct:{ low:25, avg:34, high:44,label:'25–44%',unit:'%' }, ebitdaMargin:{ low:3, avg:7, high:13,label:'3–13%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:9,label:'1–9%',unit:'%' }, cashRunway:{ low:2, avg:4, high:8,label:'2–8 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'StatsSA Tourism & Hospitality 2024'
-    }
-  }, 'Healthcare':{
-    AU:{
-      grossMargin:{ low:40, avg:52, high:64,label:'40–64%',unit:'%' }, debtorDays:{ low:20, avg:32, high:48,label:'20–48 days',unit:'days' }, payrollPct:{ low:44, avg:54, high:64,label:'44–64%',unit:'%' }, ebitdaMargin:{ low:8, avg:15, high:24,label:'8–24%',unit:'%' }, revenueGrowth:{ low:3, avg:7, high:14,label:'3–14%',unit:'%' }, cashRunway:{ low:5, avg:9, high:15,label:'5–15 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'ATO Business Benchmarks 2024'
-    }, NZ:{
-      grossMargin:{ low:38, avg:50, high:62,label:'38–62%',unit:'%' }, debtorDays:{ low:20, avg:34, high:50,label:'20–50 days',unit:'days' }, payrollPct:{ low:44, avg:54, high:64,label:'44–64%',unit:'%' }, ebitdaMargin:{ low:7, avg:13, high:22,label:'7–22%',unit:'%' }, revenueGrowth:{ low:3, avg:6, high:12,label:'3–12%',unit:'%' }, cashRunway:{ low:4, avg:8, high:14,label:'4–14 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Stats NZ Business Demography 2024'
-    }, UK:{
-      grossMargin:{ low:38, avg:50, high:62,label:'38–62%',unit:'%' }, debtorDays:{ low:22, avg:36, high:52,label:'22–52 days',unit:'days' }, payrollPct:{ low:44, avg:55, high:65,label:'44–65%',unit:'%' }, ebitdaMargin:{ low:7, avg:14, high:22,label:'7–22%',unit:'%' }, revenueGrowth:{ low:3, avg:6, high:12,label:'3–12%',unit:'%' }, cashRunway:{ low:4, avg:8, high:14,label:'4–14 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'HMRC/ONS Healthcare 2024'
-    }, CA:{
-      grossMargin:{ low:38, avg:50, high:63,label:'38–63%',unit:'%' }, debtorDays:{ low:20, avg:34, high:50,label:'20–50 days',unit:'days' }, payrollPct:{ low:44, avg:55, high:65,label:'44–65%',unit:'%' }, ebitdaMargin:{ low:7, avg:14, high:23,label:'7–23%',unit:'%' }, revenueGrowth:{ low:3, avg:7, high:13,label:'3–13%',unit:'%' }, cashRunway:{ low:4, avg:9, high:15,label:'4–15 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Statistics Canada FPD 2024'
-    }, US:{
-      grossMargin:{ low:40, avg:53, high:66,label:'40–66%',unit:'%' }, debtorDays:{ low:18, avg:30, high:46,label:'18–46 days',unit:'days' }, payrollPct:{ low:44, avg:55, high:65,label:'44–65%',unit:'%' }, ebitdaMargin:{ low:8, avg:16, high:26,label:'8–26%',unit:'%' }, revenueGrowth:{ low:4, avg:8, high:15,label:'4–15%',unit:'%' }, cashRunway:{ low:5, avg:10, high:16,label:'5–16 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'IBISWorld US Healthcare 2024'
-    }, ZA:{
-      grossMargin:{ low:32, avg:44, high:58,label:'32–58%',unit:'%' }, debtorDays:{ low:25, avg:40, high:58,label:'25–58 days',unit:'days' }, payrollPct:{ low:42, avg:52, high:62,label:'42–62%',unit:'%' }, ebitdaMargin:{ low:6, avg:11, high:18,label:'6–18%',unit:'%' }, revenueGrowth:{ low:3, avg:6, high:12,label:'3–12%',unit:'%' }, cashRunway:{ low:3, avg:7, high:12,label:'3–12 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'StatsSA Health & Social Services 2024'
-    }
-  }, 'Transport & Logistics':{
-    AU:{
-      grossMargin:{ low:20, avg:30, high:42,label:'20–42%',unit:'%' }, debtorDays:{ low:28, avg:40, high:55,label:'28–55 days',unit:'days' }, payrollPct:{ low:30, avg:40, high:52,label:'30–52%',unit:'%' }, ebitdaMargin:{ low:5, avg:10, high:16,label:'5–16%',unit:'%' }, revenueGrowth:{ low:2, avg:5, high:10,label:'2–10%',unit:'%' }, cashRunway:{ low:3, avg:7, high:12,label:'3–12 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'ATO Business Benchmarks 2024'
-    }, NZ:{
-      grossMargin:{ low:18, avg:28, high:40,label:'18–40%',unit:'%' }, debtorDays:{ low:28, avg:42, high:56,label:'28–56 days',unit:'days' }, payrollPct:{ low:30, avg:40, high:52,label:'30–52%',unit:'%' }, ebitdaMargin:{ low:4, avg:9, high:15,label:'4–15%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:9,label:'1–9%',unit:'%' }, cashRunway:{ low:3, avg:6, high:11,label:'3–11 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Stats NZ Business Demography 2024'
-    }, UK:{
-      grossMargin:{ low:18, avg:28, high:40,label:'18–40%',unit:'%' }, debtorDays:{ low:30, avg:44, high:60,label:'30–60 days',unit:'days' }, payrollPct:{ low:30, avg:42, high:54,label:'30–54%',unit:'%' }, ebitdaMargin:{ low:4, avg:9, high:15,label:'4–15%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:9,label:'1–9%',unit:'%' }, cashRunway:{ low:3, avg:6, high:11,label:'3–11 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'HMRC/ONS Transport 2024'
-    }, CA:{
-      grossMargin:{ low:18, avg:28, high:40,label:'18–40%',unit:'%' }, debtorDays:{ low:28, avg:42, high:56,label:'28–56 days',unit:'days' }, payrollPct:{ low:30, avg:41, high:53,label:'30–53%',unit:'%' }, ebitdaMargin:{ low:4, avg:9, high:15,label:'4–15%',unit:'%' }, revenueGrowth:{ low:2, avg:5, high:10,label:'2–10%',unit:'%' }, cashRunway:{ low:3, avg:7, high:12,label:'3–12 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Statistics Canada FPD 2024'
-    }, US:{
-      grossMargin:{ low:20, avg:30, high:42,label:'20–42%',unit:'%' }, debtorDays:{ low:26, avg:38, high:52,label:'26–52 days',unit:'days' }, payrollPct:{ low:28, avg:38, high:50,label:'28–50%',unit:'%' }, ebitdaMargin:{ low:5, avg:11, high:18,label:'5–18%',unit:'%' }, revenueGrowth:{ low:2, avg:5, high:11,label:'2–11%',unit:'%' }, cashRunway:{ low:4, avg:8, high:13,label:'4–13 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'IBISWorld US Transport & Logistics 2024'
-    }, ZA:{
-      grossMargin:{ low:14, avg:22, high:34,label:'14–34%',unit:'%' }, debtorDays:{ low:35, avg:50, high:68,label:'35–68 days',unit:'days' }, payrollPct:{ low:28, avg:40, high:54,label:'28–54%',unit:'%' }, ebitdaMargin:{ low:3, avg:7, high:12,label:'3–12%',unit:'%' }, revenueGrowth:{ low:1, avg:4, high:8,label:'1–8%',unit:'%' }, cashRunway:{ low:2, avg:5, high:9,label:'2–9 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'StatsSA Transport Survey 2024'
-    }
-  }, 'Finance & Insurance':{
-    AU:{
-      grossMargin:{ low:55, avg:65, high:78,label:'55–78%',unit:'%' }, debtorDays:{ low:15, avg:28, high:42,label:'15–42 days',unit:'days' }, payrollPct:{ low:35, avg:45, high:56,label:'35–56%',unit:'%' }, ebitdaMargin:{ low:15, avg:24, high:35,label:'15–35%',unit:'%' }, revenueGrowth:{ low:3, avg:8, high:15,label:'3–15%',unit:'%' }, cashRunway:{ low:8, avg:14, high:22,label:'8–22 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'ATO Business Benchmarks 2024'
-    }, NZ:{
-      grossMargin:{ low:53, avg:63, high:76,label:'53–76%',unit:'%' }, debtorDays:{ low:15, avg:30, high:44,label:'15–44 days',unit:'days' }, payrollPct:{ low:35, avg:45, high:55,label:'35–55%',unit:'%' }, ebitdaMargin:{ low:14, avg:22, high:33,label:'14–33%',unit:'%' }, revenueGrowth:{ low:2, avg:7, high:13,label:'2–13%',unit:'%' }, cashRunway:{ low:7, avg:13, high:20,label:'7–20 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Stats NZ Business Demography 2024'
-    }, UK:{
-      grossMargin:{ low:53, avg:64, high:77,label:'53–77%',unit:'%' }, debtorDays:{ low:14, avg:28, high:42,label:'14–42 days',unit:'days' }, payrollPct:{ low:34, avg:44, high:55,label:'34–55%',unit:'%' }, ebitdaMargin:{ low:14, avg:23, high:34,label:'14–34%',unit:'%' }, revenueGrowth:{ low:2, avg:7, high:14,label:'2–14%',unit:'%' }, cashRunway:{ low:7, avg:13, high:21,label:'7–21 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'HMRC/ONS Financial Services 2024'
-    }, CA:{
-      grossMargin:{ low:53, avg:64, high:77,label:'53–77%',unit:'%' }, debtorDays:{ low:14, avg:28, high:42,label:'14–42 days',unit:'days' }, payrollPct:{ low:34, avg:44, high:55,label:'34–55%',unit:'%' }, ebitdaMargin:{ low:14, avg:23, high:34,label:'14–34%',unit:'%' }, revenueGrowth:{ low:3, avg:7, high:14,label:'3–14%',unit:'%' }, cashRunway:{ low:7, avg:13, high:21,label:'7–21 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'Statistics Canada FPD 2024'
-    }, US:{
-      grossMargin:{ low:55, avg:67, high:80,label:'55–80%',unit:'%' }, debtorDays:{ low:12, avg:24, high:38,label:'12–38 days',unit:'days' }, payrollPct:{ low:34, avg:44, high:54,label:'34–54%',unit:'%' }, ebitdaMargin:{ low:16, avg:26, high:38,label:'16–38%',unit:'%' }, revenueGrowth:{ low:3, avg:8, high:16,label:'3–16%',unit:'%' }, cashRunway:{ low:8, avg:15, high:24,label:'8–24 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'IBISWorld US Financial Services 2024'
-    }, ZA:{
-      grossMargin:{ low:45, avg:57, high:72,label:'45–72%',unit:'%' }, debtorDays:{ low:18, avg:32, high:48,label:'18–48 days',unit:'days' }, payrollPct:{ low:33, avg:43, high:54,label:'33–54%',unit:'%' }, ebitdaMargin:{ low:12, avg:20, high:30,label:'12–30%',unit:'%' }, revenueGrowth:{ low:3, avg:7, high:13,label:'3–13%',unit:'%' }, cashRunway:{ low:6, avg:11, high:18,label:'6–18 wks',unit:'wks' }, cyberScore:{ low:30, avg:55, high:80,label:'30–80 pts',unit:' pts' }, complianceScore:{ low:40, avg:65, high:90,label:'40–90 pts',unit:' pts' }, source: 'StatsSA Financial Services 2024'
-    }
-  }
-};
+// Industry benchmarks. The previous figures had no named source and have been removed.
+// Load official figures here (with source, year and URL per figure) before switching the report section back on.
+// Shape: BENCHMARKS[sector][countryCode] = { grossMargin:{low,avg,high,label,unit}, ..., source:'...', year:'...', url:'...' }
+const BENCHMARKS = {};
 
 // Helper to get benchmark for current user
 function getBenchmark() {
   const sector = userData.sector || 'Professional Services';
   const code = userData.countryCode || 'AU';
-  const sectorData = BENCHMARKS[sector] || BENCHMARKS['Professional Services'];
-  return sectorData[code] || sectorData['AU'];
+  const sectorData = BENCHMARKS[sector];
+  if(!sectorData) return null;
+  return sectorData[code] || null;
 }
 
 // Benchmark comparison text
@@ -978,7 +894,7 @@ function benchmarkCompare(value, metric, benchmark) {
 }
 
 // ── WIZARD STATE ──
-let wizardCountry = { code:'AU', price:'$49 AUD', currency:'AUD', name:'Australia' };
+let wizardCountry = { code:'NZ', price:'$49 NZD', currency:'NZD', name:'New Zealand' };
 
 function selectCountry(el, code, price, currency) {
   document.querySelectorAll('.country-card').forEach(c => c.classList.remove('cc-selected'));
@@ -990,6 +906,8 @@ function selectCountry(el, code, price, currency) {
   if(hint) hint.textContent = currency;
   const btn = document.getElementById('step1-next');
   if(btn) { btn.disabled = false; btn.style.opacity = '1'; }
+  const begin = document.getElementById('begin-btn');
+  if(begin) begin.textContent = (typeof PAY_LINKS !== 'undefined' && PAY_LINKS[code]) ? ('Pay ' + price + ' and begin →') : 'Begin my diagnostic →';
 }
 
 function goStep1() {
@@ -1015,16 +933,13 @@ function updateWizardSidebar(activeStep) {
 }
 
 const COUNTRY_DATA = {
-  'AU': { currency:'AUD', symbol:'$', price:'49', label:'$49 AUD', countryName:'Australia' },
   'NZ': { currency:'NZD', symbol:'$', price:'49', label:'$49 NZD', countryName:'New Zealand' },
-  'UK': { currency:'GBP', symbol:'£', price:'29', label:'£29 GBP', countryName:'United Kingdom' },
-  'CA': { currency:'CAD', symbol:'CA$', price:'49', label:'CA$49', countryName:'Canada' },
-  'US': { currency:'USD', symbol:'$', price:'35', label:'$35 USD', countryName:'United States' },
+  'AU': { currency:'AUD', symbol:'$', price:'49', label:'$49 AUD', countryName:'Australia' },
   'ZA': { currency:'ZAR', symbol:'R', price:'649', label:'R649 ZAR', countryName:'South Africa' },
 };
 
 function updatePriceDisplay(countryCode) {
-  const data = COUNTRY_DATA[countryCode] || COUNTRY_DATA['AU'];
+  const data = COUNTRY_DATA[countryCode] || COUNTRY_DATA['NZ'];
   const el = document.getElementById('price-display');
   if(el) el.textContent = data.label;
   const hint = document.getElementById('rev-currency-hint');
@@ -1036,8 +951,8 @@ function startAssessment() {
   const biz = document.getElementById('f-biz').value.trim();
   const sector = document.getElementById('f-sector').value;
   if(!name||!biz||!sector){alert('Please fill in your name, business name and sector to continue.');return;}
-  const countryCode = wizardCountry.code || 'AU';
-  const countryInfo = COUNTRY_DATA[countryCode] || COUNTRY_DATA['AU'];
+  const countryCode = wizardCountry.code || 'NZ';
+  const countryInfo = COUNTRY_DATA[countryCode] || COUNTRY_DATA['NZ'];
   if(!userData) userData = {};
   userData = { name, biz, sector,
     revenue: document.getElementById('f-revenue').value || 'not specified',
@@ -1049,7 +964,7 @@ function startAssessment() {
   };
   document.getElementById('sb-biz').textContent = biz;
   const navTag = document.getElementById('nav-price-tag');
-  if(navTag) navTag.textContent = 'Business Diagnostic · ' + (COUNTRY_DATA[countryCode]||COUNTRY_DATA['AU']).label;
+  if(navTag) navTag.textContent = 'Business Diagnostic · ' + (COUNTRY_DATA[countryCode]||COUNTRY_DATA['NZ']).label;
   document.getElementById('sb-sector').textContent = sector;
   buildSidebar();
   switchScreen('assessment-screen');
@@ -1108,7 +1023,7 @@ function showModule(idx) {
 
   m.questions.forEach((q,qi) => {
     const gn = MODULES.slice(0,idx).reduce((a,mm)=>a+mm.questions.length,0)+qi+1;
-    html += `<div class="q-block"><div class="q-num">Question ${gn} of 20</div><div class="q-text">${q.text}</div>`;
+    html += `<div class="q-block"><div class="q-num">Question ${gn} of ${MODULES.reduce((a,mm)=>a+mm.questions.length,0)}</div><div class="q-text">${qText(q)}</div>`;
     if(q.type==='slider') {
       const sv = (answers[m.id]||{})[q.id]?.val || q.default;
       html += `<div class="slider-wrap">
@@ -1131,6 +1046,7 @@ function showModule(idx) {
     html += `</div>`;
   });
 
+  if(m.id === 'cashflow') html += numbersBlock();
   const isLast = idx===MODULES.length-1;
   html += `<div class="q-nav">
     ${idx>0?`<button class="btn-back" onclick="showModule(${idx-1})">← ${MODULES[idx-1].name}</button>`:'<span></span>'}
@@ -1212,9 +1128,9 @@ async function generateReport() {
     const ans=answers[m.id]||{};
     return m.name+':\n'+m.questions.map(q=>{
       const a=ans[q.id];
-      if(!a) return `  - ${q.text}: (not answered)`;
-      if(a.type==='slider') return `  - ${q.text}: ${a.val}/10`;
-      return `  - ${q.text}: "${q.opts[a.idx].l}" (${q.opts[a.idx].s})`;
+      if(!a) return `  - ${qText(q)}: (not answered)`;
+      if(a.type==='slider') return `  - ${qText(q)}: ${a.val}/10`;
+      return `  - ${qText(q)}: "${q.opts[a.idx].l}" (${q.opts[a.idx].s})`;
     }).join('\n');
   }).join('\n\n');
 
@@ -1225,8 +1141,8 @@ CRITICAL RULES:
 - Use real dollar figures, timeframes, and named actions throughout.
 - Write like a trusted advisor who has read every answer carefully and is being completely honest.
 - If the answers reveal a serious problem, name it directly. Do not soften it.
-- Reference their specific answers constantly — quote back what they told you and explain what it means commercially.
-- Each fix must be a detailed, implementable action plan — not a vague suggestion.
+- Reference their specific answers constantly, quote back what they told you and explain what it means commercially.
+- Each fix must be a detailed, implementable action plan, not a vague suggestion.
 - Tone: direct, warm, commercially sharp. Like a brilliant friend who happens to be a business expert.
 
 BUSINESS PROFILE:
@@ -1247,7 +1163,7 @@ ${(()=>{
   const labels={grossMargin:'Gross Margin',debtorDays:'Debtor Days',payrollPct:'Payroll % Revenue',ebitdaMargin:'EBITDA Margin',revenueGrowth:'Revenue Growth YoY',cashRunway:'Cash Runway'};
   return Object.entries(bm).filter(([k])=>k!=='source').map(([k,v])=>(labels[k]||k)+': sector range '+v.label).join('\n');
 })()}
-Benchmark source: ${(()=>{const bm=getBenchmark();return bm?bm.source:'IBISWorld';})()}
+Benchmark source: ${(()=>{const bm=getBenchmark();return bm?bm.source:'none loaded';})()}
 
 THEIR EXACT ANSWERS:
 ${answersSummary}
@@ -1256,37 +1172,37 @@ WEAKEST AREAS: ${worst[0].name} (${moduleScores[worst[0].id]}/100) and ${worst[1
 CRITICAL CYBER SECURITY INSTRUCTIONS:
 Protocol mapping (use owners exact answers to write specific named fixes):
 cy1=MFA(Google Authenticator/Duo), cy2=Backups(Backblaze/Carbonite $99/yr), cy3=Phishing(KnowBe4 free test), cy4=Auto-updates(Windows/Mac settings), cy5=Endpoint(Sophos $45/yr), cy6=Incident plan(1-page, 4 steps)
-If cyber scored below 60: treat as CRITICAL priority. Name the exact protocol number, tool, time to implement, and why it prevents financial loss. Be specific: "Protocol 1 - Enable MFA on Gmail: Settings > Security > 2-Step Verification > download Google Authenticator. 15 mins. Blocks 99.9% of account takeovers."
+If cyber scored below 60: treat as CRITICAL priority. Name the exact protocol number, tool, time to implement, and why it prevents financial loss. Be specific: "Protocol 1 - Enable MFA on Gmail: Settings > Security > 2-Step Verification > download Google Authenticator. 15 mins."
 
 COMPLIANCE MODULE NOTES:
 co1=Tax/payroll(ATO penalties), co2=Contracts(Fair Work underpayment), co3=Privacy(OAIC/GDPR), co4=Insurance(liability gaps)
-If EITHER Cyber Security OR Compliance scored below 60, they must be treated as CRITICAL priority areas — regulatory and cyber failures can end an SME faster than any operational or financial issue.
+If EITHER Cyber Security OR Compliance scored below 60, they must be treated as CRITICAL priority areas, regulatory and cyber failures can end an SME faster than any operational or financial issue.
 STRONGEST AREA: ${best.name} (${moduleScores[best.id]}/100)
 
-Write the report in plain text — no markdown, no asterisks, no hash symbols. Use the exact section headers below.
+Write the report in plain text, no markdown, no asterisks, no hash symbols. Use the exact section headers below.
 
 EXECUTIVE SUMMARY
-Write 4–5 sentences. State the single most important commercial finding from this diagnostic. Name ${userData.name} and ${userData.biz} directly. Quantify the cost of inaction where possible — use specific dollar estimates based on their revenue range and sector averages. Be honest about urgency. This should feel like the opening of a boardroom debrief, not a template.
+Write 4–5 sentences. State the single most important commercial finding from this diagnostic. Name ${userData.name} and ${userData.biz} directly. Quantify the cost of inaction where possible, use specific dollar estimates based on their revenue range and sector averages. Be honest about urgency. This should feel like the opening of a boardroom debrief, not a template.
 
 PRIORITY AREA 1: ${worst[0].name}
-Write 5–6 sentences minimum. Explain exactly what their answers reveal about this area of the business. Reference their specific responses — what did they say and what does it actually mean for a ${userData.sector} business at their revenue level? Quantify the cost in time or money. Explain what happens if this is not addressed in the next 30 days. Be specific about the commercial consequences — lost margin, staff time wasted, revenue at risk, compliance exposure, or customer churn. This must feel like an advisor who has seen this pattern many times and knows exactly what it leads to.
+Write 5–6 sentences minimum. Explain exactly what their answers reveal about this area of the business. Reference their specific responses, what did they say and what does it actually mean for a ${userData.sector} business at their revenue level? Quantify the cost in time or money. Explain what happens if this is not addressed in the next 30 days. Be specific about the commercial consequences, lost margin, staff time wasted, revenue at risk, compliance exposure, or customer churn. This must feel like an advisor who has seen this pattern many times and knows exactly what it leads to.
 
 PRIORITY AREA 2: ${worst[1].name}
-Same depth and format as Priority Area 1. Minimum 5–6 sentences. Different commercial angle — do not repeat the same type of finding. Dig into what the answers reveal that the owner may not have fully recognised themselves.
+Same depth and format as Priority Area 1. Minimum 5–6 sentences. Different commercial angle, do not repeat the same type of finding. Dig into what the answers reveal that the owner may not have fully recognised themselves.
 
-FIX 1 — TODAY
-Title: [A specific, named, concrete action — not a category, an actual task]
+FIX 1, TODAY
+Title: [A specific, named, concrete action, not a category, an actual task]
 What to do: Write a detailed 4–5 sentence action plan. Name the exact steps. Who does what, in what order, using which tools or resources. Include a specific time estimate. Make it so clear that the owner could hand this to a team member and they would know exactly what to do.
 Impact: Write 2 sentences quantifying what this fix recovers or prevents. Use dollar figures or hours where possible. Be specific to their revenue range and sector.
 
-FIX 2 — BY WEDNESDAY
+FIX 2, BY WEDNESDAY
 Same format and depth as Fix 1. Must address a different problem area. Must be equally specific and actionable.
 
-FIX 3 — BY FRIDAY
+FIX 3, BY FRIDAY
 Same format and depth as Fix 1 and Fix 2. Must create visible momentum by end of week. Should build on or complement the earlier fixes where possible.
 
 WHAT IS WORKING
-Write 4–5 sentences about ${best.name}. Be genuinely specific — what do their answers tell you about why this area is strong? What are they doing right that many businesses in their sector get wrong? Name the commercial advantage this gives them. Acknowledge it warmly but also note what they need to protect or maintain to keep this advantage as they grow.
+Write 4–5 sentences about ${best.name}. Be genuinely specific, what do their answers tell you about why this area is strong? What are they doing right that many businesses in their sector get wrong? Name the commercial advantage this gives them. Acknowledge it warmly but also note what they need to protect or maintain to keep this advantage as they grow.
 
 7-DAY CHALLENGE
 Write 3–4 sentences. Name the single highest-leverage action from the three fixes above. Explain specifically why this one matters most right now for ${userData.biz}. Make it a concrete commitment with a named day and measurable outcome. End with one sentence that connects this weeks action to the longer-term trajectory of the business.`;
@@ -1309,51 +1225,9 @@ Write 3–4 sentences. Name the single highest-leverage action from the three fi
 }
 
 function buildFallback(worst, best) {
-  var w0=worst[0], w1=worst[1];
-  var ans = answers;
-
-  // Build fix list based on actual answers
-  var allFixes = [];
-
-  // Cyber fixes
-  var cy = answers['cyber'] || {};
-  if(!cy['cy1'] || cy['cy1'].neg) allFixes.push({zone:'cyber', timing:'Fix 1 — Today', title:'Protocol 1: Enable Multi-Factor Authentication (MFA)', desc:'Go to Settings in your Gmail, Microsoft 365 or Xero account right now. Enable 2-Step Verification. Download Google Authenticator (free, iOS and Android) or Duo Security. Do email first, then your accounting software, then banking logins. Takes 15 minutes per account.', impact:'Blocks 99.9% of automated account takeover attacks — even if your password is already compromised'});
-  if(!cy['cy2'] || cy['cy2'].neg) allFixes.push({zone:'cyber', timing:'Fix 1 — Today', title:'Protocol 2: Set Up Automated Offsite Backups', desc:'Sign up for Backblaze Business Backup (backblaze.com, approx $99 USD/year) or Carbonite (carbonite.com, from $83/year). Install on every work computer. Enable daily automatic backups. Set a quarterly calendar reminder to test your restore.', impact:'Enables full recovery from ransomware without paying. Average SME ransomware payment: $170,000 AUD'});
-  if(!cy['cy3'] || cy['cy3'].neg) allFixes.push({zone:'cyber', timing:'Fix 2 — By Wednesday', title:'Protocol 3: Run a Phishing Awareness Session', desc:'Book a 30-minute team session this week. Use KnowBe4 free phishing simulation test (knowbe4.com/free-phishing-security-test) to show who would click a malicious link. Teach three rules: never click links in unexpected emails, verify sender addresses, call sender to confirm if unsure.', impact:'91% of cyberattacks start with a phishing email. One trained team member can prevent a breach costing tens of thousands'});
-  if(!cy['cy4'] || cy['cy4'].neg) allFixes.push({zone:'cyber', timing:'Fix 2 — By Wednesday', title:'Protocol 4: Enable Automatic Updates on All Devices', desc:'On Windows: Settings > Windows Update > Automatic Updates. On Mac: System Settings > General > Software Update > enable Automatic Updates. Do this on every computer and phone used for work. Also enable auto-update in Chrome and your accounting software.', impact:'60% of breaches exploit vulnerabilities that already had a patch available. Automatic updates close the window at zero cost'});
-  if(!cy['cy5'] || cy['cy5'].neg) allFixes.push({zone:'cyber', timing:'Fix 3 — By Friday', title:'Protocol 5: Install Endpoint Protection on All Devices', desc:'Download Sophos Home Premium (sophos.com, approx $45 AUD/year for 3 devices) or Malwarebytes Business on every work device. Log in to your router admin page (usually 192.168.1.1) and verify the firewall is enabled.', impact:'Endpoint protection detects ransomware and malware in real time. Hardware firewall stops malicious traffic before it reaches your devices'});
-  if(!cy['cy6'] || cy['cy6'].neg) allFixes.push({zone:'cyber', timing:'Fix 3 — By Friday', title:'Protocol 6: Write a 1-Page Incident Response Plan', desc:'Write four things and post near every work computer: (1) Who to call first — your IT contact; (2) Isolate — disconnect affected devices immediately; (3) Preserve — do not delete anything, photograph error screens; (4) Report — notify your cyber insurer and OAIC (AU) or ICO (UK) if customer data is involved.', impact:'In a cyber incident the first 60 minutes determine whether you lose hours or weeks. A plan prevents panic decisions that turn a contained incident into a catastrophe'});
-
-  // Compliance fixes
-  var co = answers['compliance'] || {};
-  if(!co['co1'] || co['co1'].neg) allFixes.push({zone:'compliance', timing:'Fix 1 — Today', title:'Tax and Payroll: Audit Your Current Obligations', desc:'Log into your accounting software and check: (1) Are all BAS/GST returns lodged and paid? (2) Are PAYG withholding payments current? (3) Is superannuation paid on time? If anything is overdue, contact your BAS agent or accountant today — do not wait for a notice.', impact:'ATO late lodgement penalties start at $313 per period. Early contact almost always results in a payment plan — late contact results in penalties'});
-  if(!co['co2'] || co['co2'].neg) allFixes.push({zone:'compliance', timing:'Fix 2 — By Wednesday', title:'Employment Contracts: Review All Staff Agreements', desc:'Pull every employment contract. For each check: (1) Is it signed? (2) Does it state the correct Award and classification? (3) Does it reflect current role and pay rate? Use Fair Work Commission templates (fairwork.gov.au) to update any that fail these checks.', impact:'Fair Work underpayment claims can be backdated up to 6 years. Average SME underpayment claim cost: $28,000 AUD including back-pay and penalties'});
-  if(!co['co3'] || co['co3'].neg) allFixes.push({zone:'compliance', timing:'Fix 3 — By Friday', title:'Privacy Policy: Implement a Current Data Handling Policy', desc:'Download the free OAIC Privacy Policy template (oaic.gov.au), customise for your business in under an hour, and publish on your website. Add a link to it on any contact form or checkout page. Required if you collect any customer personal information.', impact:'OAIC can issue fines up to $2.22 million AUD for serious privacy breaches. A published privacy policy also builds customer trust'});
-
-  // Operational fixes for other weak areas
-  var ops = answers['ops'] || {};
-  var cash = answers['cashflow'] || {};
-  allFixes.push({zone:'ops', timing:'Fix 1 — Today', title:'Identify and document your single biggest recurring problem', desc:'Pick the problem your team solves most often. Write the root cause in one sentence and the fix in one sentence. Assign it to one person with a deadline by end of week. This single step prevents the same problem consuming hours every month.', impact:'Reduces recurring time cost and creates accountability for permanent resolution'});
-  allFixes.push({zone:'cashflow', timing:'Fix 2 — By Wednesday', title:'Review your cash position and debtor list', desc:'Open your accounting software and check: current bank balance, any invoices overdue by more than 30 days, and committed outgoings for the next 60 days. If cash runway is under 8 weeks, chase your three oldest outstanding invoices today.', impact:'Proactive debtor management recovers cash faster and prevents the need for emergency financing'});
-
-  // Select top 3 fixes prioritising worst modules
-  var selected = [];
-  var worstIds = worst.map(function(m){ return m.id; });
-
-  // First: fixes from worst modules
-  allFixes.forEach(function(f) {
-    if(selected.length < 3 && worstIds.indexOf(f.zone) >= 0) selected.push(f);
-  });
-  // Fill remaining slots
-  allFixes.forEach(function(f) {
-    if(selected.length < 3 && selected.indexOf(f) < 0) selected.push(f);
-  });
-
-  // Set timing labels correctly
-  var timings = ['Fix 1 — Today', 'Fix 2 — By Wednesday', 'Fix 3 — By Friday'];
-  selected = selected.slice(0,3).map(function(f,i){ return Object.assign({}, f, {timing: timings[i]}); });
-
-  window._fallbackFixes = selected;
+  // Fixes come from the answers: any cash gap is always Fix 1, then the biggest weighted gaps, one per module where possible.
+  var timings = ['Fix 1 · Today', 'Fix 2 · By Wednesday', 'Fix 3 · By Friday'];
+  window._fallbackFixes = pickFixesV2().map(function(f,i){ return Object.assign({}, f, {timing: timings[i]}); });
   return 'FALLBACK_STRUCTURED';
 }
 
@@ -1409,56 +1283,49 @@ function renderReport(text, worst, best) {
 }
 
 function renderStructuredFixes(fixes, worst, best) {
-  // Executive summary
   var w0 = worst[0], w1 = worst[1];
   var s0 = moduleScores[w0.id], s1 = moduleScores[w1.id];
+  var lead = fixes[0] && fixes[0].zone === 'cashflow' ? ' Cash comes first, because a cash problem gets in the way of fixing anything else.' : '';
   document.getElementById('exec-summary-text').textContent =
-    userData.name + ', this diagnostic identifies two areas where ' + userData.biz +
-    ' carries the most risk right now: ' + w0.name + ' (' + s0 + '/100) and ' +
-    w1.name + ' (' + s1 + '/100). The three fixes below are specific and actionable — no specialist required.';
+    userData.name + ', your two lowest-scoring areas at ' + userData.biz + ' are ' + w0.name + ' (' + s0 + '/100) and ' +
+    w1.name + ' (' + s1 + '/100). The three fixes below come straight from your answers, and each has a clear test for when it is done.' + lead;
 
-  // Priority areas
   var pg = document.getElementById('priority-grid');
   pg.innerHTML = '';
   [w0, w1].forEach(function(m, i) {
     var score = moduleScores[m.id];
     var headerCls = i === 0 ? 'p1' : 'p2';
-    var bodyText = i === 0
-      ? 'Your answers reveal a pattern creating real commercial risk. At ' + score + '/100, this area is generating compounding problems that accumulate weekly — in lost time, eroded margin, or growing exposure.'
-      : 'At ' + score + '/100, this area has been deprioritised. Without action this week, the gap between your current position and sector peers will continue to widen.';
     pg.innerHTML += '<div class="priority-card">' +
       '<div class="priority-card-header ' + headerCls + '">' +
       '<div><div class="priority-card-num">Priority ' + (i+1) + '</div>' +
       '<div class="priority-card-name">' + m.name + '</div></div>' +
       '<div class="priority-card-score">' + score + '<span style="font-size:13px;font-weight:400;opacity:0.6">/100</span></div>' +
-      '</div><div class="priority-card-body"><div class="priority-card-text">' + bodyText + '</div></div></div>';
+      '</div><div class="priority-card-body"><div class="priority-card-text">' + escH(moduleFindingsText(m.id)) + '</div></div></div>';
   });
 
-  // Fix cards
   renderFixCards(fixes.slice(0,3).map(function(f,i){
-    return {num:i+1, timing:f.timing||('Fix '+(i+1)), title:f.title, desc:f.desc, impact:f.impact};
+    return Object.assign({}, f, {num:i+1, timing:f.timing||('Fix '+(i+1))});
   }));
 
-  // What is working
   var bestScore = moduleScores[best.id];
   document.getElementById('working-text').textContent =
-    'Your strongest area is ' + best.name + ' (' + bestScore + '/100). Your answers here suggest genuine capability that has been deliberately built. Protect this as you address the priority areas above.';
+    'Your strongest area is ' + best.name + ' (' + bestScore + '/100). Keep doing what is working here, and review it once a quarter so it stays strong while you fix the areas above.';
 
-  // 7-day challenge
-  var f1 = fixes[0];
   document.getElementById('seven-day-text').textContent =
-    'By next Monday: start ' + (f1 ? f1.title : 'Fix 1') + ' today. Address ' + w1.name + ' by Wednesday. Set one weekly tracking metric by Friday. Act on day one — not day seven.';
+    'Each fix has three steps, spread so no single day takes more than a couple of hours. Day six is for checking each fix against its done test. Day seven is for retaking the diagnostic and setting next week\'s three.';
+  renderWeek(fixes);
+  renderFindings();
 }
 
 function renderFixCards(fixes) {
   var numCls = ['fn1','fn2','fn3'];
-  var timingLabels = ['Fix 1 — Today','Fix 2 — By Wednesday','Fix 3 — By Friday'];
+  var timingLabels = ['Fix 1 · Today','Fix 2 · By Wednesday','Fix 3 · By Friday'];
   var fc = document.getElementById('fix-cards');
   fc.innerHTML = '';
   fixes.slice(0,3).forEach(function(f, i) {
     var timing = f.timing || timingLabels[i];
     // Clean up timing label
-    timing = timing.replace(/^Fix \d+ — /i,'').replace(/^Fix \d — /i,'').replace(/^\d — /,'').trim();
+    timing = timing.replace(/^Fix \d+, /i,'').replace(/^Fix \d, /i,'').replace(/^\d, /,'').trim();
     var timingLabel = timingLabels[i];
 
     var card = '<div class="fix-card">';
@@ -1469,7 +1336,13 @@ function renderFixCards(fixes) {
     card += '<div class="fix-card-title">' + f.title + '</div>';
     card += '</div></div>';
     card += '<div class="fix-card-body">';
-    card += '<div class="fix-card-body-text">' + f.desc + '</div>';
+    if(f.steps) {
+      card += '<div class="fix-card-body-text">' + escH(f.why || '') + '</div>';
+      card += '<ol class="fix-steps">' + f.steps.map(function(st){ return '<li>' + escH(st) + '</li>'; }).join('') + '</ol>';
+      card += '<div class="fix-meta"><span>' + (f.zoneName ? escH(f.zoneName) + ' · ' : '') + 'Time: ' + escH(f.time) + '</span><span>Done when: ' + escH(f.done) + '</span></div>';
+    } else {
+      card += '<div class="fix-card-body-text">' + f.desc + '</div>';
+    }
     if(f.impact) {
       card += '<div style="margin-top:14px;padding:12px 16px;background:var(--green-soft);border-radius:8px;border-left:3px solid var(--green);">';
       card += '<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--green);margin-bottom:4px;">Impact</div>';
@@ -1494,6 +1367,8 @@ function showReport(reportText, worst, best) {
   document.getElementById('rc-date').textContent = 'Generated ' + d.toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('rc-overall-score').innerHTML = overall + '<span class="rc-overall-denom">/100</span>';
   document.getElementById('rc-overall-status').textContent = scoreLabel(overall);
+  saveRunAndDelta(overall);
+  renderNumbers();
   document.getElementById('rf-biz').textContent = userData.biz;
   document.getElementById('rf-date').textContent = d.toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('rc-meta').innerHTML = [
@@ -1568,6 +1443,300 @@ function runProcessing() {
     else { generateReport(); }
   }
   step();
+}
+
+
+// ══ FIXLO v2: PAYMENT LINKS (Stripe) ══
+// Paste each Stripe Payment Link here. Leave '' to run without payment while testing.
+// In Stripe, set each link's "after payment" redirect to: https://deanbritz.github.io/fixlo/?paid=1
+const PAY_LINKS = { NZ:'', AU:'', ZA:'' };
+
+// ══ FIXLO v2: COUNTRY WORDING ══
+const CW = {
+  NZ:{ tax:'GST, PAYE and provisional tax', payPlan:'an instalment arrangement with Inland Revenue',
+       cyber:'the NCSC\'s Own Your Online website', report:'report scams and cyber incidents to the NCSC at ncsc.govt.nz/report',
+       breach:'Under the Privacy Act 2020, a privacy breach that has caused or is likely to cause serious harm must be notified to the Privacy Commissioner and the people affected as soon as practicable.',
+       emp:'Every employee must have a written employment agreement. Employment New Zealand has a free Employment Agreement Builder.',
+       privacy:'The Privacy Act 2020 applies to every business that holds personal information. The Privacy Commissioner publishes free guidance on writing a privacy statement.',
+       insure:'ACC covers workplace injury, so focus the review on liability, professional indemnity and cyber cover.' },
+  AU:{ tax:'BAS (GST and PAYG withholding) and super, which under Payday Super must now be paid with wages', payPlan:'a payment plan with the ATO',
+       cyber:'cyber.gov.au', report:'report cybercrime through ReportCyber at cyber.gov.au/report',
+       breach:'If your business is covered by the Privacy Act 1988 (generally turnover above A$3 million, plus some smaller businesses such as health service providers), an eligible data breach must be reported to the OAIC and the people affected.',
+       emp:'Check each contract states the correct award and classification. The Fair Work Ombudsman\'s free Pay and Conditions Tool checks award rates.',
+       privacy:'Most businesses with turnover under A$3 million are exempt from the Privacy Act 1988, but not all (health service providers are covered, for example). Check whether it applies to you, and if it does, use the OAIC\'s guidance.',
+       insure:'Workers compensation insurance is compulsory for employers in every state and territory, so check it alongside liability, professional indemnity and cyber cover.' },
+  ZA:{ tax:'VAT, monthly EMP201 (PAYE, UIF and SDL) and provisional tax', payPlan:'a payment arrangement with SARS',
+       cyber:'your bank and SABRIC', report:'report fraud to your bank straight away, and to the SAPS if money was lost',
+       breach:'Under POPIA, if personal information has been accessed or acquired by an unauthorised person, you must notify the Information Regulator and the people affected as soon as reasonably possible.',
+       emp:'The Basic Conditions of Employment Act requires written particulars of employment for each employee.',
+       privacy:'POPIA applies to every business that processes personal information. Register your Information Officer with the Information Regulator and publish a privacy notice.',
+       insure:'If you employ staff, confirm you are registered with the Compensation Fund under COIDA, then review liability, professional indemnity and cyber cover.' }
+};
+function cw(key){ var c = (userData && CW[userData.countryCode]) ? userData.countryCode : 'NZ'; return CW[c][key]; }
+function qText(q){ var c = userData && userData.countryCode; return (q.textBy && c && q.textBy[c]) ? q.textBy[c] : q.text; }
+
+// ══ FIXLO v2: PLAIN-ENGLISH FINDINGS ══
+// Choice questions: one entry per option, [finding, severity 1-3] or null when the answer is fine.
+// Slider questions: one finding used when the answer is in the weak half.
+const FINDINGS = {
+  cf2:[["You rarely or never work out how many weeks of cash you have left.",3],["You check your cash runway quarterly, which can be too late to act on a shortfall.",2],null,null],
+  cf3:'You\'re not confident your gross margin is where it should be, which usually means it isn\'t being measured by service or product.',
+  cf4:[null,null,["Clients take 45 to 60 days to pay, so you are funding their cash flow.",2],["Clients take over 60 days to pay. That is a serious drain on your cash.",3]],
+  op2:[null,null,["Decisions take a week or more, which slows delivery and frustrates clients.",2],["Decisions are often deferred, so work queues up waiting on them.",3]],
+  op3:'You are regularly stepping in to fix things your team should be able to handle.',
+  op4:[null,null,["Old problems and rework come up fairly often, which quietly eats time and margin.",2],["Old problems and rework happen every week. That is paid time spent doing the same job twice.",3]],
+  tm1:'Your team\'s capacity doesn\'t match the workload you\'re taking on.',
+  tm2:[null,null,["A key person\'s absence causes significant disruption.",2],["The business nearly stops when a key person is away.",3]],
+  tm3:'You\'re worried your top performers may be thinking of leaving.',
+  tm4:[null,null,["Roles and expectations are unclear in places, which creates friction.",2],["Roles are very unclear, so people are guessing what good looks like.",3]],
+  gr1:'You\'re uncertain about revenue for the next 90 days.',
+  gr2:[null,["Your prices were last reviewed 6 to 12 months ago, while your costs keep moving.",1],["Your prices haven\'t been reviewed for over a year, so rising costs have probably come out of your margin.",2],["Your pricing has never been formally reviewed.",3]],
+  gr3:'Follow-up on proposals and conversations is inconsistent, so some work is being left on the table.',
+  gr4:[null,null,["Most new revenue depends on outreach rather than referrals or repeat work.",2],["You don\'t know where your new revenue comes from.",3]],
+  di1:'Your team spends time copying data between systems and doing admin that software could do.',
+  di2:[null,null,["You pay for 3 or 4 tools that are rarely or never used.",2],["You pay for 5 or more tools that are rarely or never used.",3]],
+  cy1:[null,["MFA is on some systems but not all, and the gaps are where attackers get in.",2],["MFA isn\'t set up on your critical accounts.",3],["You\'re not sure what MFA is, so it is very likely not switched on.",3]],
+  cy2:[null,["Backups exist but are manual or untested, so recovery time is unknown.",2],["Backups are inconsistent or only kept on local devices, so a system failure could cost days.",3],["There are no backups in place, so one failure or ransomware attack could stop the business.",3]],
+  cy3:[null,["Phishing awareness is informal, with nothing structured.",1],["Your team has had no training on spotting phishing.",2],["Phishing has never been discussed with the team.",3]],
+  cy4:[null,["Updates and protection aren\'t consistent across all devices.",1],["Updates are manual and protection is basic.",2],["Devices are rarely updated and have no active protection.",3]],
+  cy6:[null,["There\'s a rough idea of what to do in an incident, but nothing written down.",1],["There\'s no incident plan, so decisions would be made under pressure.",2],["There\'s no plan and no clear place to start.",3]],
+  co1:[null,["Tax and payroll are mostly up to date, with a few items to confirm.",1],["Tax and payroll need some catching up.",2],["You\'re concerned about your tax and payroll position.",3]],
+  co2:[null,["Some employment agreements are older or unsigned.",1],["Employment agreements are outdated.",2],["There are no formal employment agreements in place.",3]],
+  co3:[null,["Your privacy policy exists but hasn\'t been reviewed recently.",1],["Personal information is handled without a formal policy.",2],["You\'re not sure what privacy obligations apply to you.",3]],
+  co4:[null,["Some insurance is in place but there may be gaps.",1],["Insurance cover may be inadequate.",2],["There\'s no current business insurance.",3]]
+};
+
+// ══ FIXLO v2: FIX LIBRARY (one per question; three steps, a time and a done test) ══
+function fixFor(qid){
+  var F = {
+    cf2:{t:'Calculate your cash runway and check it weekly', time:'60 minutes', steps:['Note today\'s balance across all business accounts, then subtract every committed payment in the next 60 days: wages, rent, suppliers and '+cw('tax')+'.','Divide what\'s left by your average weekly costs. That is your runway in weeks.','Book 15 minutes every Monday to update that one number.'], done:'You can state your runway in weeks and the Monday check is booked.'},
+    cf3:{t:'Work out the margin on your two biggest lines', time:'2 hours', steps:['Pick the two services or products that bring in the most revenue.','For each, add up direct costs: staff hours at cost, subcontractors, materials.','Compare the margin percentages side by side and note which one you would rather sell more of.'], done:'You have a margin percentage for both lines, written down.'},
+    cf4:{t:'Chase every invoice over 30 days', time:'90 minutes', steps:['Run an aged debtors report from your accounting software.','Phone the three largest overdue accounts rather than emailing.','Turn on automatic reminders at the due date and seven days after, and add a payment link to your invoices. Check what your terms of trade say about interest on late payment.'], done:'The three largest debtors have been called and reminders are switched on.'},
+    op2:{t:'Set a two-day rule for client decisions', time:'60 minutes', steps:['List the decisions currently waiting and who they are waiting on.','Decide what your team can approve without you, including a spending limit.','Agree that client decisions get an answer within two working days.'], done:'The waiting list is cleared and the approval limits are written down.'},
+    op3:{t:'Hand one recurring problem back to the team', time:'60 minutes', steps:['List the things you stepped in on over the last two weeks.','Pick the most frequent one and write down how you would handle it.','Agree who owns it from now on and when they should come to you.'], done:'Someone else owns it and knows when to escalate.'},
+    op4:{t:'Fix your most common repeat problem', time:'90 minutes', steps:['List the problems that came up more than once last month, and any jobs that had to be redone.','Pick the most common one and find the cause: an unclear brief, a missing check, a handover.','Write down the fix or add one check where it goes wrong, and share it with the team.'], done:'The fix is written, shared and has been used at least once.'},
+    tm1:{t:'Match the next month\'s workload to your capacity', time:'90 minutes', steps:['List the work committed for the next four weeks with estimated hours.','Compare it with the hours your team actually has available.','Decide what to defer, subcontract or decline, and tell the clients affected.'], done:'The next four weeks fit the hours available.'},
+    tm2:{t:'Get one critical task out of one head', time:'2 hours', steps:['List the five things only that person can do.','Record them doing the most critical one; a narrated screen recording is fine.','Make sure a second trusted person can reach the logins that task needs.'], done:'Someone else could do the most critical task using the recording.'},
+    tm3:{t:'Have a stay conversation with your top performer', time:'45 minutes', steps:['Book 20 minutes, one to one, with no other agenda.','Ask what keeps them here and what might make them leave.','Act on one thing they raised within two weeks, and tell them you have.'], done:'The conversation has happened and one change is under way.'},
+    tm4:{t:'Write a one-page outline for each role', time:'2 hours', steps:['For each role, write its purpose in one line.','List its five main responsibilities and what good looks like for each.','Go through it with the person in the role and adjust it together.'], done:'Every role has an agreed one-page outline.'},
+    gr1:{t:'Build a 90-day revenue view', time:'90 minutes', steps:['List confirmed work by month for the next three months.','Add likely work, marking how likely each piece is.','Compare each month with your costs and note any gap.'], done:'You can see each month\'s revenue against costs for the next 90 days.'},
+    gr2:{t:'Review the price of one service', time:'90 minutes', steps:['Check how your direct costs have changed since you last set the price.','Set a new price for new clients on that one service.','Draft the notice for existing clients, giving whatever notice your agreements require.'], done:'The new price is set and the notice is drafted.'},
+    gr3:{t:'Follow up every open proposal', time:'60 minutes', steps:['List the proposals and conversations from the last 60 days that are still open.','Send a short, personal follow-up to each one.','Book a 20-minute follow-up slot in your calendar every week.'], done:'Every open proposal has had a follow-up and the weekly slot is booked.'},
+    gr4:{t:'Track where your last 20 clients came from', time:'60 minutes', steps:['List your last 20 clients and how each one found you.','Identify the source that brought in the best clients.','Plan one action to get more from that source, such as asking happy clients for an introduction.'], done:'You know your best source and have one action under way.'},
+    di1:{t:'Cut one manual workaround', time:'90 minutes', steps:['List where details get typed in more than once, and the admin tasks done by hand every week.','Pick the one that costs the most hours.','Check the integrations and automation settings in software you already pay for, and switch on what fixes it.'], done:'That workaround is gone, or has a dated next step.'},
+    di2:{t:'Pull together a full subscription list', time:'60 minutes', steps:['Export the last three months of bank and card statements and filter for repeating payments.','List each tool with its cost, who owns it and when it was last used.','Cancel or downgrade anything with no owner or no use in the last 30 days.'], done:'One list exists, every tool has an owner, and unused tools are cancelled.'},
+    cy1:{t:'Turn on multi-factor authentication', time:'60 minutes', steps:['Start with email: switch on two-step sign-in for every user.','Do the same for your accounting software and online banking.','Store the recovery codes somewhere safe and offline.'], done:'MFA is on for email, accounting and banking, for every user.'},
+    cy2:{t:'Set up automatic backups and test a restore', time:'90 minutes', steps:['Choose a backup service that keeps separate copies of your files. A synced folder is not a backup, because deletions sync too.','Switch on automatic daily backups for every work computer and cloud account that holds client data.','Restore one real file and time how long it takes, so you know how fast you could recover.'], done:'Daily backups are running and one restore has worked.'},
+    cy3:{t:'Run a 15-minute scam briefing', time:'30 minutes', steps:['Show the team two real examples of invoice or bank-detail scams. Free examples are available from '+cw('cyber')+'.','Agree one rule: any change to bank details is confirmed by phone on a number you already hold.','Agree where suspicious emails go: name one person to check them, and '+cw('report')+'.'], done:'Everyone has heard the briefing and knows the bank-details rule.'},
+    cy4:{t:'Update and protect every work device', time:'60 minutes', steps:['List every computer and phone used for work.','Switch on automatic updates for the operating system, browsers and your main business software on each one.','Confirm each has active malware protection, then log in to your router, check its firewall is on and change any default admin password.'], done:'Every device updates on its own and is protected, and the router is secured.'},
+    cy6:{t:'Write a one-page incident plan', time:'90 minutes', steps:['Name who decides, who calls your IT support and insurer, and who talks to clients.','Put the key phone numbers on paper and keep a copy away from your computers.','Add your reporting duty in plain words. '+cw('breach')], done:'The plan is printed, stored offline, and the people named in it have read it.'},
+    co1:{t:'Confirm your tax position for this quarter', time:'90 minutes', steps:['List every return and payment due in the next 90 days: '+cw('tax')+'.','Reconcile the figures against your accounting software.','If anything is behind, call your accountant this week. If you can\'t pay in full, ask about '+cw('payPlan')+' before the due date.'], done:'Every due date is in your calendar and the figures reconcile, or your accountant is on it.'},
+    co2:{t:'Check every employment agreement', time:'2 hours', steps:['Pull every employee\'s employment agreement.','Check each is signed and matches the person\'s current role, hours and pay. '+cw('emp'),'Fix any that fall short and get them signed.'], done:'Every employee has a current, signed agreement.'},
+    co3:{t:'Bring your privacy policy up to date', time:'90 minutes', steps:['List the personal information you collect and where it is stored.','Check which rules apply to you. '+cw('privacy'),'Publish your policy and link to it from every form that collects personal details.'], done:'A current policy is published and linked from your forms.'},
+    co4:{t:'Review your insurance with a broker', time:'60 minutes', steps:['List your current policies with their renewal dates.','Note what isn\'t covered. '+cw('insure'),'Book a 30-minute review with an insurance broker.'], done:'The review is booked, with your gaps written down.'}
+  };
+  return F[qid];
+}
+const MAINTAIN_FIXES = [
+  {t:'Run your quarterly access review', time:'60 minutes', steps:['Check the user lists on email, accounting and file storage.','Remove anyone who no longer needs access.','Confirm MFA is still on for every account.'], done:'Every login belongs to a current person.'},
+  {t:'Re-test your backup restore', time:'45 minutes', steps:['Pick a different file from last time.','Restore it from backup.','Note how long it took.'], done:'A second restore has worked.'},
+  {t:'Review one price and one cost', time:'60 minutes', steps:['Pick your largest cost line and check for a better rate.','Pick one service and check its margin against last quarter.','Decide whether either needs action.'], done:'One cost and one price reviewed.'}
+];
+// Priority weights: cash always leads (see pickFixesV2), then security and compliance.
+const MOD_WEIGHT = { cashflow:1.3, cyber:1.25, compliance:1.2, ops:1.0, team:1.0, growth:0.9, digital:0.9 };
+
+function weakItems(){
+  var out = [];
+  MODULES.forEach(function(m){
+    var ans = answers[m.id] || {};
+    m.questions.forEach(function(q){
+      var a = ans[q.id], f = FINDINGS[q.id], text = null, sev = 0;
+      if(!a || !f) return;
+      if(a.type === 'slider'){
+        var v = a.invert ? 11 - a.val : a.val;
+        if(v <= 5){ text = f; sev = v <= 2 ? 3 : v <= 4 ? 2 : 1; }
+      } else if(Array.isArray(f) && f[a.idx]){ text = f[a.idx][0]; sev = f[a.idx][1]; }
+      if(text) out.push({mid:m.id, mname:m.name, qid:q.id, text:text, sev:sev, score:sev*(MOD_WEIGHT[m.id]||1)});
+    });
+  });
+  return out.sort(function(a,b){ return b.score - a.score || b.sev - a.sev; });
+}
+
+function pickFixesV2(){
+  var items = weakItems(), picked = [], used = {};
+  var cash = items.filter(function(i){ return i.mid === 'cashflow'; })[0];
+  if(cash){ picked.push(cash); used.cashflow = 1; }
+  items.forEach(function(i){ if(picked.length < 3 && !used[i.mid]){ picked.push(i); used[i.mid] = 1; } });
+  items.forEach(function(i){ if(picked.length < 3 && picked.indexOf(i) < 0) picked.push(i); });
+  var fixes = picked.map(function(i){ var f = fixFor(i.qid); return {zone:i.mid, zoneName:i.mname, why:i.text, title:f.t, steps:f.steps, time:f.time, done:f.done, desc:i.text, impact:''}; });
+  var k = 0;
+  while(fixes.length < 3){ var mf = MAINTAIN_FIXES[k++]; fixes.push({zone:'maintain', zoneName:'Maintenance', why:'Your answers show no gap here. Keep it that way with a light check.', title:mf.t, steps:mf.steps, time:mf.time, done:mf.done, desc:'', impact:''}); }
+  return fixes;
+}
+
+function buildWeek(fixes){
+  var f1 = fixes[0], f2 = fixes[1], f3 = fixes[2];
+  return [
+    {h:'Fix 1', tasks:[f1.steps[0], f1.steps[1]]},
+    {h:'Fix 1 and 2', tasks:[f1.steps[2], f2.steps[0]]},
+    {h:'Fix 2', tasks:[f2.steps[1], f2.steps[2]]},
+    {h:'Fix 3', tasks:[f3.steps[0], f3.steps[1]]},
+    {h:'Fix 3', tasks:[f3.steps[2]]},
+    {h:'Check', tasks:['Check fix 1 is done: '+f1.done, 'Check fix 2 is done: '+f2.done, 'Check fix 3 is done: '+f3.done]},
+    {h:'Re-score', tasks:['Retake the diagnostic and compare your scores with this week.', 'Carry anything unfinished into next week before adding new fixes.']}
+  ];
+}
+
+function store(k, v){ try{ if(v === undefined) return JSON.parse(localStorage.getItem('fixlo.'+k)); localStorage.setItem('fixlo.'+k, JSON.stringify(v)); }catch(e){ return null; } }
+function escH(t){ return String(t).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+function renderWeek(fixes){
+  var week = buildWeek(fixes), runId = window._fixloRunId || 'r0';
+  var ticks = store('ticks.'+runId) || {};
+  var start = new Date();
+  var el = document.getElementById('days-list');
+  if(!el) return;
+  el.innerHTML = week.map(function(d, di){
+    var dt = new Date(start.getTime() + di*86400000).toLocaleDateString('en-NZ',{weekday:'short', day:'numeric', month:'short'});
+    return '<div class="day-row"><div class="day-label"><b>Day '+(di+1)+'</b>'+escH(dt)+' · '+escH(d.h)+'</div><div class="day-tasks">'+d.tasks.map(function(t, ti){
+      var key = di+'-'+ti, on = !!ticks[key];
+      return '<label class="day-task'+(on?' done':'')+'"><input type="checkbox" data-k="'+key+'"'+(on?' checked':'')+'><span>'+escH(t)+'</span></label>';
+    }).join('')+'</div></div>';
+  }).join('');
+  window._planText = userData.biz+' · FIXLO 7-day plan · '+start.toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'})+'\n\n'+
+    fixes.map(function(f,i){ return 'Fix '+(i+1)+' ('+f.zoneName+'): '+f.title+'\nDone when: '+f.done; }).join('\n\n')+'\n\n'+
+    week.map(function(d,di){ return 'Day '+(di+1)+' ('+d.h+')\n'+d.tasks.map(function(t){ return '  [ ] '+t; }).join('\n'); }).join('\n');
+}
+
+function renderFindings(){
+  var el = document.getElementById('findings-grid');
+  if(!el) return;
+  var items = weakItems();
+  el.innerHTML = MODULES.map(function(m){
+    var mine = items.filter(function(i){ return i.mid === m.id; });
+    var s = moduleScores[m.id];
+    var body = mine.length ? '<ul>'+mine.map(function(i){ return '<li>'+escH(i.text)+'</li>'; }).join('')+'</ul>' : '<p>No gaps in your answers here. Review it once a quarter.</p>';
+    return '<div class="finding-card"><div class="finding-head"><span>'+escH(m.name)+'</span><span class="finding-score '+scoreClass(s)+'">'+s+'</span></div>'+body+'</div>';
+  }).join('');
+}
+
+function moduleFindingsText(mid){
+  var mine = weakItems().filter(function(i){ return i.mid === mid; });
+  return mine.length ? mine.map(function(i){ return i.text; }).join(' ') : 'No specific gaps showed up in your answers here, but the overall score suggests room to tighten it.';
+}
+
+function saveRunAndDelta(overall){
+  var hist = store('history') || [];
+  var prev = hist.length ? hist[hist.length-1] : null;
+  window._fixloRunId = 'r'+Date.now();
+  var scores = {}; MODULES.forEach(function(m){ scores[m.id] = moduleScores[m.id]; });
+  hist.push({id:window._fixloRunId, date:new Date().toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'}), overall:overall, scores:scores});
+  store('history', hist.slice(-26));
+  var el = document.getElementById('rc-delta');
+  if(el) el.textContent = prev ? ('Last time '+prev.overall+' on '+prev.date+' ('+(overall-prev.overall>=0?'+':'')+(overall-prev.overall)+')') : 'First run. Retake next week to see the change.';
+}
+
+function copyPlan(){
+  var msg = document.getElementById('copy-msg'), txt = window._planText || '';
+  function fallback(){ var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); msg.textContent = 'Plan copied.'; }catch(e){ msg.textContent = 'Select and copy the plan above.'; } document.body.removeChild(ta); }
+  try{ navigator.clipboard.writeText(txt).then(function(){ msg.textContent = 'Plan copied. Paste it into your notes or calendar.'; }, fallback); }catch(e){ fallback(); }
+}
+
+function retakeDiagnostic(){
+  answers = {}; moduleScores = {}; currentModule = 0; userNumbers = {};
+  startTime = Date.now();
+  buildSidebar(); switchScreen('assessment-screen'); showModule(0); startTimer();
+}
+
+// ══ FIXLO v2: PAY, THEN BEGIN ══
+function payAndBegin(){
+  var name = document.getElementById('f-name').value.trim();
+  var biz = document.getElementById('f-biz').value.trim();
+  var sector = document.getElementById('f-sector').value;
+  if(!name || !biz || !sector){ alert('Please fill in your name, business name and sector to continue.'); return; }
+  var link = PAY_LINKS[wizardCountry.code];
+  if(!link){ startAssessment(); return; }
+  store('pending', {code:wizardCountry.code, name:name, biz:biz, sector:sector, revenue:document.getElementById('f-revenue').value, staff:document.getElementById('f-staff').value});
+  window.location.href = link;
+}
+
+function resumeAfterPayment(){
+  var params; try{ params = new URLSearchParams(window.location.search); }catch(e){ return; }
+  if(!params.get('paid')) return;
+  var p = store('pending'); if(!p) return;
+  var card = document.querySelector('.country-card[data-code="'+p.code+'"]');
+  var cd = COUNTRY_DATA[p.code]; if(!card || !cd) return;
+  selectCountry(card, p.code, cd.label, cd.currency);
+  document.getElementById('f-name').value = p.name; document.getElementById('f-biz').value = p.biz;
+  document.getElementById('f-sector').value = p.sector; document.getElementById('f-revenue').value = p.revenue || ''; document.getElementById('f-staff').value = p.staff || '';
+  try{ localStorage.removeItem('fixlo.pending'); }catch(e){}
+  startAssessment();
+}
+
+document.addEventListener('change', function(e){
+  var k = e.target && e.target.getAttribute && e.target.getAttribute('data-k');
+  if(!k) return;
+  var runId = window._fixloRunId || 'r0';
+  var t = store('ticks.'+runId) || {}; t[k] = e.target.checked; store('ticks.'+runId, t);
+  e.target.parentNode.classList.toggle('done', e.target.checked);
+});
+if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', resumeAfterPayment); } else { resumeAfterPayment(); }
+
+
+// ══ FIXLO v2: OPTIONAL "YOUR NUMBERS" ══
+// Three optional figures for the last 12 months. They don't change the scores; they give the owner
+// their own margin and wage ratios, and compare them with official benchmarks once BENCHMARKS is loaded.
+const NUM_FIELDS = [
+  {k:'turnover', l:'Turnover (sales) for the last 12 months', h:'Total sales before any costs.'},
+  {k:'cos', l:'Direct costs for the last 12 months', h:'What it cost to deliver what you sold: materials, stock, subcontractors. Leave out overheads such as rent.'},
+  {k:'wages', l:'Wages and salaries for the last 12 months', h:''}
+];
+function wagesHint(){ var c = userData && userData.countryCode; return c === 'AU' ? 'Include super. Leave out owner drawings.' : c === 'ZA' ? 'Include employer UIF and SDL contributions. Leave out owner drawings.' : 'Include employer KiwiSaver contributions. Leave out owner drawings.'; }
+function numbersBlock(){
+  var cur = (userData && userData.currency) || '';
+  var html = '<div class="q-block numbers-block"><div class="q-num">Optional · Your numbers</div>' +
+    '<div class="q-text">Add three figures from your last 12 months to see your margin and wage costs as a share of sales.</div>' +
+    '<p class="numbers-note">Skip any you don\'t have to hand. Your accounts or last year\'s tax return will have them. They stay on this device and don\'t change your scores.</p><div class="numbers-fields">';
+  NUM_FIELDS.forEach(function(f){
+    var v = userNumbers[f.k] !== undefined ? userNumbers[f.k] : '';
+    html += '<label class="num-field" for="num-'+f.k+'"><span class="num-label">'+f.l+' ('+cur+')</span>' +
+      '<input class="wf-input" id="num-'+f.k+'" type="text" inputmode="decimal" autocomplete="off" placeholder="e.g. 850000" value="'+v+'" oninput="recNumber(\''+f.k+'\', this.value)">' +
+      '<span class="num-hint">'+(f.k === 'wages' ? wagesHint() : f.h)+'</span></label>';
+  });
+  return html + '</div></div>';
+}
+function recNumber(k, raw){
+  var n = parseFloat(String(raw).replace(/[^0-9.]/g, ''));
+  if(isNaN(n) || n < 0){ delete userNumbers[k]; } else { userNumbers[k] = n; }
+}
+function calcRatios(){
+  var t = userNumbers.turnover, out = {};
+  if(!t || t <= 0) return null;
+  if(userNumbers.cos !== undefined){ out.grossMargin = (t - userNumbers.cos) / t * 100; out.cosPct = userNumbers.cos / t * 100; }
+  if(userNumbers.wages !== undefined){ out.payrollPct = userNumbers.wages / t * 100; }
+  return (out.grossMargin === undefined && out.payrollPct === undefined) ? null : out;
+}
+function renderNumbers(){
+  var wrap = document.getElementById('numbers-wrap'), grid = document.getElementById('numbers-grid'), foot = document.getElementById('numbers-foot');
+  if(!wrap || !grid) return;
+  var r = calcRatios();
+  if(!r){ wrap.style.display = 'none'; return; }
+  var bm = getBenchmark(), tiles = [];
+  function tile(label, val, metric, note){
+    var cmp = (bm && bm[metric]) ? benchmarkCompare(Math.round(val), metric, bm) : null;
+    return '<div class="num-tile"><div class="num-tile-label">'+label+'</div><div class="num-tile-val">'+val.toFixed(1)+'%</div>' +
+      (cmp ? '<div class="num-tile-cmp" style="color:'+cmp.color+'">'+escH(cmp.text)+'</div>' : '') +
+      '<div class="num-tile-note">'+escH(note)+'</div></div>';
+  }
+  if(r.grossMargin !== undefined){
+    tiles.push(tile('Gross margin', r.grossMargin, 'grossMargin', r.grossMargin < 0 ? 'Your direct costs are higher than your sales, so you are losing money before overheads. Check the figures, then your pricing.' : 'What is left from each sale after direct costs, to pay overheads and profit.'));
+    tiles.push(tile('Direct costs', r.cosPct, 'cosPct', 'Direct costs as a share of sales.'));
+  }
+  if(r.payrollPct !== undefined) tiles.push(tile('Wages', r.payrollPct, 'payrollPct', 'Wages and salaries as a share of sales.'));
+  grid.innerHTML = tiles.join('');
+  foot.textContent = (bm && bm.source) ? ('Benchmark source: ' + bm.source + (bm.year ? ', ' + bm.year : '') + '.') :
+    'Work these out again each quarter. A margin that slips by even a few points is often the first sign of a pricing or cost problem.';
+  wrap.style.display = 'block';
 }
 
 </script>
