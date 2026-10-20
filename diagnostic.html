@@ -546,6 +546,13 @@
   .wl-price-amount { color:var(--ink); }
   .wl-price-note { color:var(--ink-light); font-size:13px; }
   @media (max-width:768px) { .wizard-left { border-right:none; border-bottom:1px solid var(--border); padding:32px 20px; } .wizard-right, .wizard-panel { padding:32px 20px; } }
+
+  /* Tagline */
+  .brand-lockup { display:flex; align-items:baseline; gap:12px; text-decoration:none; color:inherit; flex-wrap:wrap; }
+  .tagline { font-size:14px; color:var(--ink-light); font-weight:500; }
+  .wl-logo { margin-bottom:6px; }
+  .wl-tagline-small { font-size:16px; font-weight:600; color:var(--brand); margin-bottom:28px; }
+  @media (max-width:520px) { .brand-lockup .tagline { display:none; } }
 </style>
 </head>
 <body>
@@ -553,7 +560,7 @@
 <!-- API key removed. Never put a secret key in a public page. -->
 
 <nav>
-  <div class="logo">FIX<span>LO</span>™</div>
+  <a class="brand-lockup" href="./"><span class="logo">FIX<span>LO</span>™</span><span class="tagline">Fix three things. Every week.</span></a>
   <div class="nav-tag" id="nav-price-tag">Business Diagnostic</div>
 </nav>
 
@@ -562,6 +569,7 @@
   <!-- STICKY LEFT SIDEBAR -->
   <div class="wizard-left">
     <div class="wl-logo">FIX<span>LO</span>™</div>
+    <div class="wl-tagline-small">Fix three things. Every week.</div>
     <div class="wl-content">
       <div class="wl-tagline">Find out exactly<br>what to <em>fix first.</em></div>
       <div class="wl-sub">25 questions. About 6 minutes. A personalised report with 3 named actions you can act on this week.</div>

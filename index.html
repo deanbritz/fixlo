@@ -112,13 +112,16 @@
     section.band { padding-block:48px; }
   }
   @media (max-width:420px) { header.top .btn.small { display:none; } }
+  .brand-lockup { display:flex; align-items:baseline; gap:12px; text-decoration:none; color:inherit; flex-wrap:wrap; }
+  .tagline { font-size:15px; color:var(--ink-light); font-weight:500; }
+  @media (max-width:520px) { .brand-lockup .tagline { display:none; } }
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
-    <a class="logo" href="./">FIX<span>LO</span>™</a>
+    <a class="brand-lockup" href="./"><span class="logo">FIX<span>LO</span>™</span><span class="tagline">Fix three things. Every week.</span></a>
     <a class="btn small" href="diagnostic.html">Start the assessment</a>
   </div>
 </header>
