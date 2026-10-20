@@ -122,6 +122,8 @@
   .wl-hp { position:absolute; left:-9999px; width:1px; height:1px; }
   .weekly .status.err { color:#F2B8B0; }
   .weekly .status.ok { color:#fff; }
+  .privacy-note { margin-top:22px; font-size:15px; color:var(--ink-mid); max-width:36em; border-left:3px solid var(--brand); padding-left:14px; }
+  .privacy-note b { color:var(--ink); }
 </style>
 </head>
 <body>
@@ -149,6 +151,7 @@
         <span>No login</span>
         <span>Report straight away</span>
       </div>
+      <p class="privacy-note"><b>Your business information stays with you.</b> The diagnostic runs entirely in your own browser. Your answers, scores and figures are never sent to FIXLO, and we don't store them. The only thing we ever receive is an email address, and only if you choose to join the waitlist.</p>
     </div>
 
     <div class="sample" aria-label="Example of the three fixes in a FIXLO report">
@@ -221,7 +224,7 @@
         <input id="wl-hp" class="wl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
         <button type="submit" class="btn light" id="wl-btn">Join the waitlist</button>
       </form>
-      <p class="status" id="wl-status" role="status">No commitment. Be first to hear when FIXLO Weekly opens.</p>
+      <p class="status" id="wl-status" role="status">No commitment. We only receive your email address. Ask us to delete it any time: dean@fixlo-advisory.com</p>
     </div>
     <ul>
       <li><b>Three fixes every Monday</b>Sent automatically to your email at 6am your time.</li>

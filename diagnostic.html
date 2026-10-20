@@ -553,6 +553,14 @@
   .wl-logo { margin-bottom:6px; }
   .wl-tagline-small { font-size:16px; font-weight:600; color:var(--brand); margin-bottom:28px; }
   @media (max-width:520px) { .brand-lockup .tagline { display:none; } }
+
+  /* Privacy band */
+  .privacy-band { display:flex; flex-wrap:wrap; gap:16px 32px; align-items:center; justify-content:space-between; padding:28px 48px; border-top:1px solid var(--border); background:#fff; }
+  .privacy-band b { display:block; font-size:17px; margin-bottom:4px; color:var(--ink); }
+  .privacy-band p { font-size:15px; color:var(--ink-mid); line-height:1.6; max-width:640px; }
+  .privacy-actions { display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
+  @media (max-width:700px) { .privacy-band { padding:24px 20px; } }
+  @media print { .privacy-actions { display:none !important; } }
 </style>
 </head>
 <body>
@@ -892,7 +900,19 @@
         <button type="submit" class="btn-upgrade" id="wl-btn">Join the waitlist →</button>
       </form>
       <div class="wl-status" id="wl-status" role="status"></div>
+      <div class="ub-price-note">We only receive your email address, never your answers. Ask us to delete it any time: dean@fixlo-advisory.com</div>
       <div class="ub-price-note">No commitment · Be first to know when it launches</div>
+    </div>
+
+    <div class="privacy-band">
+      <div>
+        <b>Your business information stays with you.</b>
+        <p>This diagnostic runs entirely in your own browser. Your answers, scores and figures are never sent to FIXLO, and we don't store them. Your last results are kept on this device only, so you can compare next week.</p>
+      </div>
+      <div class="privacy-actions">
+        <button type="button" class="btn-days ghost" id="del-btn" onclick="deleteMyAnswers()">Delete my answers from this device</button>
+        <span class="copy-msg" id="del-msg" role="status"></span>
+      </div>
     </div>
 
     <div class="report-footer-bar">
@@ -1937,11 +1957,9 @@ function renderNumbers(){
     var email = document.getElementById('wl-email').value.trim(), st = document.getElementById('wl-status'), btn = document.getElementById('wl-btn');
     if(document.getElementById('wl-hp').value) return;
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ st.className='wl-status err'; st.textContent='Please enter a valid email address.'; return; }
-    var u = (typeof userData==='object' && userData) ? userData : {};
-    var who = [u.name, u.biz].filter(Boolean).join(', ') || email;
-    var payload = { access_key:KEY, subject:'FIXLO Weekly waitlist: ' + who + (u.country ? ' (' + u.country + ')' : ''),
-      from_name:'FIXLO Weekly waitlist', replyto:email,
-      'Email':email, 'Name':u.name||'Not given', 'Business':u.biz||'Not given', 'Industry':u.sector||'Not given', 'Country':u.country||'Not given' };
+    // Email only: no business information leaves the owner's device.
+    var payload = { access_key:KEY, subject:'FIXLO Weekly waitlist: ' + email + ' (from a report)',
+      from_name:'FIXLO Weekly waitlist', replyto:email, 'Email':email, 'Signed up from':'End of a FIXLO report' };
     btn.disabled = true; btn.textContent = 'Joining...'; st.className='wl-status'; st.textContent='';
     fetch('https://api.web3forms.com/submit', {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return r.ok && j.success; }); })
@@ -1949,6 +1967,16 @@ function renderNumbers(){
       .catch(function(){ btn.disabled=false; btn.textContent='Join the waitlist →'; st.className='wl-status err'; st.textContent='That didn\'t go through. Please email ' + TO + ' and we\'ll add you.'; });
   });
 })();
+
+// ── Delete everything FIXLO has kept in this browser (two clicks to confirm) ──
+function deleteMyAnswers(){
+  var btn = document.getElementById('del-btn'), msg = document.getElementById('del-msg');
+  if(btn.dataset.armed !== '1'){ btn.dataset.armed = '1'; btn.textContent = 'Click again to confirm'; msg.textContent = ''; return; }
+  var n = 0;
+  try{ Object.keys(localStorage).forEach(function(k){ if(k.indexOf('fixlo.') === 0){ localStorage.removeItem(k); n++; } }); }catch(e){}
+  btn.dataset.armed = ''; btn.textContent = 'Deleted'; btn.disabled = true;
+  msg.textContent = 'Your saved answers and results have been removed from this device. This report stays on screen until you close the page.';
+}
 </script>
 
 
