@@ -512,6 +512,14 @@
   .report-footer-bar { background:#fff; }
   :focus-visible { outline:3px solid var(--brand); outline-offset:2px; }
   @media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important; } }
+
+  /* Scorecard: all seven areas in one continuous row */
+  .scorecard-grid { grid-template-columns:repeat(7, minmax(0,1fr)); }
+  .score-tile { border-right:1px solid var(--border); padding:22px 10px 20px; }
+  .score-tile:last-child { border-right:none; }
+  .score-tile-name { font-size:13px; min-height:38px; }
+  @media (max-width:1000px) { .scorecard-grid { grid-template-columns:repeat(4, minmax(0,1fr)); } .score-tile { border-bottom:1px solid var(--border); } }
+  @media (max-width:600px) { .scorecard-grid { grid-template-columns:repeat(2, minmax(0,1fr)); } }
 </style>
 </head>
 <body>
@@ -836,7 +844,7 @@
     <div class="upgrade-box">
       <div class="ub-eyebrow">Want this every Monday, automatically?</div>
       <h3 class="ub-title">FIXLO Weekly is<br><em>coming soon.</em></h3>
-      <p class="ub-sub">We're building the full subscription: live financial data from your accounting system, weekly benchmark scoring, and your 3 fixes sent automatically to your email inbox every Monday at 6am your time. Join the waitlist to be first.</p>
+      <p class="ub-sub">We're building the full subscription: live financial data from your accounting system, weekly benchmark scoring, and your 3 most important weekly fixes sent automatically to you every Monday at 6am your time. Each week builds on the last, so your business performance and resilience improve step by step. Join the waitlist to be first.</p>
       <div class="ub-features">
         <span class="ub-feat">Weekly 3-fix Monday brief</span>
         <span class="ub-feat">Live Xero / MYOB data</span>
@@ -1523,7 +1531,7 @@ function showReport(reportText, worst, best) {
     const s = moduleScores[m.id];
     const cls = scoreClass(s);
     const sc = cls[0];
-    const arc = buildArc(s, m.color);
+    const arc = buildArc(s, cls==='good'?'#2F7D4F':cls==='warning'?'#A86A00':'#B23B2E');
     grid.innerHTML += `<div class="score-tile ${cls}">
       <div class="score-tile-flag ${cls}"></div>
       <div class="score-tile-name">${m.name}</div>
@@ -1562,7 +1570,7 @@ function buildArc(score, color) {
   const pct = score / 100;
   const dash = pct * circ;
   const gap = circ - dash;
-  const trackColor = '#E8E4DC';
+  const trackColor = '#E6EAED';
   return `<svg class="score-tile-gauge" width="72" height="72" viewBox="0 0 72 72">
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${trackColor}" stroke-width="6"/>
     <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="6"
