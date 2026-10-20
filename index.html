@@ -115,6 +115,13 @@
   .brand-lockup { display:flex; align-items:baseline; gap:12px; text-decoration:none; color:inherit; flex-wrap:wrap; }
   .tagline { font-size:15px; color:var(--ink-light); font-weight:500; }
   @media (max-width:520px) { .brand-lockup .tagline { display:none; } }
+  .wl-form { display:flex; flex-wrap:wrap; align-items:flex-end; gap:12px; margin-top:24px; max-width:560px; }
+  .wl-field { display:flex; flex-direction:column; gap:6px; flex:1 1 240px; font-size:15px; color:#C9D5DC; }
+  .wl-field input { font-family:var(--font); font-size:16px; padding:13px 14px; border-radius:4px; border:1px solid var(--brand-line); background:#fff; color:var(--ink); }
+  .wl-field input:focus { outline:3px solid var(--brand-line); outline-offset:1px; }
+  .wl-hp { position:absolute; left:-9999px; width:1px; height:1px; }
+  .weekly .status.err { color:#F2B8B0; }
+  .weekly .status.ok { color:#fff; }
 </style>
 </head>
 <body>
@@ -209,7 +216,12 @@
       <p class="eyebrow">Coming soon: FIXLO Weekly</p>
       <h2>Your next three fixes, in your inbox every Monday at 6am.</h2>
       <p>The full subscription, NZ$129, A$105 or R1,200 a month, connects to your online accounting system and sends your 3 most important weekly fixes to you automatically. Each week builds on the last, with clear actions ready to go, so you don't have to plan anything yourself. Step by step, your business performance and resilience improve.</p>
-      <p class="status">Start with the assessment today. Your report lets you join the Weekly waitlist in one step.</p>
+      <form class="wl-form" id="wl-form" novalidate>
+        <label class="wl-field" for="wl-email"><span>Your email</span><input id="wl-email" type="email" autocomplete="email" required placeholder="you@yourbusiness.co.nz"></label>
+        <input id="wl-hp" class="wl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn light" id="wl-btn">Join the waitlist</button>
+      </form>
+      <p class="status" id="wl-status" role="status">No commitment. Be first to hear when FIXLO Weekly opens.</p>
     </div>
     <ul>
       <li><b>Three fixes every Monday</b>Sent automatically to your email at 6am your time.</li>
@@ -249,5 +261,23 @@
   </div>
 </footer>
 
+<script>
+(function(){
+  var KEY='fa6c3c90-218e-488c-8e3b-688c9f824055', TO='dean@fixlo-advisory.com';
+  var form=document.getElementById('wl-form'); if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var email=document.getElementById('wl-email').value.trim(), st=document.getElementById('wl-status'), btn=document.getElementById('wl-btn');
+    if(document.getElementById('wl-hp').value) return;
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ st.className='status err'; st.textContent='Please enter a valid email address.'; return; }
+    btn.disabled=true; btn.textContent='Joining...';
+    fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({access_key:KEY, subject:'FIXLO Weekly waitlist: '+email+' (front page)', from_name:'FIXLO Weekly waitlist', replyto:email, 'Email':email, 'Signed up from':'FIXLO front page'})})
+      .then(function(r){ return r.json().then(function(j){ return r.ok && j.success; }); })
+      .then(function(ok){ if(!ok) throw 0; btn.textContent="You're on the list"; st.className='status ok'; st.textContent="Thank you. You'll be among the first to hear when FIXLO Weekly opens."; })
+      .catch(function(){ btn.disabled=false; btn.textContent='Join the waitlist'; st.className='status err'; st.textContent="That didn't go through. Please email "+TO+" and we'll add you."; });
+  });
+})();
+</script>
 </body>
 </html>
