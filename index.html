@@ -529,6 +529,23 @@
   .wl-status { min-height:22px; margin-top:12px; font-size:15px; color:#fff; }
   .wl-status.err { color:#F2B8B0; }
   @media print { .wl-form, .wl-status { display:none !important; } }
+
+  /* Start screen: light, matching the FIXLO front page */
+  .wizard-left { background:var(--cream); color:var(--ink); border-right:1px solid var(--border); }
+  .wl-logo { color:var(--ink); }
+  .wl-logo span { color:var(--brand); }
+  .wl-tagline { color:var(--ink); }
+  .wl-sub { color:var(--ink-mid); }
+  .wl-step { border:1px solid var(--border); background:#fff; }
+  .wl-step.wl-active { border-color:var(--brand); background:var(--brand-soft); }
+  .wl-step-num { color:var(--brand); font-weight:700; }
+  .wl-step-text { color:var(--ink-mid); font-size:15px; }
+  .wl-step.wl-active .wl-step-text { color:var(--brand-dark); font-weight:600; }
+  .wl-price { border:1px solid var(--border); background:#fff; }
+  .wl-price-label { color:var(--ink-light); font-size:13px; }
+  .wl-price-amount { color:var(--ink); }
+  .wl-price-note { color:var(--ink-light); font-size:13px; }
+  @media (max-width:768px) { .wizard-left { border-right:none; border-bottom:1px solid var(--border); padding:32px 20px; } .wizard-right, .wizard-panel { padding:32px 20px; } }
 </style>
 </head>
 <body>
