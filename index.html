@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FIXLO™, Business Diagnostic</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --cream: #F7F4EE; --cream-deep: #EDE8DE; --ink: #1A1814;
@@ -371,6 +371,147 @@
   .num-tile-note { font-size:12px; color:var(--ink-mid); line-height:1.55; }
   .numbers-foot { font-size:12px; color:var(--ink-light); margin-top:14px; line-height:1.6; }
   @media (max-width:700px) { .numbers-section { padding:24px 20px 28px; } }
+
+  /* ── NATURAL THEME (Oct 2026): plain, professional adviser look. Visual only. ── */
+  :root {
+    --cream:#F6F7F8; --cream-deep:#EEF1F3; --ink:#1E2A32; --ink-mid:#3F4D57; --ink-light:#66737C;
+    --border:#D9DFE3; --accent:#B23B2E; --accent-soft:#F8E9E7; --green:#2F7D4F; --green-soft:#E8F3EC; --amber:#A86A00;
+    --brand:#1F4E6B; --brand-dark:#173B52; --brand-soft:#E7EFF4;
+    --serif:'Source Sans 3','Segoe UI',system-ui,-apple-system,sans-serif;
+    --sans:'Source Sans 3','Segoe UI',system-ui,-apple-system,sans-serif;
+    --mono:'Source Sans 3','Segoe UI',system-ui,-apple-system,sans-serif;
+  }
+  body { font-size:16px; font-variant-numeric:tabular-nums; -webkit-font-smoothing:antialiased; }
+  nav { background:#fff; }
+  .logo, .wl-logo, .gen-logo, .rc-logo { letter-spacing:0; font-weight:700; }
+  .logo span, .gen-logo span { color:var(--brand); }
+  .wl-logo span { color:#9DB8C9; }
+  .rc-logo span { color:#fff; }
+  em, .wl-tagline em, .mod-h2 em, .ub-title em { font-style:normal; color:inherit; }
+  /* Sentence-case labels instead of spaced capitals */
+  .nav-tag, .wl-price-label, .wf-label, .sb-label, .sb-sector, .sp-lbl, .sb-time-label, .mod-tag, .q-num,
+  .rc-report-label, .rc-meta-label, .rc-overall-label, .rc-overall-status, .score-tile-name, .score-tile-status,
+  .fix-card-timing, .fix-card-impact-label, .priority-card-num, .challenge-label, .ub-eyebrow, .num-tile-label,
+  .section-band-num, .section-band-sub, .scorecard-legend-item, .radar-bar-label, .challenge-days-label, .day-label, .fix-meta, .rfo-note, .btn-print-bar-note, .slider-ends, .ub-feat, .ub-price-note, .rc-date, .rc-delta, .cc-currency
+    { text-transform:none; letter-spacing:0; }
+  .wf-label, .sb-label, .q-num, .num-tile-label, .score-tile-name { font-size:13px; font-weight:600; color:var(--ink-mid); }
+  .nav-tag { font-size:13px; }
+  /* Intro */
+  .wizard-left { background:var(--brand-dark); color:#E9EEF1; }
+  .wl-tagline { font-size:30px; font-weight:700; }
+  .wl-step { border-radius:4px; }
+  .wl-step.wl-active { border-color:#9DB8C9; background:rgba(255,255,255,0.08); }
+  .wl-step-num { color:#9DB8C9; }
+  .wl-price { border-radius:4px; }
+  .wl-price-amount { font-weight:700; }
+  .wizard-right { background:#fff; }
+  .wp-title { font-size:26px; font-weight:700; }
+  .wp-dot.wp-active { background:var(--brand); }
+  .cc-flag { display:none; }
+  .country-card { border:1px solid var(--border); border-radius:4px; padding:18px 12px; }
+  .country-card:hover { border-color:var(--brand); background:var(--brand-soft); }
+  .country-card.cc-selected { border-color:var(--brand); background:var(--brand-soft); box-shadow:inset 0 0 0 1px var(--brand); }
+  .cc-name { font-size:15px; }
+  .wf-input, .wf-select { border-radius:4px; font-size:15px; }
+  .wf-input:focus, .wf-select:focus { border-color:var(--brand); box-shadow:0 0 0 3px var(--brand-soft); }
+  .wp-btn-next { background:var(--brand); border-radius:4px; font-size:15px; }
+  .wp-btn-next:hover { background:var(--brand-dark); }
+  .wp-btn-back { border-radius:4px; }
+  /* Assessment */
+  .sb-biz { font-size:16px; font-weight:700; }
+  .sb-sector { color:var(--ink-light); }
+  .mod-dot { display:none; }
+  .sb-mod { border-radius:4px; }
+  .sb-mod.active { background:var(--brand-soft); }
+  .sb-mod.active .mod-name { color:var(--brand-dark); font-weight:600; }
+  .mod-name { font-size:14px; }
+  .sp-fill { background:var(--brand); }
+  .sb-time { background:transparent; border:1px solid var(--border); border-radius:4px; }
+  .sb-time-val { font-size:17px; }
+  .mod-tag { background:transparent !important; color:var(--ink-light) !important; padding:0; border-radius:0; font-size:14px; }
+  .mod-tag span { display:none !important; }
+  .mod-h2 { font-size:32px; font-weight:700; }
+  .mod-intro { background:transparent; border-left:3px solid var(--brand); border-radius:0; font-size:15px; font-weight:400; color:var(--ink-mid); padding:4px 0 4px 16px; }
+  .q-block { animation:none; }
+  .q-text { font-size:17px; font-weight:600; }
+  .c-emoji { display:none; }
+  .c-label { display:block; font-size:15px; font-weight:600; margin-bottom:2px; }
+  .c-sub { display:block; font-size:13px; }
+  .choice-btn { border:1px solid var(--border); border-radius:4px; padding:14px 16px; }
+  .choice-btn:hover { border-color:var(--brand); transform:none; box-shadow:none; background:#FAFBFC; }
+  .choice-btn.selected { border-color:var(--brand); background:var(--brand-soft); box-shadow:inset 0 0 0 1px var(--brand); }
+  .choice-btn.sel-good { border-color:var(--brand); background:var(--brand-soft); box-shadow:inset 0 0 0 1px var(--brand); }
+  input[type=range]::-webkit-slider-thumb { width:20px; height:20px; background:var(--brand); border:3px solid #fff; box-shadow:0 0 0 1px var(--brand); }
+  input[type=range]::-webkit-slider-thumb:hover { background:var(--brand-dark); box-shadow:0 0 0 1px var(--brand-dark); }
+  .slider-val { border-radius:4px; box-shadow:none; font-size:13px; }
+  .slider-ends { font-size:13px; }
+  .btn-next, .btn-back { border-radius:4px; font-size:15px; }
+  .btn-next { background:var(--brand); color:#fff; }
+  .btn-next:hover { background:var(--brand-dark); transform:none; }
+  .btn-next.final { background:var(--brand); }
+  .btn-next.final:hover { background:var(--brand-dark); }
+  .numbers-block { border:1px solid var(--border); border-radius:4px; }
+  /* Generating */
+  .gen-bar { background:var(--brand); }
+  .spinner { border-top-color:var(--brand); }
+  /* Report */
+  #report-screen { background:var(--cream-deep); }
+  .report-page { box-shadow:0 1px 3px rgba(30,42,50,0.12); }
+  .btn-print { background:var(--brand); border-radius:4px; }
+  .btn-print:hover { background:var(--brand-dark); }
+  .report-cover { background:var(--brand-dark); }
+  .rc-right { background:rgba(255,255,255,0.07); clip-path:none; border-left:1px solid rgba(255,255,255,0.12); }
+  .rc-right::before { display:none; }
+  .rc-biz-name { font-size:34px; font-weight:700; }
+  .rc-overall-score { font-size:76px; }
+  .section-band { background:#fff; border-top:1px solid var(--border); }
+  .section-band-num { color:var(--brand); font-weight:700; }
+  .section-band-title { font-size:20px; font-weight:700; }
+  .scorecard-grid, .priority-card, .fix-card, .days-list, .finding-card, .num-tile { border-radius:4px; }
+  .scorecard-grid { border:1px solid var(--border); }
+  .score-tile.critical, .score-tile.warning, .score-tile.good { background:#fff; }
+  .score-tile-num { font-size:30px; }
+  .legend-pip { border-radius:1px; }
+  .radar-wrap { background:#fff; }
+  .radar-text h3 { font-size:20px; font-weight:700; }
+  .radar-bar-label { font-size:13px; }
+  .radar-bar-track, .radar-bar-fill { border-radius:1px; }
+  .exec-summary-box { background:#fff; border:1px solid var(--border); border-left:4px solid var(--brand); border-radius:4px; padding:24px 28px; }
+  .exec-summary-box::before, .exec-quote-mark { display:none; content:none; }
+  .exec-text { color:var(--ink); font-size:16px; font-weight:400; line-height:1.7; }
+  .priority-card-header.p1 { background:var(--accent); }
+  .priority-card-name { font-size:16px; }
+  .priority-card-text, .fix-card-body-text, .fix-steps, .working-text, .days-lead, .finding-card ul { font-size:15px; }
+  .fix-card { border:1px solid var(--border); }
+  .fix-card-num { font-family:var(--sans); font-weight:700; }
+  .fn1, .fn2, .fn3 { background:var(--brand); }
+  .fix-card-title { font-size:18px; font-weight:700; }
+  .fix-card-body { padding:18px 20px 20px 76px; }
+  .fix-step-num { background:var(--brand); }
+  .fix-meta { font-size:13px; }
+  .working-section { background:#fff; border-left:4px solid var(--green); }
+  .working-icon { border-radius:4px; }
+  .working-title { font-size:20px; font-weight:700; }
+  .challenge-box { background:var(--brand-dark); border-radius:4px; }
+  .challenge-label { color:#9DB8C9; }
+  .challenge-days { color:#fff; }
+  .day-label b { font-family:var(--sans); font-size:17px; font-weight:700; }
+  .day-task { font-size:15px; }
+  .day-task input { accent-color:var(--brand); width:16px; height:16px; }
+  .btn-days { background:var(--brand); border-color:var(--brand); border-radius:4px; font-size:14px; }
+  .btn-days.ghost { background:transparent; color:var(--brand); }
+  .finding-head { font-family:var(--sans); font-size:17px; font-weight:700; }
+  .finding-score { border-radius:3px; font-size:13px; }
+  .num-tile-val { font-family:var(--sans); }
+  .upgrade-box { background:var(--brand-dark); }
+  .ub-eyebrow { color:#9DB8C9; }
+  .ub-title { font-weight:700; }
+  .ub-feat::before { color:#9DD3B2; }
+  .btn-upgrade { background:#fff; color:var(--brand-dark); border-radius:4px; font-weight:600; }
+  .btn-upgrade:hover { background:var(--brand-soft); color:var(--brand-dark); transform:none; }
+  .report-footer-bar { background:#fff; }
+  :focus-visible { outline:3px solid var(--brand); outline-offset:2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important; } }
 </style>
 </head>
 <body>
@@ -398,7 +539,7 @@
     </div>
     <div class="wl-price">
       <div class="wl-price-label">One-time investment</div>
-      <div class="wl-price-amount" id="wl-price">$49 AUD</div>
+      <div class="wl-price-amount" id="wl-price">$49 NZD</div>
       <div class="wl-price-note">No subscription · No follow-up calls</div>
     </div>
   </div>
@@ -717,7 +858,7 @@
 <script>
 // ══ MODULE DEFINITIONS ══
 const MODULES = [
-  { id:'cashflow', name:'Cash & Financial Health', color:'#C8521A', bg:'#F4EDE6',
+  { id:'cashflow', name:'Cash & Financial Health', color:'#1F4E6B', bg:'#E7EFF4',
     tagline:'The foundation everything else rests on.',
     intro:'Assesses your cash visibility, margin health, debtor management and financial awareness, the areas that most directly determine whether your business survives and grows.',
     questions:[
@@ -726,7 +867,7 @@ const MODULES = [
       {id:'cf4',type:'choice',text:'How long does it typically take to collect payment after invoicing?',opts:[{e:'✅',l:'Under 30 days',s:'Strong debtor management',neg:false},{e:'😐',l:'30–45 days',s:'Room to improve',neg:false},{e:'😬',l:'45–60 days',s:'Cash drag building',neg:true},{e:'🚨',l:'Over 60 days',s:'Significant cash risk',neg:true}]},
     ]
   },
-  { id:'ops', name:'Operations & Delivery', color:'#C07800', bg:'#FFFBEB',
+  { id:'ops', name:'Operations & Delivery', color:'#1F4E6B', bg:'#E7EFF4',
     tagline:'Where time and money leak without being noticed.',
     intro:'Identifies friction, rework, bottlenecks and approval delays that cost your business hours and margin every week, often without the owner ever seeing it directly.',
     questions:[
@@ -735,7 +876,7 @@ const MODULES = [
       {id:'op4',type:'choice',text:'How often does your team re-solve old problems, or redo work that then has to be fixed?',opts:[{e:'✅',l:'Very rare',s:'Strong first-time quality',neg:false},{e:'😐',l:'Occasionally',s:'Some gaps',neg:false},{e:'😬',l:'Fairly common',s:'Time and margin leaking',neg:true},{e:'🚨',l:'Every week',s:'Major operations problem',neg:true}]},
     ]
   },
-  { id:'team', name:'People & Capacity', color:'#2D6A4F', bg:'#EAF2ED',
+  { id:'team', name:'People & Capacity', color:'#1F4E6B', bg:'#E7EFF4',
     tagline:'Whether your team is a lever or a ceiling.',
     intro:'Examines team capacity, key-person dependency, staff engagement and role clarity, the factors that determine whether your people are amplifying or constraining what\'s possible.',
     questions:[
@@ -745,7 +886,7 @@ const MODULES = [
       {id:'tm4',type:'choice',text:'How clear are your team\'s roles, responsibilities and what good performance looks like?',opts:[{e:'📋',l:'Fully documented',s:'Clear expectations',neg:false},{e:'😐',l:'Mostly understood',s:'Some ambiguity',neg:false},{e:'😬',l:'Unclear in places',s:'Creates friction',neg:true},{e:'❓',l:'Very unclear',s:'Significant confusion',neg:true}]},
     ]
   },
-  { id:'growth', name:'Revenue & Growth', color:'#3B82F6', bg:'#EFF6FF',
+  { id:'growth', name:'Revenue & Growth', color:'#1F4E6B', bg:'#E7EFF4',
     tagline:'Whether growth is happening by design or by accident.',
     intro:'Looks at pipeline health, pricing confidence, follow-up discipline and revenue source clarity, the signals that determine whether your growth trajectory is intentional or fragile.',
     questions:[
@@ -755,7 +896,7 @@ const MODULES = [
       {id:'gr4',type:'choice',text:'How much of your new revenue comes from referrals or repeat customers vs cold outreach?',opts:[{e:'🔄',l:'Mostly referrals/repeat',s:'Strong and sustainable',neg:false},{e:'⚖️',l:'Roughly 50/50',s:'Balanced mix',neg:false},{e:'📢',l:'Mostly new outreach',s:'Acquisition-dependent',neg:true},{e:'❓',l:'Not sure where it comes from',s:'No pipeline visibility',neg:true}]},
     ]
   },
-  { id:'digital', name:'Systems & Digital Tools', color:'#7C3AED', bg:'#F5F3FF',
+  { id:'digital', name:'Systems & Digital Tools', color:'#1F4E6B', bg:'#E7EFF4',
     tagline:'Whether your tools work for you or against you.',
     intro:'Detects tool drag, software waste, manual workarounds and system fragility, the digital friction that quietly costs your business time and money every single week.',
     questions:[
@@ -764,7 +905,7 @@ const MODULES = [
     ]
   },
 
-  { id:'cyber', name:'Cyber Security', color:'#DC2626', bg:'#FEF2F2',
+  { id:'cyber', name:'Cyber Security', color:'#1F4E6B', bg:'#E7EFF4',
     tagline:'How exposed is your business, and does anyone actually know?',
     intro:'Most SME breaches are not sophisticated attacks. They are unlocked doors. These 5 questions test your real-world posture across the core protocols every SME owner can implement today, no IT specialist required. Your answers will generate a specific action plan for your business.',
     questions:[
@@ -811,7 +952,7 @@ const MODULES = [
     ]
   },
 
-  { id:'compliance', name:'Compliance & Legal Risk', color:'#0369A1', bg:'#EFF6FF',
+  { id:'compliance', name:'Compliance & Legal Risk', color:'#1F4E6B', bg:'#E7EFF4',
     tagline:'Are you unknowingly exposed to fines, penalties or legal liability?',
     intro:'Compliance failures rarely announce themselves. They accumulate quietly, missed obligations, outdated contracts, payroll errors, until a regulator, employee or client surfaces them. These questions identify your highest-risk compliance gaps right now.',
     questions:[
