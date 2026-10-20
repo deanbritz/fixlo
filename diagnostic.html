@@ -596,15 +596,15 @@
           <div class="cc-name">New Zealand</div>
           <div class="cc-currency">NZD · $49</div>
         </div>
-        <div class="country-card" onclick="selectCountry(this,'AU','$49 AUD','AUD')" data-code="AU">
+        <div class="country-card" onclick="selectCountry(this,'AU','$40 AUD','AUD')" data-code="AU">
           <span class="cc-flag">🇦🇺</span>
           <div class="cc-name">Australia</div>
-          <div class="cc-currency">AUD · $49</div>
+          <div class="cc-currency">AUD · $40</div>
         </div>
-        <div class="country-card" onclick="selectCountry(this,'ZA','R649 ZAR','ZAR')" data-code="ZA">
+        <div class="country-card" onclick="selectCountry(this,'ZA','R450 ZAR','ZAR')" data-code="ZA">
           <span class="cc-flag">🇿🇦</span>
           <div class="cc-name">South Africa</div>
-          <div class="cc-currency">ZAR · R649</div>
+          <div class="cc-currency">ZAR · R450</div>
         </div>
       </div>
       <div class="wp-btn-row">
@@ -1114,8 +1114,8 @@ function updateWizardSidebar(activeStep) {
 
 const COUNTRY_DATA = {
   'NZ': { currency:'NZD', symbol:'$', price:'49', label:'$49 NZD', countryName:'New Zealand' },
-  'AU': { currency:'AUD', symbol:'$', price:'49', label:'$49 AUD', countryName:'Australia' },
-  'ZA': { currency:'ZAR', symbol:'R', price:'649', label:'R649 ZAR', countryName:'South Africa' },
+  'AU': { currency:'AUD', symbol:'$', price:'40', label:'$40 AUD', countryName:'Australia' },
+  'ZA': { currency:'ZAR', symbol:'R', price:'450', label:'R450 ZAR', countryName:'South Africa' },
 };
 
 function updatePriceDisplay(countryCode) {
