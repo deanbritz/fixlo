@@ -512,6 +512,23 @@
   .report-footer-bar { background:#fff; }
   :focus-visible { outline:3px solid var(--brand); outline-offset:2px; }
   @media (prefers-reduced-motion: reduce) { * { animation:none !important; transition:none !important; } }
+
+  /* Scorecard: all seven areas in one continuous row */
+  .scorecard-grid { grid-template-columns:repeat(7, minmax(0,1fr)); }
+  .score-tile { border-right:1px solid var(--border); padding:22px 10px 20px; }
+  .score-tile:last-child { border-right:none; }
+  .score-tile-name { font-size:13px; min-height:38px; }
+  @media (max-width:1000px) { .scorecard-grid { grid-template-columns:repeat(4, minmax(0,1fr)); } .score-tile { border-bottom:1px solid var(--border); } }
+  @media (max-width:600px) { .scorecard-grid { grid-template-columns:repeat(2, minmax(0,1fr)); } }
+  /* Waitlist form */
+  .wl-form { display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-end; gap:12px; max-width:560px; margin:0 auto; }
+  .wl-field { display:flex; flex-direction:column; gap:6px; text-align:left; flex:1 1 260px; color:#C9D5DC; font-size:14px; }
+  .wl-field input { font-family:var(--sans); font-size:16px; padding:15px 14px; border-radius:4px; border:1px solid #9DB8C9; background:#fff; color:var(--ink); }
+  .wl-field input:focus { outline:3px solid #9DB8C9; outline-offset:1px; }
+  .wl-hp { position:absolute; left:-9999px; width:1px; height:1px; }
+  .wl-status { min-height:22px; margin-top:12px; font-size:15px; color:#fff; }
+  .wl-status.err { color:#F2B8B0; }
+  @media print { .wl-form, .wl-status { display:none !important; } }
 </style>
 </head>
 <body>
@@ -836,7 +853,7 @@
     <div class="upgrade-box">
       <div class="ub-eyebrow">Want this every Monday, automatically?</div>
       <h3 class="ub-title">FIXLO Weekly is<br><em>coming soon.</em></h3>
-      <p class="ub-sub">We're building the full subscription: live financial data from your accounting system, weekly benchmark scoring, and your 3 fixes sent automatically to your email inbox every Monday at 6am your time. Join the waitlist to be first.</p>
+      <p class="ub-sub">We're building the full subscription: live financial data from your accounting system, weekly benchmark scoring, and your 3 most important weekly fixes sent automatically to you every Monday at 6am your time. Each week builds on the last, with clear actions ready to go, so you don't have to plan anything yourself. Step by step, your business performance and resilience improve. Join the waitlist to be first.</p>
       <div class="ub-features">
         <span class="ub-feat">Weekly 3-fix Monday brief</span>
         <span class="ub-feat">Live Xero / MYOB data</span>
@@ -844,7 +861,12 @@
         <span class="ub-feat">8-week cash forecast</span>
         <span class="ub-feat">Tax &amp; compliance alerts</span>
       </div>
-      <a href="http://eepurl.com/2NdmuF8CNO" target="_blank" class="btn-upgrade">Join the waitlist →</a>
+      <form class="wl-form" id="wl-form" novalidate>
+        <label class="wl-field" for="wl-email"><span>Your email</span><input id="wl-email" type="email" autocomplete="email" required placeholder="you@yourbusiness.co.nz"></label>
+        <input id="wl-hp" class="wl-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn-upgrade" id="wl-btn">Join the waitlist →</button>
+      </form>
+      <div class="wl-status" id="wl-status" role="status"></div>
       <div class="ub-price-note">No commitment · Be first to know when it launches</div>
     </div>
 
@@ -1880,6 +1902,28 @@ function renderNumbers(){
   wrap.style.display = 'block';
 }
 
+
+// ── Waitlist: sends the sign-up straight to dean@fixlo-advisory.com ──
+(function(){
+  var KEY = 'fa6c3c90-218e-488c-8e3b-688c9f824055', TO = 'dean@fixlo-advisory.com';
+  var form = document.getElementById('wl-form'); if(!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var email = document.getElementById('wl-email').value.trim(), st = document.getElementById('wl-status'), btn = document.getElementById('wl-btn');
+    if(document.getElementById('wl-hp').value) return;
+    if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ st.className='wl-status err'; st.textContent='Please enter a valid email address.'; return; }
+    var u = (typeof userData==='object' && userData) ? userData : {};
+    var who = [u.name, u.biz].filter(Boolean).join(', ') || email;
+    var payload = { access_key:KEY, subject:'FIXLO Weekly waitlist: ' + who + (u.country ? ' (' + u.country + ')' : ''),
+      from_name:'FIXLO Weekly waitlist', replyto:email,
+      'Email':email, 'Name':u.name||'Not given', 'Business':u.biz||'Not given', 'Industry':u.sector||'Not given', 'Country':u.country||'Not given' };
+    btn.disabled = true; btn.textContent = 'Joining...'; st.className='wl-status'; st.textContent='';
+    fetch('https://api.web3forms.com/submit', {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify(payload)})
+      .then(function(r){ return r.json().then(function(j){ return r.ok && j.success; }); })
+      .then(function(ok){ if(!ok) throw 0; btn.textContent='You\'re on the list'; st.textContent='Thank you. You\'ll be among the first to hear when FIXLO Weekly opens.'; })
+      .catch(function(){ btn.disabled=false; btn.textContent='Join the waitlist →'; st.className='wl-status err'; st.textContent='That didn\'t go through. Please email ' + TO + ' and we\'ll add you.'; });
+  });
+})();
 </script>
 
 
