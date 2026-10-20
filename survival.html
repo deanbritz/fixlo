@@ -589,6 +589,33 @@ footer{margin-top:30px;font-size:13px;color:var(--muted);max-width:75ch}
     var fallback = function(){ box.focus(); box.select(); $('fb-status').textContent = 'Select the text below and copy it.'; };
     try { navigator.clipboard.writeText(t).then(done, fallback); } catch(e){ fallback(); }
   });
+  // One labelled row per item, so the email reads as a tidy table.
+  function buildPayload(){
+    var res = runAll(inp), sm = summary(res), p = pickFixes(inp);
+    var name = $('fb-name').value.trim(), biz = $('fb-biz').value.trim();
+    var wk = function(w){ return w >= 52 ? 'Lasts the year' : w + (w === 1 ? ' week' : ' weeks'); };
+    var COUNTRY = {NZ:'New Zealand', AU:'Australia', ZA:'South Africa'};
+    var who = name ? (biz ? name + ', ' + biz : name) : (biz || 'Name not given');
+    var o = {
+      access_key: WEB3FORMS_KEY,
+      subject: 'Survival Test: ' + who + ' (' + COUNTRY[state.country] + ', ' + wk(sm.min) + ')',
+      from_name: 'FIXLO Business Survival Test',
+      'Name': name || 'Not given',
+      'Business': biz || 'Not given',
+      'Email': $('fb-email').value.trim() || 'Not given',
+      'Country': COUNTRY[state.country],
+      'Shared by': state.partner || 'Direct link',
+      'Figures used': state.example ? 'Example: ' + EXAMPLES[state.exampleKey].text : 'Their own figures',
+      'Survival line': wk(sm.min)
+    };
+    res.forEach(function(r){ o[r.name] = wk(r.weeks); });
+    p.fixes.forEach(function(f, n){ o['Fix ' + (n+1)] = f.title; });
+    o['Showed them something new'] = state.fb['new'] || 'No answer';
+    o['Worth per month (weekly service)'] = state.fb.price || 'No answer';
+    o['Want their adviser to run it'] = state.fb.adviser || 'No answer';
+    o['Comments'] = $('fb-comment').value.trim() || 'None';
+    return o;
+  }
   function mailtoFallback(t){
     var url = 'mailto:' + FEEDBACK_EMAIL + '?subject=' + encodeURIComponent('FIXLO Business Survival Test feedback') + '&body=' + encodeURIComponent(t);
     var st = $('fb-send-status'); st.className = '';
@@ -604,8 +631,7 @@ footer{margin-top:30px;font-size:13px;color:var(--muted);max-width:75ch}
     if (!WEB3FORMS_KEY){ mailtoFallback(t); return; }
     btn.disabled = true; btn.textContent = 'Sending...'; st.className = ''; st.textContent = '';
     var reply = $('fb-email').value.trim();
-    var payload = {access_key: WEB3FORMS_KEY, subject: 'FIXLO Business Survival Test feedback' + (state.partner ? ' (via ' + state.partner + ')' : ''),
-      from_name: $('fb-name').value.trim() || 'FIXLO Business Survival Test', message: t};
+    var payload = buildPayload();
     if (reply) payload.replyto = reply;
     fetch('https://api.web3forms.com/submit', {method:'POST', headers:{'Content-Type':'application/json', 'Accept':'application/json'}, body: JSON.stringify(payload)})
       .then(function(r){ return r.json().then(function(j){ return {ok: r.ok && j.success, j:j}; }); })
