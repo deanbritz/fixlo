@@ -594,7 +594,7 @@
     <div class="wl-price">
       <div class="wl-price-label">One-time investment</div>
       <div class="wl-price-amount" id="wl-price">$49 NZD</div>
-      <div class="wl-price-note">Week one of FIXLO Weekly · No subscription needed</div>
+      <div class="wl-price-note" id="wl-price-note">Counts as week one of FIXLO Weekly, NZ$129 a month (coming soon)</div>
     </div>
   </div>
 
@@ -1114,6 +1114,9 @@ function selectCountry(el, code, price, currency) {
   const names = {AU:'Australia',NZ:'New Zealand',UK:'United Kingdom',CA:'Canada',US:'United States',ZA:'South Africa'};
   wizardCountry = { code, price, currency, name: names[code] || code };
   document.getElementById('wl-price').textContent = price;
+  var weekly = {NZ:'NZ$129', AU:'A$105', ZA:'R1,200'}[code];
+  var pn = document.getElementById('wl-price-note');
+  if(pn && weekly) pn.textContent = 'Counts as week one of FIXLO Weekly, ' + weekly + ' a month (coming soon)';
   const hint = document.getElementById('rev-currency-hint');
   if(hint) hint.textContent = currency;
   const btn = document.getElementById('step1-next');
