@@ -327,6 +327,10 @@
   /* ── FIXLO v2 ── */
   .rc-delta { font-family:var(--mono); font-size:11px; color:rgba(247,244,238,0.55); margin-top:8px; }
   .fix-steps { margin:14px 0 0; padding-left:18px; display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--ink-mid); line-height:1.6; }
+  .fix-owner { display:flex; flex-wrap:wrap; align-items:center; gap:8px 18px; margin:0 0 12px; font-family:var(--mono); font-size:11px; color:var(--ink-light); }
+  .fix-owner label { display:flex; align-items:center; gap:8px; flex:1 1 220px; min-width:0; max-width:320px; }
+  .fix-owner input { flex:1; min-width:0; width:100%; font:inherit; font-size:13px; color:var(--ink); background:#fff; border:1px solid var(--border); border-radius:6px; padding:5px 9px; }
+  .fix-owner b { color:var(--ink); font-weight:600; }
   .fix-meta { display:flex; flex-wrap:wrap; gap:6px 18px; margin-top:14px; padding-top:12px; border-top:1px solid var(--border); font-family:var(--mono); font-size:11px; color:var(--ink-light); line-height:1.6; }
   .days-section { padding:32px 48px 40px; border-bottom:1px solid var(--border); }
   .days-lead { font-size:14px; color:var(--ink-mid); line-height:1.7; margin-bottom:18px; max-width:640px; }
@@ -590,7 +594,7 @@
     <div class="wl-price">
       <div class="wl-price-label">One-time investment</div>
       <div class="wl-price-amount" id="wl-price">$49 NZD</div>
-      <div class="wl-price-note">No subscription · No follow-up calls</div>
+      <div class="wl-price-note">Week one of FIXLO Weekly · No subscription needed</div>
     </div>
   </div>
 
@@ -886,7 +890,7 @@
     <div class="upgrade-box">
       <div class="ub-eyebrow">Want this every Monday, automatically?</div>
       <h3 class="ub-title">FIXLO Weekly is<br><em>coming soon.</em></h3>
-      <p class="ub-sub">We're building the full subscription, NZ$129, A$105 or R1,200 a month: live financial data from your accounting system, weekly benchmark scoring, and your 3 most important weekly fixes sent automatically to you every Monday at 6am your time. Each week builds on the last, with clear actions ready to go, so you don't have to plan anything yourself. Step by step, your business performance and resilience improve. Join the waitlist to be first.</p>
+      <p class="ub-sub">We're building the full subscription, NZ$129, A$105 or R1,200 a month: live financial data from your accounting system, weekly benchmark scoring, and your 3 most important weekly fixes sent automatically to you every Monday at 6am your time. Each week builds on the last, with clear actions ready to go, so you don't have to plan anything yourself. Step by step, your business performance and resilience improve. This diagnostic is your week one: what you paid for it comes off your first month. Join the waitlist to be first.</p>
       <div class="ub-features">
         <span class="ub-feat">Weekly 3-fix Monday brief</span>
         <span class="ub-feat">Live Xero / MYOB data</span>
@@ -1527,7 +1531,7 @@ function renderStructuredFixes(fixes, worst, best) {
 
 function renderFixCards(fixes) {
   var numCls = ['fn1','fn2','fn3'];
-  var timingLabels = ['Fix 1 · Today','Fix 2 · By Wednesday','Fix 3 · By Friday'];
+  var timingLabels = ['Fix 1','Fix 2','Fix 3'];
   var fc = document.getElementById('fix-cards');
   fc.innerHTML = '';
   fixes.slice(0,3).forEach(function(f, i) {
@@ -1544,6 +1548,7 @@ function renderFixCards(fixes) {
     card += '<div class="fix-card-title">' + f.title + '</div>';
     card += '</div></div>';
     card += '<div class="fix-card-body">';
+    card += '<div class="fix-owner"><label>Who is doing it <input type="text" class="fix-owner-input" data-fix="' + i + '" value="' + escH(fixOwner(i)) + '" placeholder="Name" aria-label="Who is doing fix ' + (i+1) + '"></label><span>Due: <b>' + escH(fixDueLabel(i)) + '</b></span></div>';
     if(f.steps) {
       card += '<div class="fix-card-body-text">' + escH(f.why || '') + '</div>';
       card += '<ol class="fix-steps">' + f.steps.map(function(st){ return '<li>' + escH(st) + '</li>'; }).join('') + '</ol>';
@@ -1560,7 +1565,24 @@ function renderFixCards(fixes) {
     card += '</div></div>';
     fc.innerHTML += card;
   });
+  fc.querySelectorAll('.fix-owner-input').forEach(function(inp){
+    inp.addEventListener('input', function(){ setFixOwner(+inp.getAttribute('data-fix'), inp.value); });
+  });
 }
+
+// Each fix carries a named owner and a due day, so the plan is a commitment, not advice.
+function fixDueDates(start){
+  // Due 1, 2 and 4 working days after the diagnostic, skipping weekends: a Monday start gives Tuesday, Wednesday and Friday.
+  var d = start ? new Date(start) : new Date(); d.setHours(0,0,0,0);
+  function addWorkdays(from, n){ var x = new Date(from); while(n > 0){ x.setDate(x.getDate() + 1); if(x.getDay() !== 0 && x.getDay() !== 6) n--; } return x; }
+  return [1, 2, 4].map(function(n){ return addWorkdays(d, n); });
+}
+function fixDueLabel(i){
+  return fixDueDates(window._planStart)[i].toLocaleDateString('en-NZ',{weekday:'short', day:'numeric', month:'short'}).replace(',', '');
+}
+function fixOwners(){ return store('owners.'+(window._fixloRunId || 'r0')) || {}; }
+function fixOwner(i){ var o = fixOwners(); return (o[i] !== undefined) ? o[i] : (userData.name || ''); }
+function setFixOwner(i, v){ var o = fixOwners(); o[i] = v; store('owners.'+(window._fixloRunId || 'r0'), o); }
 
 
 
@@ -1801,7 +1823,7 @@ function escH(t){ return String(t).replace(/[&<>"]/g, function(c){ return {'&':'
 function renderWeek(fixes){
   var week = buildWeek(fixes), runId = window._fixloRunId || 'r0';
   var ticks = store('ticks.'+runId) || {};
-  var start = new Date();
+  var start = window._planStart || new Date();
   var el = document.getElementById('days-list');
   if(!el) return;
   el.innerHTML = week.map(function(d, di){
@@ -1811,8 +1833,14 @@ function renderWeek(fixes){
       return '<label class="day-task'+(on?' done':'')+'"><input type="checkbox" data-k="'+key+'"'+(on?' checked':'')+'><span>'+escH(t)+'</span></label>';
     }).join('')+'</div></div>';
   }).join('');
-  window._planText = userData.biz+' · FIXLO 7-day plan · '+start.toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'})+'\n\n'+
-    fixes.map(function(f,i){ return 'Fix '+(i+1)+' ('+f.zoneName+'): '+f.title+'\nDone when: '+f.done; }).join('\n\n')+'\n\n'+
+  window._planFixes = fixes; window._planWeek = week;
+  window._planText = buildPlanText();
+}
+
+function buildPlanText(){
+  var fixes = window._planFixes || [], week = window._planWeek || [], start = window._planStart || new Date();
+  return userData.biz+' · FIXLO 7-day plan · '+start.toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'})+'\n\n'+
+    fixes.slice(0,3).map(function(f,i){ var who = fixOwner(i); return 'Fix '+(i+1)+' ('+f.zoneName+'): '+f.title+'\nWho: '+(who || 'not yet named')+' · Due: '+fixDueLabel(i)+'\nDone when: '+f.done; }).join('\n\n')+'\n\n'+
     week.map(function(d,di){ return 'Day '+(di+1)+' ('+d.h+')\n'+d.tasks.map(function(t){ return '  [ ] '+t; }).join('\n'); }).join('\n');
 }
 
@@ -1837,6 +1865,7 @@ function saveRunAndDelta(overall){
   var hist = store('history') || [];
   var prev = hist.length ? hist[hist.length-1] : null;
   window._fixloRunId = 'r'+Date.now();
+  window._planStart = new Date();
   var scores = {}; MODULES.forEach(function(m){ scores[m.id] = moduleScores[m.id]; });
   hist.push({id:window._fixloRunId, date:new Date().toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'}), overall:overall, scores:scores});
   store('history', hist.slice(-26));
@@ -1845,7 +1874,7 @@ function saveRunAndDelta(overall){
 }
 
 function copyPlan(){
-  var msg = document.getElementById('copy-msg'), txt = window._planText || '';
+  var msg = document.getElementById('copy-msg'), txt = (window._planFixes ? buildPlanText() : '') || window._planText || '';
   function fallback(){ var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); msg.textContent = 'Plan copied.'; }catch(e){ msg.textContent = 'Select and copy the plan above.'; } document.body.removeChild(ta); }
   try{ navigator.clipboard.writeText(txt).then(function(){ msg.textContent = 'Plan copied. Paste it into your notes or calendar.'; }, fallback); }catch(e){ fallback(); }
 }
