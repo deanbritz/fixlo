@@ -592,6 +592,69 @@
   #snapshot .sn-meta { font-size:9pt; color:#3F4D57; margin-bottom:4px; }
   #snapshot ol { margin:3px 0 4px 18px; padding:0; } #snapshot li { margin-bottom:1px; }
   #snapshot .sn-foot { font-size:8.5pt; color:#66737C; margin-top:8px; }
+
+  /* ── PHONES AND SMALL TABLETS (iOS and Android) ── */
+  html { -webkit-text-size-adjust:100%; text-size-adjust:100%; }
+  body { overflow-wrap:break-word; }
+  @media (max-width:860px) {
+    nav { padding:12px 16px; }
+    .nav-tag { font-size:12px; text-align:right; }
+    /* Assessment: one column, modules as a scrolling strip */
+    .aw { grid-template-columns:minmax(0,1fr); }
+    .a-sidebar { position:static; height:auto; border-right:none; border-bottom:1px solid var(--border); padding:14px 16px; overflow:visible; }
+    .sb-biz { font-size:15px; } .sb-sector { margin-bottom:10px; padding-bottom:10px; }
+    .sb-label { display:none; }
+    .sb-modules { display:flex; gap:6px; overflow-x:auto; margin:0 -16px 12px; padding:0 16px 4px; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+    .sb-modules::-webkit-scrollbar { display:none; }
+    .sb-mod { flex:0 0 auto; border:1px solid var(--border); margin:0; padding:8px 10px; gap:8px; }
+    .sb-mod .mod-name { font-size:13px; white-space:nowrap; }
+    .sb-prog { padding-top:8px; } .sp-track { margin-bottom:0; }
+    .sb-time { display:none; }
+    .a-content { padding:24px 16px 40px; max-width:none; min-width:0; }
+    .mod-h2 { font-size:26px; }
+    .q-nav { flex-wrap:wrap; gap:12px; }
+    /* Report */
+    #report-screen { padding:16px 0 48px; }
+    .btn-print-bar { padding:0 16px; flex-wrap:wrap; gap:10px; }
+    .sample-banner { margin:0 12px 14px; }
+    .report-page { box-shadow:none; }
+    .report-cover { grid-template-columns:minmax(0,1fr); min-height:0; }
+    .rc-left { padding:28px 20px 20px; }
+    .rc-right { padding:20px; border-left:none; border-top:1px solid rgba(255,255,255,0.12); }
+    .rc-biz-name { font-size:26px; }
+    .rc-overall-score { font-size:56px; }
+    .rc-meta-row { gap:14px 20px; }
+    .section-band { padding:14px 16px; flex-wrap:wrap; gap:4px 10px; }
+    .section-band-title { font-size:18px; }
+    .section-band-sub { margin-left:0; flex-basis:100%; }
+    .scorecard-section, .exec-section, .priority-section, .fixes-section, .working-section, .challenge-section { padding:24px 16px; }
+    .radar-wrap { grid-template-columns:minmax(0,1fr); gap:18px; padding:24px 16px; }
+    .radar-bar-row { grid-template-columns:minmax(0,118px) minmax(0,1fr) 34px; gap:8px; }
+    .radar-bar-score { font-size:14px !important; white-space:nowrap; text-align:right; }
+    .radar-bar-label { font-size:12px; text-align:left; }
+    .exec-summary-box { padding:18px 16px; }
+    .priority-grid { grid-template-columns:minmax(0,1fr); gap:14px; }
+    .priority-card-header { padding:14px 16px; gap:10px; }
+    .priority-card-body { padding:16px; }
+    .fix-card-body { padding:16px; }
+    .fix-card-title { font-size:17px; }
+    .fix-owner label { max-width:none; }
+    .working-header { flex-wrap:wrap; }
+    .challenge-box { grid-template-columns:minmax(0,1fr); padding:22px; }
+    .upgrade-box { padding:36px 20px; }
+    .ub-title { font-size:26px; }
+    .wl-form { flex-direction:column; align-items:stretch; }
+    .wl-field { flex:1 1 auto; }
+    .report-footer-bar { flex-wrap:wrap; gap:12px; padding:16px; }
+    .days-actions .btn-days { flex:1 1 auto; }
+  }
+  @media (max-width:520px) {
+    .choices { grid-template-columns:minmax(0,1fr); }
+    .country-grid { grid-template-columns:minmax(0,1fr); }
+    .wf-row { grid-template-columns:minmax(0,1fr); }
+    .wp-trust { flex-wrap:wrap; gap:8px 16px; }
+    .scorecard-legend { flex-wrap:wrap; gap:8px 16px; }
+  }
 </style>
 </head>
 <body>
@@ -2164,6 +2227,11 @@ function runSample(){
   generateReport();
 }
 if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', runSample); } else { runSample(); }
+
+// On phones, keep the current module's chip in view in the scrolling strip.
+(function(){ if(typeof showModule !== 'function') return; var orig = showModule;
+  window.showModule = function(i){ orig.apply(this, arguments); try{ var a = document.getElementById('sbm-'+i); if(a && window.innerWidth <= 860){ var strip = a.parentNode; strip.scrollLeft = a.offsetLeft - (strip.clientWidth - a.offsetWidth)/2; } }catch(e){} };
+})();
 </script>
 
 
