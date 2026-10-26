@@ -124,6 +124,9 @@
   .weekly .status.ok { color:#fff; }
   .privacy-note { margin-top:22px; font-size:15px; color:var(--ink-mid); max-width:36em; border-left:3px solid var(--brand); padding-left:14px; }
   .privacy-note b { color:var(--ink); }
+  .btn.outline { background:transparent; color:var(--brand); border-color:var(--brand); }
+  .btn.outline:hover { background:var(--brand-soft); color:var(--brand-dark); }
+  .cta-row .cta-note { flex-basis:100%; }
 </style>
 </head>
 <body>
@@ -143,6 +146,7 @@
       <p class="lede">A practical check across seven areas of your business. You get a score for each area, three named fixes with the steps to take, and a seven-day plan to get them done.</p>
       <div class="cta-row">
         <a class="btn" href="diagnostic.html">Start the assessment</a>
+        <a class="btn outline" href="diagnostic.html?sample=1">See a sample report</a>
         <span class="cta-note">NZ$49 · A$40 · R450 · counts as week one of FIXLO Weekly</span>
       </div>
       <div class="facts">
@@ -155,7 +159,7 @@
     </div>
 
     <div class="sample" aria-label="Example of the three fixes in a FIXLO report">
-      <div class="sample-head"><b>Your 3 fixes this week</b><small>Example report</small></div>
+      <div class="sample-head"><b>Your 3 fixes this week</b><small><a href="diagnostic.html?sample=1">See the full example report</a></small></div>
       <div class="sample-fix"><div class="sample-num">1</div><div><b>Calculate your cash runway and check it weekly</b><span>Cash &amp; Financial Health · 60 minutes</span></div></div>
       <div class="sample-fix"><div class="sample-num">2</div><div><b>Turn on multi-factor authentication</b><span>Cyber Security · 60 minutes</span></div></div>
       <div class="sample-fix"><div class="sample-num">3</div><div><b>Match next month's workload to your capacity</b><span>People &amp; Capacity · 90 minutes</span></div></div>

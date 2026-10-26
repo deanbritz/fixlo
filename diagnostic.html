@@ -565,6 +565,33 @@
   .privacy-actions { display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
   @media (max-width:700px) { .privacy-band { padding:24px 20px; } }
   @media print { .privacy-actions { display:none !important; } }
+
+  /* If you leave it, snapshot, sample */
+  .fix-leave { margin-top:12px; padding:10px 14px; background:#FBF6EC; border-left:3px solid var(--amber); border-radius:3px; font-size:14px; color:var(--ink-mid); line-height:1.55; }
+  .fix-leave b { color:var(--ink); }
+  .days-note { font-size:13px; color:var(--ink-light); margin:16px 0 0; }
+  .sample-banner { max-width:960px; margin:0 auto 16px; display:flex; flex-wrap:wrap; gap:12px 24px; align-items:center; justify-content:space-between; background:var(--brand-soft); border:1px solid var(--brand); border-radius:4px; padding:14px 18px; font-size:15px; color:var(--ink); }
+  .sample-banner[hidden] { display:none !important; }
+  .sample-cta { background:var(--brand); color:#fff; text-decoration:none; font-weight:600; padding:10px 18px; border-radius:4px; white-space:nowrap; }
+  #snapshot { display:none; }
+  @media print {
+    body.snap-print > *:not(#snapshot) { display:none !important; }
+    body.snap-print #snapshot { display:block !important; }
+    .sample-banner { display:none !important; }
+  }
+  #snapshot { font-family:var(--sans); color:#1E2A32; font-size:10.5pt; line-height:1.4; }
+  #snapshot .sn-head { display:flex; justify-content:space-between; align-items:baseline; border-bottom:2px solid #1F4E6B; padding-bottom:6px; margin-bottom:10px; }
+  #snapshot .sn-logo { font-weight:700; font-size:16pt; } #snapshot .sn-logo span { color:#1F4E6B; }
+  #snapshot .sn-tag { font-size:9.5pt; color:#66737C; }
+  #snapshot h1 { font-size:15pt; margin:0 0 2px; } #snapshot .sn-sub { color:#3F4D57; margin-bottom:10px; }
+  #snapshot .sn-overall { font-size:22pt; font-weight:700; color:#1F4E6B; }
+  #snapshot table { width:100%; border-collapse:collapse; margin:6px 0 12px; font-size:9.5pt; }
+  #snapshot td, #snapshot th { border-bottom:1px solid #D9DFE3; padding:3px 6px; text-align:left; }
+  #snapshot .sn-fix { border:1px solid #D9DFE3; border-radius:3px; padding:8px 10px; margin-bottom:8px; break-inside:avoid; }
+  #snapshot .sn-fix h2 { font-size:11.5pt; margin:0 0 3px; }
+  #snapshot .sn-meta { font-size:9pt; color:#3F4D57; margin-bottom:4px; }
+  #snapshot ol { margin:3px 0 4px 18px; padding:0; } #snapshot li { margin-bottom:1px; }
+  #snapshot .sn-foot { font-size:8.5pt; color:#66737C; margin-top:8px; }
 </style>
 </head>
 <body>
@@ -750,6 +777,10 @@
 
 <!-- ══ REPORT ══ -->
 <div id="report-screen">
+  <div class="sample-banner" id="sample-banner" hidden>
+    <div><b>This is an example report</b> for a made-up business, Harbour Electrical, so you can see what FIXLO gives you. Your own report is based on your answers.</div>
+    <a class="sample-cta" href="diagnostic.html">Start my own assessment</a>
+  </div>
   <div class="btn-print-bar">
     <div class="btn-print-bar-note">Your diagnostic report is ready, <strong>save it as PDF to keep a copy</strong></div>
     <button class="btn-print" onclick="window.print()">⬇ Save as PDF</button>
@@ -865,9 +896,13 @@
     <div class="days-section">
       <p class="days-lead" id="seven-day-text">Loading…</p>
       <div class="days-list" id="days-list"></div>
+      <p class="days-note">The snapshot, email and calendar options use your own printer, email app and calendar. Nothing is sent to FIXLO.</p>
       <div class="days-actions">
         <button class="btn-days" type="button" onclick="copyPlan()">Copy my 7-day plan</button>
         <button class="btn-days ghost" type="button" onclick="retakeDiagnostic()">Retake next week</button>
+        <button class="btn-days ghost" type="button" onclick="printSnapshot()">Print one-page snapshot</button>
+        <button class="btn-days ghost" type="button" onclick="emailPlan()">Email my plan to myself</button>
+        <button class="btn-days ghost" type="button" onclick="calendarFixes()">Add the fixes to my calendar</button>
         <span class="copy-msg" id="copy-msg" role="status"></span>
       </div>
     </div>
@@ -1555,6 +1590,7 @@ function renderFixCards(fixes) {
     if(f.steps) {
       card += '<div class="fix-card-body-text">' + escH(f.why || '') + '</div>';
       card += '<ol class="fix-steps">' + f.steps.map(function(st){ return '<li>' + escH(st) + '</li>'; }).join('') + '</ol>';
+      if(f.leave) card += '<div class="fix-leave"><b>If you leave it:</b> ' + escH(f.leave) + '</div>';
       card += '<div class="fix-meta"><span>' + (f.zoneName ? escH(f.zoneName) + ' · ' : '') + 'Time: ' + escH(f.time) + '</span><span>Done when: ' + escH(f.done) + '</span></div>';
     } else {
       card += '<div class="fix-card-body-text">' + f.desc + '</div>';
@@ -1599,6 +1635,7 @@ function showReport(reportText, worst, best) {
   document.getElementById('rc-sector-label').textContent = userData.sector + ' · ' + userData.country;
   document.getElementById('rc-date').textContent = 'Generated ' + d.toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'});
   document.getElementById('rc-overall-score').innerHTML = overall + '<span class="rc-overall-denom">/100</span>';
+  window._overall = overall;
   document.getElementById('rc-overall-status').textContent = scoreLabel(overall);
   saveRunAndDelta(overall);
   renderNumbers();
@@ -1770,6 +1807,35 @@ function fixFor(qid){
   };
   return F[qid];
 }
+// What tends to happen if a fix is left. Calm and factual; no invented figures.
+const LEAVE = {
+  cf2:'A cash shortfall tends to show up only when a payment bounces, by which point the options are fewer and dearer.',
+  cf3:'You may keep putting effort into the work that earns the least, without knowing it.',
+  cf4:'Late payers tend to get later, and the money you are owed keeps funding someone else\'s business instead of yours.',
+  op2:'Work keeps stalling while clients wait, and the delays land back on you.',
+  op3:'You stay the bottleneck for the same problem, and the team keeps waiting for you to step in.',
+  op4:'The same problem keeps costing time and goodwill every time it repeats.',
+  tm1:'Deadlines slip, quality drops and the people you rely on most get stretched.',
+  tm2:'If that person is away or leaves, the task stops until someone works it out from scratch.',
+  tm3:'You may only find out what would have kept them after they have resigned.',
+  tm4:'Gaps and overlaps stay hidden until something is missed or done twice.',
+  gr1:'A quiet month can arrive without warning, leaving little time to fill it.',
+  gr2:'Rising costs keep eating into the margin on that service a little more each month.',
+  gr3:'Interested prospects go quiet, or choose someone who followed up.',
+  gr4:'Marketing time and money keep going to places that may not bring your best clients.',
+  di1:'The hours keep leaking every week, along with the errors that retyping brings.',
+  di2:'Money keeps going out on tools nobody uses, and former staff may still have access.',
+  cy1:'One stolen password can be enough for someone to get into your email or bank account.',
+  cy2:'If files are lost to a fault or ransomware, you may not be able to get them back.',
+  cy3:'One convincing fake invoice or bank-detail change can send a payment to a scammer.',
+  cy4:'Out-of-date devices are an easy way in for attackers, and a lost phone can expose client information.',
+  cy6:'In an incident, time goes on working out who does what instead of containing the damage.',
+  co1:'Missed returns or payments can bring penalties, interest and an unexpected bill.',
+  co2:'Missing or outdated agreements make any dispute with a staff member harder and more costly to resolve.',
+  co3:'You may not be meeting your privacy obligations, which matters most if something goes wrong with client information.',
+  co4:'You may only find a gap in your cover when you need to make a claim.'
+};
+const MAINTAIN_LEAVE = ['Access builds up over time, and old accounts are an easy way in.','Backups can stop working quietly; you only find out when you need one.','Small cost increases add up when no one checks them.'];
 const MAINTAIN_FIXES = [
   {t:'Run your quarterly access review', time:'60 minutes', steps:['Check the user lists on email, accounting and file storage.','Remove anyone who no longer needs access.','Confirm MFA is still on for every account.'], done:'Every login belongs to a current person.'},
   {t:'Re-test your backup restore', time:'45 minutes', steps:['Pick a different file from last time.','Restore it from backup.','Note how long it took.'], done:'A second restore has worked.'},
@@ -1801,9 +1867,9 @@ function pickFixesV2(){
   if(cash){ picked.push(cash); used.cashflow = 1; }
   items.forEach(function(i){ if(picked.length < 3 && !used[i.mid]){ picked.push(i); used[i.mid] = 1; } });
   items.forEach(function(i){ if(picked.length < 3 && picked.indexOf(i) < 0) picked.push(i); });
-  var fixes = picked.map(function(i){ var f = fixFor(i.qid); return {zone:i.mid, zoneName:i.mname, why:i.text, title:f.t, steps:f.steps, time:f.time, done:f.done, desc:i.text, impact:''}; });
+  var fixes = picked.map(function(i){ var f = fixFor(i.qid); return {zone:i.mid, zoneName:i.mname, why:i.text, title:f.t, steps:f.steps, time:f.time, done:f.done, leave:LEAVE[i.qid]||'', desc:i.text, impact:''}; });
   var k = 0;
-  while(fixes.length < 3){ var mf = MAINTAIN_FIXES[k++]; fixes.push({zone:'maintain', zoneName:'Maintenance', why:'Your answers show no gap here. Keep it that way with a light check.', title:mf.t, steps:mf.steps, time:mf.time, done:mf.done, desc:'', impact:''}); }
+  while(fixes.length < 3){ var mf = MAINTAIN_FIXES[k]; fixes.push({zone:'maintain', zoneName:'Maintenance', why:'Your answers show no gap here. Keep it that way with a light check.', title:mf.t, steps:mf.steps, time:mf.time, done:mf.done, leave:MAINTAIN_LEAVE[k]||'', desc:'', impact:''}); k++; }
   return fixes;
 }
 
@@ -1843,7 +1909,7 @@ function renderWeek(fixes){
 function buildPlanText(){
   var fixes = window._planFixes || [], week = window._planWeek || [], start = window._planStart || new Date();
   return userData.biz+' · FIXLO 7-day plan · '+start.toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'})+'\n\n'+
-    fixes.slice(0,3).map(function(f,i){ var who = fixOwner(i); return 'Fix '+(i+1)+' ('+f.zoneName+'): '+f.title+'\nWho: '+(who || 'not yet named')+' · Due: '+fixDueLabel(i)+'\nDone when: '+f.done; }).join('\n\n')+'\n\n'+
+    fixes.slice(0,3).map(function(f,i){ var who = fixOwner(i); return 'Fix '+(i+1)+' ('+f.zoneName+'): '+f.title+'\nWho: '+(who || 'not yet named')+' · Due: '+fixDueLabel(i)+'\nDone when: '+f.done+(f.leave ? '\nIf you leave it: '+f.leave : ''); }).join('\n\n')+'\n\n'+
     week.map(function(d,di){ return 'Day '+(di+1)+' ('+d.h+')\n'+d.tasks.map(function(t){ return '  [ ] '+t; }).join('\n'); }).join('\n');
 }
 
@@ -1865,6 +1931,7 @@ function moduleFindingsText(mid){
 }
 
 function saveRunAndDelta(overall){
+  if(window._sample){ window._fixloRunId = 'sample'; window._planStart = new Date(); var se = document.getElementById('rc-delta'); if(se) se.textContent = 'Example report for a made-up business'; return; }
   var hist = store('history') || [];
   var prev = hist.length ? hist[hist.length-1] : null;
   window._fixloRunId = 'r'+Date.now();
@@ -2009,6 +2076,94 @@ function deleteMyAnswers(){
   btn.dataset.armed = ''; btn.textContent = 'Deleted'; btn.disabled = true;
   msg.textContent = 'Your saved answers and results have been removed from this device. This report stays on screen until you close the page.';
 }
+
+// ══ SNAPSHOT, EMAIL AND CALENDAR (all handled by the owner's own printer, email app and calendar) ══
+function snapFixes(){ return (window._planFixes || []).slice(0,3); }
+function snapScores(){ return MODULES.map(function(m){ return {name:m.name, score:moduleScores[m.id], label:scoreLabel(moduleScores[m.id])}; }); }
+function snapDate(){ return (window._planStart || new Date()).toLocaleDateString('en-NZ',{day:'numeric',month:'long',year:'numeric'}); }
+function siteBase(){ try{ return location.origin + location.pathname.replace(/[^\/]*$/, ''); }catch(e){ return 'https://deanbritz.github.io/fixlo/'; } }
+
+function printSnapshot(){
+  var el = document.getElementById('snapshot');
+  if(!el){ el = document.createElement('div'); el.id = 'snapshot'; document.body.appendChild(el); }
+  var fixes = snapFixes();
+  el.innerHTML = '<div class="sn-head"><div class="sn-logo">FIX<span>LO</span>™</div><div class="sn-tag">Fix three things. Every week.</div></div>' +
+    '<h1>' + escH(userData.biz || 'Your business') + '</h1><div class="sn-sub">One-page snapshot · ' + escH(snapDate()) + (window._sample ? ' · Example report' : '') + '</div>' +
+    '<div>Overall score <span class="sn-overall">' + (window._overall != null ? window._overall : '') + '</span>/100</div>' +
+    '<table><tr><th>Area</th><th>Score</th><th>Status</th></tr>' + snapScores().map(function(r){ return '<tr><td>' + escH(r.name) + '</td><td>' + r.score + '</td><td>' + escH(r.label) + '</td></tr>'; }).join('') + '</table>' +
+    fixes.map(function(f,i){ return '<div class="sn-fix"><h2>Fix ' + (i+1) + ': ' + escH(f.title) + '</h2><div class="sn-meta">' + escH(f.zoneName) + ' · Who: ' + escH(fixOwner(i) || 'not yet named') + ' · Due: ' + escH(fixDueLabel(i)) + ' · Time: ' + escH(f.time || '') + '</div>' +
+      (f.steps ? '<ol>' + f.steps.map(function(st){ return '<li>' + escH(st) + '</li>'; }).join('') + '</ol>' : '') +
+      '<div><b>Done when:</b> ' + escH(f.done || '') + '</div>' + (f.leave ? '<div><b>If you leave it:</b> ' + escH(f.leave) + '</div>' : '') + '</div>'; }).join('') +
+    '<div class="sn-foot">Retake the diagnostic next week for your next three fixes: ' + escH(siteBase()) + ' · General business guidance, not legal, tax or financial advice.</div>';
+  document.body.classList.add('snap-print');
+  var done = function(){ document.body.classList.remove('snap-print'); window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+  window.print();
+  setTimeout(done, 1500);
+}
+
+function emailPlan(){
+  var fixes = snapFixes(), lines = [];
+  lines.push('FIXLO plan for ' + (userData.biz || 'my business') + ' · ' + snapDate());
+  if(window._overall != null) lines.push('Overall score: ' + window._overall + '/100');
+  lines.push('');
+  snapScores().forEach(function(r){ lines.push(r.name + ': ' + r.score + ' (' + r.label + ')'); });
+  lines.push('', 'MY THREE FIXES THIS WEEK');
+  fixes.forEach(function(f,i){
+    lines.push('', 'Fix ' + (i+1) + ': ' + f.title, 'Who: ' + (fixOwner(i) || 'not yet named') + ' · Due: ' + fixDueLabel(i) + ' · Time: ' + (f.time || ''));
+    (f.steps || []).forEach(function(st, k){ lines.push((k+1) + '. ' + st); });
+    lines.push('Done when: ' + (f.done || ''));
+    if(f.leave) lines.push('If you leave it: ' + f.leave);
+  });
+  lines.push('', 'Retake next week for your next three fixes: ' + siteBase());
+  window.location.href = 'mailto:?subject=' + encodeURIComponent('My FIXLO plan: three fixes this week') + '&body=' + encodeURIComponent(lines.join('\n'));
+}
+
+function calendarFixes(){
+  var fixes = snapFixes(), pad = function(n){ return (n < 10 ? '0' : '') + n; };
+  var stamp = function(d, h){ return d.getFullYear() + pad(d.getMonth()+1) + pad(d.getDate()) + 'T' + pad(h) + '0000'; };
+  var esc = function(t){ return String(t).replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,').replace(/\n/g,'\\n'); };
+  var now = new Date(), dtstamp = now.toISOString().replace(/[-:]/g,'').replace(/\.\d+/,'');
+  var ev = [];
+  fixes.forEach(function(f,i){
+    var d = fixDueDates(window._planStart)[i];
+    ev.push(['BEGIN:VEVENT','UID:fixlo-' + (window._fixloRunId || 'r0') + '-' + i + '@fixlo-advisory.com','DTSTAMP:' + dtstamp,'DTSTART:' + stamp(d, 9),'DTEND:' + stamp(d, 10),
+      'SUMMARY:' + esc('FIXLO Fix ' + (i+1) + ': ' + f.title),
+      'DESCRIPTION:' + esc((f.steps || []).map(function(st,k){ return (k+1) + '. ' + st; }).join('\n') + '\nDone when: ' + (f.done || '')),
+      'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:' + esc('FIXLO Fix ' + (i+1)),'TRIGGER:-PT15M','END:VALARM','END:VEVENT'].join('\r\n'));
+  });
+  var nx = new Date(window._planStart || now); nx.setDate(nx.getDate() + 7); nx.setHours(0,0,0,0);
+  ev.push(['BEGIN:VEVENT','UID:fixlo-' + (window._fixloRunId || 'r0') + '-next@fixlo-advisory.com','DTSTAMP:' + dtstamp,'DTSTART:' + stamp(nx, 9),'DTEND:' + stamp(nx, 9).replace(/T09/, 'T09').replace(/0000$/, '3000'),
+    'SUMMARY:' + esc('FIXLO: your next three fixes'),'DESCRIPTION:' + esc('Retake the diagnostic for next week\'s three fixes: ' + siteBase()),'END:VEVENT'].join('\r\n'));
+  var ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//FIXLO//Three fixes//EN','CALSCALE:GREGORIAN'].concat(ev).concat(['END:VCALENDAR']).join('\r\n');
+  var blob = new Blob([ics], {type:'text/calendar'}), a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'fixlo-three-fixes.ics'; document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  var msg = document.getElementById('copy-msg'); if(msg) msg.textContent = 'Calendar file downloaded. Open it to add your three fixes and next week\'s reminder.';
+}
+
+// ══ SAMPLE REPORT: diagnostic.html?sample=1 shows a full example for a made-up business ══
+const SAMPLE_ANSWERS = {cf2:1, cf3:5, cf4:2, op2:1, op3:6, op4:1, tm1:6, tm2:2, tm3:7, tm4:1, gr1:5, gr2:2, gr3:4, gr4:0, di1:4, di2:1, cy1:1, cy2:1, cy3:2, cy4:1, cy6:1, co1:1, co2:1, co3:2, co4:1};
+function runSample(){
+  var params; try{ params = new URLSearchParams(location.search); }catch(e){ return; }
+  if(!params.get('sample')) return;
+  var code = (params.get('country') || 'NZ').toUpperCase(); if(!COUNTRY_DATA[code]) code = 'NZ';
+  var card = document.querySelector('.country-card[data-code="' + code + '"]'), cd = COUNTRY_DATA[code];
+  if(card && cd) selectCountry(card, code, cd.label, cd.currency);
+  document.getElementById('f-name').value = 'Sam'; document.getElementById('f-biz').value = 'Harbour Electrical (example)';
+  document.getElementById('f-sector').value = 'Construction'; document.getElementById('f-revenue').value = '1M – 3M'; document.getElementById('f-staff').value = '6–20';
+  window._sample = true;
+  startAssessment();
+  MODULES.forEach(function(m){ m.questions.forEach(function(q){
+    var v = SAMPLE_ANSWERS[q.id]; if(v === undefined) return;
+    if(!answers[m.id]) answers[m.id] = {};
+    if(q.type === 'slider') answers[m.id][q.id] = {val:v, type:'slider', invert:!!q.invert};
+    else { var o = (q.opts || q.options || [])[v] || {}; answers[m.id][q.id] = {idx:v, neg:!!o.neg, type:'choice'}; }
+  }); });
+  var b = document.getElementById('sample-banner'); if(b) b.hidden = false;
+  generateReport();
+}
+if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', runSample); } else { runSample(); }
 </script>
 
 
