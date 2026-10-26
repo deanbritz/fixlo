@@ -1939,7 +1939,7 @@ const SECTOR_CONTEXT = {
     growth:'direct bookings usually cost less than third-party booking sites, and reviews and repeat guests are your strongest marketing.',
     digital:'a booking system that links to your accounts and listings stops double bookings and retyping.',
     cyber:'booking and payment systems hold guest details, and fake booking and invoice emails are a known risk, so check before you pay or click.',
-    compliance:'food safety, licensing and health and safety rules apply, alongside tax, employment and privacy obligations for guest details.' } }
+    compliance:'licensing and health and safety rules apply, plus food safety if you serve food, alongside tax, employment and privacy obligations for guest details.' } }
 };
 function sectorContext(){ return SECTOR_CONTEXT[(userData && userData.sector) || ''] || null; }
 const MAINTAIN_LEAVE = ['Access builds up over time, and old accounts are an easy way in.','Backups can stop working quietly; you only find out when you need one.','Small cost increases add up when no one checks them.'];
@@ -2254,8 +2254,12 @@ const SAMPLE_ANSWERS = {cf2:1, cf3:5, cf4:2, op2:1, op3:6, op4:1, tm1:6, tm2:2, 
 // One made-up business per country, so each owner sees an example from home.
 const SAMPLE_BIZ = {
   NZ:{ name:'Sam',   biz:'Harbour Electrical', place:'Auckland',     sector:'Construction & Trades', revenue:'1M – 3M', staff:'6–20' },
-  AU:{ name:'Jess',  biz:'Bayside Plumbing',   place:'Brisbane',     sector:'Construction & Trades', revenue:'1M – 3M', staff:'6–20' },
-  ZA:{ name:'Thabo', biz:'Highveld Electrical', place:'Johannesburg', sector:'Construction & Trades', revenue:'3M – 10M', staff:'6–20' }
+  // A Brisbane cafe: takings arrive at the till, so debtors are fine; the pressure is margin, pricing, the award and key staff.
+  AU:{ name:'Jess',  biz:'Wattle & Ward Café', place:'Brisbane',     sector:'Hospitality & Tourism', revenue:'500K – 1M', staff:'6–20',
+       answers:{cf2:2, cf3:3, cf4:0, op2:0, op3:8, op4:1, tm1:5, tm2:2, tm3:5, tm4:1, gr1:5, gr2:2, gr3:4, gr4:0, di1:6, di2:1, cy1:0, cy2:0, cy3:2, cy4:1, cy6:1, co1:0, co2:1, co3:1, co4:0} },
+  // A Cape Town tour operator: deposits up front, but a seasonal winter dip, guest passport details held, and seasonal guides on old contracts.
+  ZA:{ name:'Thabo', biz:'Fynbos Coast Tours', place:'Cape Town',    sector:'Hospitality & Tourism', revenue:'3M – 10M', staff:'6–20',
+       answers:{cf2:0, cf3:5, cf4:0, op2:0, op3:7, op4:1, tm1:4, tm2:2, tm3:6, tm4:1, gr1:6, gr2:1, gr3:5, gr4:2, di1:4, di2:1, cy1:1, cy2:0, cy3:1, cy4:2, cy6:2, co1:0, co2:2, co3:2, co4:0} }
 };
 // With no ?country= in the link, pick the visitor's country from their device time zone.
 function sampleGuessCountry(){
@@ -2277,7 +2281,7 @@ function runSample(){
   window._sample = true;
   startAssessment();
   MODULES.forEach(function(m){ m.questions.forEach(function(q){
-    var v = SAMPLE_ANSWERS[q.id]; if(v === undefined) return;
+    var v = (sb.answers || SAMPLE_ANSWERS)[q.id]; if(v === undefined) return;
     if(!answers[m.id]) answers[m.id] = {};
     if(q.type === 'slider') answers[m.id][q.id] = {val:v, type:'slider', invert:!!q.invert};
     else { var o = (q.opts || q.options || [])[v] || {}; answers[m.id][q.id] = {idx:v, neg:!!o.neg, type:'choice'}; }
@@ -2353,7 +2357,7 @@ function buildExecSummary(fixes, w0, w1, s0, s1){
   var cp = countryPressure([w0.id, w1.id, f1.zone]);
   if(cp) p.push('<b>Why this matters in ' + cp.name + ':</b> ' + cp.lines.map(escH).join(' '));
   var second = 'Start with Fix 1: <b>' + escH(f1.title || '') + '</b>. ';
-  if(f1.zone === 'cashflow') second += 'Cash comes first, because a cash problem left unchecked limits every other choice you have. ';
+  if(f1.zone === 'cashflow') second += 'Money comes first, because a cash or margin problem left unchecked limits every other choice you have. ';
   if(f1.leave) second += 'If you leave it: ' + escH(f1.leave);
   p.push(second);
   if(sc) p.push(escH(sc.exec) + ' Your three fixes are written with that in mind.');
