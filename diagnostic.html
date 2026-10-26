@@ -550,6 +550,9 @@
   .wl-price-label { color:var(--ink-light); font-size:13px; }
   .wl-price-amount { color:var(--ink); }
   .wl-price-note { color:var(--ink-light); font-size:13px; }
+  .score-note { font-size:13px; line-height:1.55; color:var(--ink-light); margin:-12px 0 24px; max-width:760px; }
+  .wl-sample-link { display:inline-block; margin-top:10px; font-size:14px; color:var(--brand); text-decoration:underline; }
+  .wp-trust a.wp-sample { color:var(--brand); text-decoration:underline; }
   @media (max-width:768px) { .wizard-left { border-right:none; border-bottom:1px solid var(--border); padding:32px 20px; } .wizard-right, .wizard-panel { padding:32px 20px; } }
 
   /* Tagline */
@@ -693,6 +696,7 @@
       <div class="wl-price-label">One-time investment</div>
       <div class="wl-price-amount" id="wl-price">$49 NZD</div>
       <div class="wl-price-note" id="wl-price-note">Counts as week one of FIXLO Weekly, NZ$129 a month (coming soon)</div>
+      <a class="wl-sample-link" id="wl-sample-link" href="diagnostic.html?sample=1">See a full sample report first, free</a>
     </div>
   </div>
 
@@ -806,6 +810,7 @@
       <div class="wp-trust">
         <span class="wp-trust-item">Save as PDF anytime</span>
         <span class="wp-trust-item">Answers stay on this device</span>
+        <a class="wp-trust-item wp-sample" id="wp-sample-link" href="diagnostic.html?sample=1">Not sure yet? See a sample report</a>
       </div>
     </div>
 
@@ -889,6 +894,7 @@
     </div>
     <div class="scorecard-section">
       <div class="scorecard-grid" id="scores-grid"></div>
+      <p class="score-note"><b>How scores work.</b> Multiple-choice answers score 88, 65, 35 or 10, from best to worst. Ratings from 1 to 10 score 10 to 100. Each area's score is the average of its answers, and the overall score is the average of the seven areas. 70 or more is Strong, 45 to 69 Needs attention, and under 45 Critical. The score shows where to look first. It is not a financial or credit measure.</p>
       <div class="scorecard-legend">
         <div class="scorecard-legend-item"><div class="legend-pip" style="background:var(--green)"></div>70–100 Strong</div>
         <div class="scorecard-legend-item"><div class="legend-pip" style="background:var(--amber)"></div>45–69 Needs attention</div>
@@ -1224,6 +1230,7 @@ function selectCountry(el, code, price, currency) {
   var weekly = {NZ:'NZ$129', AU:'A$105', ZA:'R1,200'}[code];
   var pn = document.getElementById('wl-price-note');
   if(pn && weekly) pn.textContent = 'Counts as week one of FIXLO Weekly, ' + weekly + ' a month (coming soon)';
+  ['wl-sample-link','wp-sample-link'].forEach(function(id){ var a = document.getElementById(id); if(a) a.href = 'diagnostic.html?sample=1&country=' + code; });
   const hint = document.getElementById('rev-currency-hint');
   if(hint) hint.textContent = currency;
   const btn = document.getElementById('step1-next');
@@ -2359,8 +2366,20 @@ function buildExecSummary(fixes, w0, w1, s0, s1){
   p.push(opening);
   var cp = countryPressure([w0.id, w1.id, f1.zone]);
   if(cp) p.push('<b>Why this matters in ' + cp.name + ':</b> ' + cp.lines.map(escH).join(' '));
-  var second = 'Start with Fix 1: <b>' + escH(f1.title || '') + '</b>. ';
-  if(f1.zone === 'cashflow') second += 'Money comes first, because a cash or margin problem left unchecked limits every other choice you have. ';
+  var second;
+  var cashWeakest = (w0.id === 'cashflow' || w1.id === 'cashflow');
+  if(f1.zone === 'cashflow' && !cashWeakest){
+    // Cash is Fix 1 by design even when other areas score lower. Say so plainly, so the report reads as one argument.
+    var covered = [];
+    fixes.slice(1, 3).forEach(function(f, k){ if(f.zone === w0.id || f.zone === w1.id) covered.push('Fix ' + (k + 2) + ' deals with ' + escH(f.zoneName)); });
+    second = '<b>Fix 1 is still cash, even though your lowest scores are elsewhere.</b> That is deliberate: a cash or margin problem left unchecked limits every other choice you have, so FIXLO always deals with money first. ';
+    second += 'Your Fix 1 is <b>' + escH(f1.title || '') + '</b>. ';
+    if(covered.length) second += covered.join(', and ') + '. ';
+    else second += 'Fixes 2 and 3 go to the single answers carrying the most risk this week. ' + escH(w0.name) + ' and ' + escH(w1.name) + ' come up in the weeks that follow. ';
+  } else {
+    second = 'Start with Fix 1: <b>' + escH(f1.title || '') + '</b>. ';
+    if(f1.zone === 'cashflow') second += 'Money comes first, because a cash or margin problem left unchecked limits every other choice you have. ';
+  }
   if(f1.leave) second += 'If you leave it: ' + escH(f1.leave);
   p.push(second);
   if(sc) p.push(escH(sc.exec) + ' Your three fixes are written with that in mind.');
