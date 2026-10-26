@@ -129,6 +129,11 @@
   .cta-row .cta-note { flex-basis:100%; }
 .sample-sectors { margin:14px 0 0; font-size:14px; line-height:1.6; }
 .sample-sectors a { color:inherit; text-decoration:underline; }
+.sec-chips { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 12px; }
+.sec-chip { font:inherit; font-size:13px; padding:6px 11px; border:1px solid var(--border); border-radius:999px; background:var(--paper); color:var(--ink); cursor:pointer; }
+.sec-chip.on { background:var(--brand, #1F4E6B); border-color:var(--brand, #1F4E6B); color:#fff; }
+.sample-ind b { display:inline; font-size:13px; }
+.sample-ind { display:block; font-style:normal; font-size:13px; line-height:1.5; color:var(--ink); margin-top:6px; padding-left:8px; border-left:3px solid var(--brand, #1F4E6B); }
 </style>
 </head>
 <body>
@@ -161,12 +166,12 @@
     </div>
 
     <div class="sample" aria-label="Example of the three fixes in a FIXLO report">
-      <div class="sample-head"><b>Your 3 fixes this week</b><small><a href="diagnostic.html?sample=1">See the full example report</a></small></div>
-      <div class="sample-fix"><div class="sample-num">1</div><div><b>Calculate your cash runway and check it weekly</b><span>Cash &amp; Financial Health · 60 minutes</span></div></div>
-      <div class="sample-fix"><div class="sample-num">2</div><div><b>Turn on multi-factor authentication</b><span>Cyber Security · 60 minutes</span></div></div>
-      <div class="sample-fix"><div class="sample-num">3</div><div><b>Match next month's workload to your capacity</b><span>People &amp; Capacity · 90 minutes</span></div></div>
-      <p class="sample-foot">Each fix comes with three steps and a clear finish line, spread across a seven-day plan.</p>
-      <p class="sample-sectors"><b>Written for your country and your industry.</b> See an example: <a href="diagnostic.html?sample=1&amp;sector=trades">trades</a>, <a href="diagnostic.html?sample=1&amp;sector=tourism">hospitality and tourism</a>, <a href="diagnostic.html?sample=1&amp;sector=agri">agriculture</a>, <a href="diagnostic.html?sample=1&amp;sector=services">professional services</a>, <a href="diagnostic.html?sample=1&amp;sector=retail">retail</a> or <a href="diagnostic.html?sample=1&amp;sector=health">healthcare</a>.</p>
+      <div class="sample-head"><b>Your 3 fixes this week</b><small><a id="sample-full" href="diagnostic.html?sample=1&amp;sector=trades">See the full example report</a></small></div>
+      <div class="sec-chips" role="group" aria-label="Show the example for your industry"><button type="button" class="sec-chip on" data-k="trades" aria-pressed="true">Trades</button><button type="button" class="sec-chip" data-k="tourism" aria-pressed="false">Tourism</button><button type="button" class="sec-chip" data-k="agri" aria-pressed="false">Farming</button><button type="button" class="sec-chip" data-k="services" aria-pressed="false">Services</button><button type="button" class="sec-chip" data-k="retail" aria-pressed="false">Retail</button><button type="button" class="sec-chip" data-k="health" aria-pressed="false">Health</button></div>
+      <div class="sample-fix"><div class="sample-num">1</div><div><b>Calculate your cash runway and check it weekly</b><span>Cash &amp; Financial Health · 60 minutes</span><em class="sample-ind" data-z="cash"><b>In a trades business:</b> take deposits on larger jobs, send progress claims on time, and chase retentions as soon as they fall due.</em></div></div>
+      <div class="sample-fix"><div class="sample-num">2</div><div><b>Turn on multi-factor authentication</b><span>Cyber Security · 60 minutes</span><em class="sample-ind" data-z="cyber"><b>In a trades business:</b> phones on site hold client details and photos; lock them, and confirm any change to a supplier&#x27;s bank details by phone.</em></div></div>
+      <div class="sample-fix"><div class="sample-num">3</div><div><b>Bring your privacy policy up to date</b><span>Compliance &amp; Legal Risk · 90 minutes</span><em class="sample-ind" data-z="comp"><b>In a trades business:</b> keep health and safety records, licences and certifications current, alongside your tax and employment paperwork.</em></div></div>
+      <p class="sample-foot">Each fix comes with three steps and a clear finish line, spread across a seven-day plan. Pick your industry above to see how the advice changes.</p>
     </div>
   </div>
 </section>
@@ -306,6 +311,19 @@ fxCount('front-page');
       .then(function(ok){ if(!ok) throw 0; btn.textContent="You're on the list"; st.className='status ok'; st.textContent="Thank you. You'll be among the first to hear when FIXLO Weekly opens."; })
       .catch(function(){ btn.disabled=false; btn.textContent='Join the waitlist'; st.className='status err'; st.textContent="That didn't go through. Please email "+TO+" and we'll add you."; });
   });
+})();
+</script>
+<script>
+(function(){
+  var SECT = {"trades": {"lead": "In a trades business", "cash": "take deposits on larger jobs, send progress claims on time, and chase retentions as soon as they fall due.", "cyber": "phones on site hold client details and photos; lock them, and confirm any change to a supplier's bank details by phone.", "comp": "keep health and safety records, licences and certifications current, alongside your tax and employment paperwork."}, "tourism": {"lead": "In hospitality and tourism", "cash": "plan cash for the quiet months while the busy season is running, and take deposits on bookings.", "cyber": "booking and payment systems hold guest details, and fake booking and invoice emails are a known risk, so check before you pay or click.", "comp": "licensing and health and safety rules apply, plus food safety if you serve food, alongside tax, employment and privacy obligations for guest details."}, "agri": {"lead": "On a farm or orchard", "cash": "map the year's income and big costs by month, and agree seasonal funding with your bank before the low point, not during it.", "cyber": "payments from buyers and to suppliers are the main target; confirm any change to bank details by phone before paying.", "comp": "on-farm health and safety, chemical and environmental records, and seasonal worker conditions sit alongside your tax and employment obligations."}, "services": {"lead": "In a professional services firm", "cash": "bill as work progresses rather than at the end, take retainers on larger matters, and watch work in progress that hasn't been invoiced.", "cyber": "you hold sensitive client information and email is the usual way in, so two-step sign-in and care with links and attachments matter most.", "comp": "keep engagement letters, professional indemnity cover and any professional body requirements up to date."}, "retail": {"lead": "In a retail business", "cash": "stock is where cash gets tied up; know your slow sellers and how many weeks of stock you hold.", "cyber": "payment terminals, online store logins and supplier invoices are all targets; keep them updated and check any change in payment details.", "comp": "pricing, refunds and consumer law obligations apply, alongside your tax and employment records."}, "health": {"lead": "In a healthcare practice", "cash": "track what is owed by funders, insurers and patients separately, and claim promptly; late claims are slow cash.", "cyber": "health information is highly sensitive and a common target, so two-step sign-in, tested backups and care with email matter most.", "comp": "health information privacy rules, practitioner registrations and professional indemnity cover need to stay current, alongside tax and employment."}};
+  var esc = function(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;'); };
+  var show = function(k){
+    var c = SECT[k]; if(!c) return;
+    document.querySelectorAll('.sample-ind').forEach(function(e){ e.innerHTML = '<b>' + esc(c.lead) + ':</b> ' + esc(c[e.getAttribute('data-z')]); });
+    document.querySelectorAll('.sec-chip').forEach(function(b){ var on = b.getAttribute('data-k') === k; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+    var a = document.getElementById('sample-full'); if(a) a.href = 'diagnostic.html?sample=1&sector=' + k;
+  };
+  document.querySelectorAll('.sec-chip').forEach(function(b){ b.addEventListener('click', function(){ show(b.getAttribute('data-k')); }); });
 })();
 </script>
 </body>
