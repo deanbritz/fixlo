@@ -155,7 +155,7 @@
         <span>No login</span>
         <span>Report straight away</span>
       </div>
-      <p class="privacy-note"><b>Your business information stays with you.</b> The diagnostic runs entirely in your own browser. Your answers, scores and figures are never sent to FIXLO, and we don't store them. The only thing we ever receive is an email address, and only if you choose to join the waitlist.</p>
+      <p class="privacy-note"><b>Your business information stays with you.</b> The diagnostic runs entirely in your own browser. Your answers, scores and figures are never sent to FIXLO, and we don't store them. The only thing we ever receive is an email address, and only if you choose to join the waitlist. <span class="fx-count-note" hidden>We also keep a simple tally of page visits, with no cookies and nothing about you or your business.</span></p>
     </div>
 
     <div class="sample" aria-label="Example of the three fixes in a FIXLO report">
@@ -268,6 +268,25 @@
   </div>
 </footer>
 
+<script>
+// ══ SIMPLE VISIT COUNT (GoatCounter, no cookies). Sends only an event name such as "sample-view-NZ". Never answers, scores or business details. ══
+// Paste your GoatCounter site code here (for "fixlo.goatcounter.com" it is 'fixlo'). Leave '' to switch counting off.
+var COUNTER_CODE = '';
+function fxCount(name){
+  if(!COUNTER_CODE) return;
+  var send = function(n){ try{ window.goatcounter.count({ path:n, title:n, event:true }); }catch(e){} };
+  if(window.goatcounter && window.goatcounter.count){ send(name); return; }
+  (window._fxq = window._fxq || []).push(name);
+  if(window._fxLoading) return; window._fxLoading = true;
+  window.goatcounter = { no_onload:true };
+  var s = document.createElement('script'); s.async = true; s.src = 'https://gc.zgo.at/count.js';
+  s.setAttribute('data-goatcounter', 'https://' + COUNTER_CODE + '.goatcounter.com/count');
+  s.onload = function(){ (window._fxq || []).forEach(send); window._fxq = []; };
+  document.head.appendChild(s);
+}
+document.addEventListener('DOMContentLoaded', function(){ if(COUNTER_CODE) document.querySelectorAll('.fx-count-note').forEach(function(e){ e.hidden = false; }); });
+fxCount('front-page');
+</script>
 <script>
 (function(){
   var KEY='fa6c3c90-218e-488c-8e3b-688c9f824055', TO='dean@fixlo-advisory.com';

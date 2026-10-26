@@ -769,6 +769,7 @@
             <option>Manufacturing</option>
             <option>Hospitality &amp; Tourism</option>
             <option>Healthcare</option>
+            <option>Agriculture &amp; Horticulture</option>
             <option>Transport &amp; Logistics</option>
             <option>Finance &amp; Insurance</option>
           </select>
@@ -1024,7 +1025,7 @@
     <div class="privacy-band">
       <div>
         <b>Your business information stays with you.</b>
-        <p>This diagnostic runs entirely in your own browser. Your answers, scores and figures are never sent to FIXLO, and we don't store them. Your last results are kept on this device only, so you can compare next week.</p>
+        <p>This diagnostic runs entirely in your own browser. Your answers, scores and figures are never sent to FIXLO, and we don't store them. Your last results are kept on this device only, so you can compare next week. <span class="fx-count-note" hidden>We also keep a simple tally of page visits, with no cookies and nothing about you or your business.</span></p>
       </div>
       <div class="privacy-actions">
         <button type="button" class="btn-days ghost" id="del-btn" onclick="deleteMyAnswers()">Delete my answers from this device</button>
@@ -1280,6 +1281,7 @@ function startAssessment() {
   const biz = document.getElementById('f-biz').value.trim();
   const sector = document.getElementById('f-sector').value;
   if(!name||!biz||!sector){alert('Please fill in your name, business name and sector to continue.');return;}
+  if(!window._sample) fxCount('diagnostic-begin-' + ((typeof wizardCountry !== 'undefined' && wizardCountry.code) || 'NZ'));
   const countryCode = wizardCountry.code || 'NZ';
   const countryInfo = COUNTRY_DATA[countryCode] || COUNTRY_DATA['NZ'];
   if(!userData) userData = {};
@@ -1707,6 +1709,7 @@ function setFixOwner(i, v){ var o = fixOwners(); o[i] = v; store('owners.'+(wind
 
 
 function showReport(reportText, worst, best) {
+  if(!window._sample) fxCount('report-shown-' + ((userData && userData.countryCode) || 'NZ'));
   switchScreen('report-screen');
   const d = new Date();
   const overall = Math.round(MODULES.reduce((a,m)=>a+moduleScores[m.id],0)/MODULES.length);
@@ -1949,7 +1952,47 @@ const SECTOR_CONTEXT = {
     growth:'direct bookings usually cost less than third-party booking sites, and reviews and repeat guests are your strongest marketing.',
     digital:'a booking system that links to your accounts and listings stops double bookings and retyping.',
     cyber:'booking and payment systems hold guest details, and fake booking and invoice emails are a known risk, so check before you pay or click.',
-    compliance:'licensing and health and safety rules apply, plus food safety if you serve food, alongside tax, employment and privacy obligations for guest details.' } }
+    compliance:'licensing and health and safety rules apply, plus food safety if you serve food, alongside tax, employment and privacy obligations for guest details.' } }  ,
+  'Agriculture & Horticulture': { lead:'On a farm or orchard', exec:'In farming and horticulture, income arrives in a few large payments a year while costs run every week, and weather and commodity prices move both.', zones:{
+    cashflow:'map the year\'s income and big costs by month, and agree seasonal funding with your bank before the low point, not during it.',
+    ops:'a written seasonal calendar for planting, spraying, harvest and maintenance keeps work on time when you are tied up.',
+    team:'seasonal workers and one key manager often carry the operation; write down how key jobs are done so others can step in.',
+    growth:'know your cost of production per unit, so you can judge contracts, buyers and prices on margin, not volume.',
+    digital:'farm management software linked to your accounts cuts the paperwork for records, compliance and reporting.',
+    cyber:'payments from buyers and to suppliers are the main target; confirm any change to bank details by phone before paying.',
+    compliance:'on-farm health and safety, chemical and environmental records, and seasonal worker conditions sit alongside your tax and employment obligations.' } },
+  'Healthcare': { lead:'In a healthcare practice', exec:'In healthcare practices, the pressure points are patient records that must stay private, practitioners who are hard to replace, and payments that arrive late from funders or insurers.', zones:{
+    cashflow:'track what is owed by funders, insurers and patients separately, and claim promptly; late claims are slow cash.',
+    ops:'clear booking, recall and cancellation routines reduce gaps in the diary and no-shows.',
+    team:'when one practitioner is away the diary empties; plan cover, and make sure more than one person can run reception and billing.',
+    growth:'referrers and returning patients drive most work; keep in touch with referrers and review your fees each year.',
+    digital:'practice management software that links bookings, clinical notes and billing removes double entry.',
+    cyber:'health information is highly sensitive and a common target, so two-step sign-in, tested backups and care with email matter most.',
+    compliance:'health information privacy rules, practitioner registrations and professional indemnity cover need to stay current, alongside tax and employment.' } },
+  'Manufacturing': { lead:'In a manufacturing business', exec:'In manufacturing, cash is tied up in materials, work in progress and finished stock, and one breakdown or key supplier can stop production.', zones:{
+    cashflow:'know how much cash sits in materials, work in progress and finished goods, and line up supplier terms with customer terms.',
+    ops:'planned maintenance on key machines and a first-off quality check cut downtime and rework.',
+    team:'one operator who knows a critical machine or process is a single point of failure; train a second.',
+    growth:'cost each product properly, including setup and waste, before you quote or discount.',
+    digital:'linking orders, stock and production planning to your accounts shows the true cost of each job.',
+    cyber:'ordering systems and supplier invoices are targets; confirm any change to a supplier\'s bank details by phone.',
+    compliance:'machinery safety, product standards and environmental rules apply, alongside your tax and employment records.' } },
+  'Transport & Logistics': { lead:'In a transport business', exec:'In transport and logistics, fuel, vehicle and wage costs move quickly, and customers often pay slowly.', zones:{
+    cashflow:'build fuel and toll changes into your rates, and chase slow-paying customers early.',
+    ops:'a vehicle maintenance schedule and clear delivery paperwork reduce breakdowns and disputes.',
+    team:'driver and dispatcher availability sets your capacity; record routes and customer requirements so others can cover.',
+    growth:'check your margin by customer and route, not just total revenue.',
+    digital:'job, tracking and invoicing systems that talk to each other save retyping and speed up billing.',
+    cyber:'fake freight bookings and invoices are common; confirm any change to payment details by phone.',
+    compliance:'driver hours, licensing, vehicle safety and load rules apply, alongside your tax and employment records.' } },
+  'Finance & Insurance': { lead:'In a finance or insurance business', exec:'In finance and insurance, trust is the product: client data, regulatory obligations and key client relationships carry the most risk.', zones:{
+    cashflow:'commission and fee income can be uneven; track it monthly against fixed costs such as licences and cover.',
+    ops:'documented advice and file review routines catch errors before a client or regulator does.',
+    team:'client relationships often sit with one adviser; make sure a second person knows each key client.',
+    growth:'referrals from clients and other professionals bring most new business, so ask for them.',
+    digital:'a client system linked to your files and compliance records saves time at review and audit.',
+    cyber:'you hold financial and identity information, a prime target, so two-step sign-in and checking payment instructions are essential.',
+    compliance:'licensing, conduct, client disclosure and, where they apply, anti-money laundering obligations sit alongside tax, employment and privacy.' } }
 };
 function sectorContext(){ return SECTOR_CONTEXT[(userData && userData.sector) || ''] || null; }
 const MAINTAIN_LEAVE = ['Access builds up over time, and old accounts are an easy way in.','Backups can stop working quietly; you only find out when you need one.','Small cost increases add up when no one checks them.'];
@@ -2259,6 +2302,23 @@ function calendarFixes(){
   var msg = document.getElementById('copy-msg'); if(msg) msg.textContent = 'Calendar file downloaded. Open it to add your three fixes and next week\'s reminder.';
 }
 
+// ══ SIMPLE VISIT COUNT (GoatCounter, no cookies). Sends only an event name such as "sample-view-NZ". Never answers, scores or business details. ══
+// Paste your GoatCounter site code here (for "fixlo.goatcounter.com" it is 'fixlo'). Leave '' to switch counting off.
+var COUNTER_CODE = '';
+function fxCount(name){
+  if(!COUNTER_CODE) return;
+  var send = function(n){ try{ window.goatcounter.count({ path:n, title:n, event:true }); }catch(e){} };
+  if(window.goatcounter && window.goatcounter.count){ send(name); return; }
+  (window._fxq = window._fxq || []).push(name);
+  if(window._fxLoading) return; window._fxLoading = true;
+  window.goatcounter = { no_onload:true };
+  var s = document.createElement('script'); s.async = true; s.src = 'https://gc.zgo.at/count.js';
+  s.setAttribute('data-goatcounter', 'https://' + COUNTER_CODE + '.goatcounter.com/count');
+  s.onload = function(){ (window._fxq || []).forEach(send); window._fxq = []; };
+  document.head.appendChild(s);
+}
+document.addEventListener('DOMContentLoaded', function(){ if(COUNTER_CODE) document.querySelectorAll('.fx-count-note').forEach(function(e){ e.hidden = false; }); });
+
 // ══ SAMPLE REPORT: diagnostic.html?sample=1 shows a full example for a made-up business ══
 const SAMPLE_ANSWERS = {cf2:1, cf3:5, cf4:2, op2:1, op3:6, op4:1, tm1:6, tm2:2, tm3:7, tm4:1, gr1:5, gr2:2, gr3:4, gr4:0, di1:4, di2:1, cy1:2, cy2:1, cy3:3, cy4:1, cy6:3, co1:1, co2:1, co3:2, co4:1};
 // One made-up business per country, so each owner sees an example from home.
@@ -2297,6 +2357,7 @@ function runSample(){
     else { var o = (q.opts || q.options || [])[v] || {}; answers[m.id][q.id] = {idx:v, neg:!!o.neg, type:'choice'}; }
   }); });
   var b = document.getElementById('sample-banner'); if(b) b.hidden = false;
+  fxCount('sample-view-' + code);
   var sbn = document.getElementById('sample-biz'); if(sbn) sbn.textContent = sb.biz + ' in ' + sb.place;
   document.querySelectorAll('.sample-switch a').forEach(function(a){ if(a.getAttribute('data-c') === code) a.classList.add('on'); });
   // The sample opens straight on the finished report: no "Generating" steps.
