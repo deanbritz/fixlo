@@ -655,6 +655,10 @@
     .wp-trust { flex-wrap:wrap; gap:8px 16px; }
     .scorecard-legend { flex-wrap:wrap; gap:8px 16px; }
   }
+
+  .fix-sector { margin-top:12px; padding:10px 14px; background:var(--brand-soft); border-left:3px solid var(--brand); border-radius:3px; font-size:14px; color:var(--ink-mid); line-height:1.55; }
+  .fix-sector b { color:var(--ink); }
+  .exec-para { margin:0 0 12px; } .exec-para:last-child { margin-bottom:0; }
 </style>
 </head>
 <body>
@@ -751,11 +755,11 @@
         <div class="wf-select-wrap">
           <select class="wf-select" id="f-sector">
             <option value="">Select your sector…</option>
-            <option>Construction</option>
+            <option>Construction &amp; Trades</option>
             <option>Professional Services</option>
             <option>Retail</option>
             <option>Manufacturing</option>
-            <option>Hospitality</option>
+            <option>Hospitality &amp; Tourism</option>
             <option>Healthcare</option>
             <option>Transport &amp; Logistics</option>
             <option>Finance &amp; Insurance</option>
@@ -1598,10 +1602,7 @@ function renderReport(text, worst, best) {
 function renderStructuredFixes(fixes, worst, best) {
   var w0 = worst[0], w1 = worst[1];
   var s0 = moduleScores[w0.id], s1 = moduleScores[w1.id];
-  var lead = fixes[0] && fixes[0].zone === 'cashflow' ? ' Cash comes first, because a cash problem gets in the way of fixing anything else.' : '';
-  document.getElementById('exec-summary-text').textContent =
-    userData.name + ', your two lowest-scoring areas at ' + userData.biz + ' are ' + w0.name + ' (' + s0 + '/100) and ' +
-    w1.name + ' (' + s1 + '/100). The three fixes below come straight from your answers, and each has a clear test for when it is done.' + lead;
+  document.getElementById('exec-summary-text').innerHTML = buildExecSummary(fixes, w0, w1, s0, s1);
 
   var pg = document.getElementById('priority-grid');
   pg.innerHTML = '';
@@ -1653,6 +1654,8 @@ function renderFixCards(fixes) {
     if(f.steps) {
       card += '<div class="fix-card-body-text">' + escH(f.why || '') + '</div>';
       card += '<ol class="fix-steps">' + f.steps.map(function(st){ return '<li>' + escH(st) + '</li>'; }).join('') + '</ol>';
+      var sc = sectorContext();
+      if(sc && sc.zones[f.zone]) card += '<div class="fix-sector"><b>' + escH(sc.lead) + ':</b> ' + escH(sc.zones[f.zone]) + '</div>';
       if(f.leave) card += '<div class="fix-leave"><b>If you leave it:</b> ' + escH(f.leave) + '</div>';
       card += '<div class="fix-meta"><span>' + (f.zoneName ? escH(f.zoneName) + ' · ' : '') + 'Time: ' + escH(f.time) + '</span><span>Done when: ' + escH(f.done) + '</span></div>';
     } else {
@@ -1898,6 +1901,42 @@ const LEAVE = {
   co3:'You may not be meeting your privacy obligations, which matters most if something goes wrong with client information.',
   co4:'You may only find a gap in your cover when you need to make a claim.'
 };
+// Industry-aware wording for the four priority sectors. Practical and country-neutral; no invented figures.
+const SECTOR_CONTEXT = {
+  'Construction & Trades': { lead:'In a trades business', exec:'In trades, problems usually start with cash tied up in jobs and unpaid invoices, and a schedule that depends on one or two people.', zones:{
+    cashflow:'take deposits on larger jobs, send progress claims on time, and chase retentions as soon as they fall due.',
+    ops:'clear job sheets and a sign-off checklist at the end of each job cut call-backs and rework.',
+    team:'one person holding the job schedule or supplier accounts in their head is a common weak point; a shared job board helps.',
+    growth:'track which builders, property managers or repeat clients bring your best work, and price variations before you do them.',
+    digital:'job management software that links quotes, job sheets and invoicing removes most double entry.',
+    cyber:'phones on site hold client details and photos; lock them, and confirm any change to a supplier\'s bank details by phone.',
+    compliance:'keep health and safety records, licences and certifications current, alongside your tax and employment paperwork.' } },
+  'Professional Services': { lead:'In a professional services firm', exec:'In professional services, the usual pressure points are unbilled time, slow-paying clients and client relationships that sit with one person.', zones:{
+    cashflow:'bill as work progresses rather than at the end, take retainers on larger matters, and watch work in progress that hasn\'t been invoiced.',
+    ops:'clear scopes and engagement letters stop scope creep, and checklists catch errors before they reach clients.',
+    team:'client relationships often sit with one person; make sure a second person knows each key client.',
+    growth:'most work comes from referrals, so ask happy clients for introductions and review your rates or fixed fees each year.',
+    digital:'practice management software that links time, billing and client records saves hours each week.',
+    cyber:'you hold sensitive client information and email is the usual way in, so two-step sign-in and care with links and attachments matter most.',
+    compliance:'keep engagement letters, professional indemnity cover and any professional body requirements up to date.' } },
+  'Retail': { lead:'In a retail business', exec:'In retail, cash is easily tied up in stock, and thin margins leave little room when costs rise.', zones:{
+    cashflow:'stock is where cash gets tied up; know your slow sellers and how many weeks of stock you hold.',
+    ops:'a simple opening and closing routine and regular stock counts cut losses and errors.',
+    team:'roster to your busiest hours, and make sure more than one person can open, close and cash up.',
+    growth:'repeat customers matter most; get permission to stay in touch, and check your margin by product line.',
+    digital:'a point-of-sale system linked to your accounts and stock removes double entry and shows what really sells.',
+    cyber:'payment terminals, online store logins and supplier invoices are all targets; keep them updated and check any change in payment details.',
+    compliance:'pricing, refunds and consumer law obligations apply, alongside your tax and employment records.' } },
+  'Hospitality & Tourism': { lead:'In hospitality and tourism', exec:'In hospitality and tourism, seasonal swings and changing staff put pressure on cash and standards at the same time.', zones:{
+    cashflow:'plan cash for the quiet months while the busy season is running, and take deposits on bookings.',
+    ops:'written booking, check-in and supplier routines keep standards steady when staff change between seasons.',
+    team:'seasonal staff come and go, so a short induction pack and a second person for key tasks keep things running.',
+    growth:'direct bookings usually cost less than third-party booking sites, and reviews and repeat guests are your strongest marketing.',
+    digital:'a booking system that links to your accounts and listings stops double bookings and retyping.',
+    cyber:'booking and payment systems hold guest details, and fake booking and invoice emails are a known risk, so check before you pay or click.',
+    compliance:'food safety, licensing and health and safety rules apply, alongside tax, employment and privacy obligations for guest details.' } }
+};
+function sectorContext(){ return SECTOR_CONTEXT[(userData && userData.sector) || ''] || null; }
 const MAINTAIN_LEAVE = ['Access builds up over time, and old accounts are an easy way in.','Backups can stop working quietly; you only find out when you need one.','Small cost increases add up when no one checks them.'];
 const MAINTAIN_FIXES = [
   {t:'Run your quarterly access review', time:'60 minutes', steps:['Check the user lists on email, accounting and file storage.','Remove anyone who no longer needs access.','Confirm MFA is still on for every account.'], done:'Every login belongs to a current person.'},
@@ -2214,7 +2253,7 @@ function runSample(){
   var card = document.querySelector('.country-card[data-code="' + code + '"]'), cd = COUNTRY_DATA[code];
   if(card && cd) selectCountry(card, code, cd.label, cd.currency);
   document.getElementById('f-name').value = 'Sam'; document.getElementById('f-biz').value = 'Harbour Electrical (example)';
-  document.getElementById('f-sector').value = 'Construction'; document.getElementById('f-revenue').value = '1M – 3M'; document.getElementById('f-staff').value = '6–20';
+  document.getElementById('f-sector').value = 'Construction & Trades'; document.getElementById('f-revenue').value = '1M – 3M'; document.getElementById('f-staff').value = '6–20';
   window._sample = true;
   startAssessment();
   MODULES.forEach(function(m){ m.questions.forEach(function(q){
@@ -2232,6 +2271,31 @@ if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoad
 (function(){ if(typeof showModule !== 'function') return; var orig = showModule;
   window.showModule = function(i){ orig.apply(this, arguments); try{ var a = document.getElementById('sbm-'+i); if(a && window.innerWidth <= 860){ var strip = a.parentNode; strip.scrollLeft = a.offsetLeft - (strip.clientWidth - a.offsetWidth)/2; } }catch(e){} };
 })();
+
+// ══ EXECUTIVE SUMMARY: direct, specific and urgent, built only from the owner's own answers ══
+function fixMinutes(t){ t = String(t || ''); var h = t.match(/(\d+(?:\.\d+)?)\s*hour/), m = t.match(/(\d+)\s*min/); return (h ? parseFloat(h[1]) * 60 : 0) + (m ? parseInt(m[1], 10) : 0); }
+function buildExecSummary(fixes, w0, w1, s0, s1){
+  var overall = window._overall != null ? window._overall : Math.round(MODULES.reduce(function(a, m){ return a + moduleScores[m.id]; }, 0) / MODULES.length);
+  var critical = MODULES.filter(function(m){ return moduleScores[m.id] < 45; }).length;
+  var f1 = fixes[0] || {}, sc = sectorContext();
+  var mins = fixes.slice(0,3).reduce(function(a, f){ return a + fixMinutes(f.time); }, 0);
+  var hrs = mins ? (Math.round(mins / 30) / 2) : 0;
+  var W = ['zero','one','two','three','four','five','six','seven','eight','nine','ten'];
+  var hw = Math.floor(hrs), half = hrs - hw >= 0.5;
+  var hrsText = !hrs ? '' : hrs === 1 ? 'about an hour' : hrs === 0.5 ? 'about half an hour' : 'about ' + (W[hw] || hw) + (half ? ' and a half' : '') + ' hours';
+  var p = [];
+  var opening = escH(userData.name) + ', ' + escH(userData.biz) + ' scored <b>' + overall + '/100</b>. ';
+  opening += critical ? ('<b>' + ((W[critical] || critical).charAt(0).toUpperCase() + (W[critical] || String(critical)).slice(1)) + ' of your seven areas ' + (critical === 1 ? 'is' : 'are') + ' critical</b>, and the weakest, ' + escH(w0.name) + ' (' + s0 + ') and ' + escH(w1.name) + ' (' + s1 + '), need action this week, not next quarter.')
+                      : ('Your weakest areas are ' + escH(w0.name) + ' (' + s0 + ') and ' + escH(w1.name) + ' (' + s1 + '). None is critical, so this is the time to tighten them before they become a problem.');
+  p.push(opening);
+  var second = 'Start with <b>' + escH(f1.title || '') + '</b>. ';
+  if(f1.zone === 'cashflow') second += 'Cash comes first: a cash problem left unchecked limits every other choice you have. ';
+  if(f1.leave) second += 'If you leave it: ' + escH(f1.leave);
+  p.push(second);
+  if(sc) p.push(escH(sc.exec) + ' Your three fixes are written with that in mind.');
+  p.push('Three fixes' + (hrsText ? ', ' + hrsText + ' of work in total' : '') + ', each with a clear finish line. Do them this week, and next week\'s three build on them.');
+  return p.map(function(t){ return '<p class="exec-para">' + t + '</p>'; }).join('');
+}
 </script>
 
 
