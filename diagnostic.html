@@ -1403,6 +1403,7 @@ function recChoice(mid,qid,idx,neg,btn) {
 }
 
 // ══ SCORING ══
+const CHOICE_SCORES = [88, 65, 35, 10];
 function calcScore(modId) {
   const m = MODULES.find(mm=>mm.id===modId);
   const ans = answers[modId]||{};
@@ -1411,7 +1412,9 @@ function calcScore(modId) {
     const a=ans[q.id];
     if(!a){total+=50;count++;return;}
     if(a.type==='slider'){total+=Math.round(((a.invert?11-a.val:a.val)/10)*100);count++;}
-    else{total+=(a.neg?20:88);count++;}
+    else{ // Sliding scale: best answer 88, then 65, 35 and 10, so a near miss no longer scores the same as the worst answer.
+      var n = (q.opts || q.options || []).length || 4, i = Math.max(0, Math.min(n - 1, a.idx | 0));
+      total += (n === 4 ? CHOICE_SCORES[i] : Math.round(88 - (78 * i) / Math.max(1, n - 1))); count++; }
   });
   return count?Math.round(total/count):50;
 }
@@ -2250,7 +2253,7 @@ function calendarFixes(){
 }
 
 // ══ SAMPLE REPORT: diagnostic.html?sample=1 shows a full example for a made-up business ══
-const SAMPLE_ANSWERS = {cf2:1, cf3:5, cf4:2, op2:1, op3:6, op4:1, tm1:6, tm2:2, tm3:7, tm4:1, gr1:5, gr2:2, gr3:4, gr4:0, di1:4, di2:1, cy1:1, cy2:1, cy3:2, cy4:1, cy6:1, co1:1, co2:1, co3:2, co4:1};
+const SAMPLE_ANSWERS = {cf2:1, cf3:5, cf4:2, op2:1, op3:6, op4:1, tm1:6, tm2:2, tm3:7, tm4:1, gr1:5, gr2:2, gr3:4, gr4:0, di1:4, di2:1, cy1:2, cy2:1, cy3:3, cy4:1, cy6:3, co1:1, co2:1, co3:2, co4:1};
 // One made-up business per country, so each owner sees an example from home.
 const SAMPLE_BIZ = {
   NZ:{ name:'Sam',   biz:'Harbour Electrical', place:'Auckland',     sector:'Construction & Trades', revenue:'1M – 3M', staff:'6–20' },
