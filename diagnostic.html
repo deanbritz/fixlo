@@ -2263,7 +2263,12 @@ function runSample(){
     else { var o = (q.opts || q.options || [])[v] || {}; answers[m.id][q.id] = {idx:v, neg:!!o.neg, type:'choice'}; }
   }); });
   var b = document.getElementById('sample-banner'); if(b) b.hidden = false;
-  generateReport();
+  // The sample opens straight on the finished report: no "Generating" steps.
+  clearInterval(timerInterval);
+  MODULES.forEach(function(m){ moduleScores[m.id] = calcScore(m.id); });
+  var sorted = MODULES.slice().sort(function(a, c){ return moduleScores[a.id] - moduleScores[c.id]; });
+  var worst = sorted.slice(0, 2), best = sorted[sorted.length - 1];
+  showReport(buildFallback(worst, best), worst, best);
 }
 if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', runSample); } else { runSample(); }
 
@@ -2274,6 +2279,31 @@ if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoad
 
 // ══ EXECUTIVE SUMMARY: direct, specific and urgent, built only from the owner's own answers ══
 function fixMinutes(t){ t = String(t || ''); var h = t.match(/(\d+(?:\.\d+)?)\s*hour/), m = t.match(/(\d+)\s*min/); return (h ? parseFloat(h[1]) * 60 : 0) + (m ? parseInt(m[1], 10) : 0); }
+// Local pressures by country and area. Facts only, each checkable at the source named in the comment.
+const COUNTRY_PRESSURE = {
+  NZ:{ name:'New Zealand',
+       cashflow:'Inland Revenue adds interest and late payment penalties to overdue GST and PAYE, so a cash gap quickly turns into a tax debt.', // ird.govt.nz
+       compliance:'Every employee must have a written employment agreement, and missing ones can draw infringement fines and Employment Relations Authority penalties.', // employment.govt.nz
+       cyber:'A privacy breach likely to cause serious harm must be reported to the Privacy Commissioner, and the people affected told, as soon as practicable.', // Privacy Act 2020
+       team:'Any dismissal needs a fair process, so a people problem left to drift costs far more to fix later.' }, // ERA s103A
+  AU:{ name:'Australia',
+       cashflow:'The ATO charges interest on overdue tax, and since 1 July 2025 that interest is no longer tax deductible.', // ato.gov.au
+       compliance:'Under Payday Super, super must be paid with wages, so a late payroll now means late super as well.', // ato.gov.au, from 1 July 2026
+       cyber:'An eligible data breach must be reported to the OAIC and the people affected if your business is covered by the Privacy Act.', // oaic.gov.au
+       team:'Underpayment claims can reach back six years, and deliberate underpayment is now a criminal offence.' }, // Fair Work Act s544; wage theft offence from 1 Jan 2025
+  ZA:{ name:'South Africa',
+       cashflow:'SARS adds a 10% late payment penalty, plus interest, to overdue VAT and PAYE.', // Tax Administration Act s213
+       compliance:'SARS can charge fixed penalties every month a return stays outstanding, on top of interest on unpaid tax.', // Tax Administration Act s210-211
+       cyber:'Under POPIA, a security compromise must be reported to the Information Regulator and the people affected as soon as reasonably possible.', // POPIA s22
+       team:'A dismissal without a fair procedure can cost up to 12 months\' pay in compensation at the CCMA.' } // LRA s194
+};
+function countryPressure(zones){
+  var cp = COUNTRY_PRESSURE[(userData && userData.countryCode) || ''];
+  if(!cp) return null;
+  var lines = [];
+  zones.forEach(function(z){ if(cp[z] && lines.indexOf(cp[z]) < 0) lines.push(cp[z]); });
+  return lines.length ? { name: cp.name, lines: lines.slice(0, 2) } : null;
+}
 function buildExecSummary(fixes, w0, w1, s0, s1){
   var overall = window._overall != null ? window._overall : Math.round(MODULES.reduce(function(a, m){ return a + moduleScores[m.id]; }, 0) / MODULES.length);
   var critical = MODULES.filter(function(m){ return moduleScores[m.id] < 45; }).length;
@@ -2284,16 +2314,25 @@ function buildExecSummary(fixes, w0, w1, s0, s1){
   var hw = Math.floor(hrs), half = hrs - hw >= 0.5;
   var hrsText = !hrs ? '' : hrs === 1 ? 'about an hour' : hrs === 0.5 ? 'about half an hour' : 'about ' + (W[hw] || hw) + (half ? ' and a half' : '') + ' hours';
   var p = [];
-  var opening = escH(userData.name) + ', ' + escH(userData.biz) + ' scored <b>' + overall + '/100</b>. ';
-  opening += critical ? ('<b>' + ((W[critical] || critical).charAt(0).toUpperCase() + (W[critical] || String(critical)).slice(1)) + ' of your seven areas ' + (critical === 1 ? 'is' : 'are') + ' critical</b>, and the weakest, ' + escH(w0.name) + ' (' + s0 + ') and ' + escH(w1.name) + ' (' + s1 + '), need action this week, not next quarter.')
-                      : ('Your weakest areas are ' + escH(w0.name) + ' (' + s0 + ') and ' + escH(w1.name) + ' (' + s1 + '). None is critical, so this is the time to tighten them before they become a problem.');
+  var critWord = W[critical] || String(critical);
+  var opening;
+  if(critical){
+    opening = '<b>' + escH(userData.name) + ', the headline: ' + escH(userData.biz) + ' is most exposed in ' + escH(w0.name) + ' and ' + escH(w1.name) + '.</b> ';
+    opening += 'The business scored ' + overall + '/100 overall, and ' + critWord + ' of your seven areas ' + (critical === 1 ? 'is' : 'are') + ' critical. ';
+    opening += escH(w0.name) + ' (' + s0 + ') and ' + escH(w1.name) + ' (' + s1 + ') need action this week, not next quarter.';
+  } else {
+    opening = '<b>' + escH(userData.name) + ', the headline: ' + escH(userData.biz) + ' has no critical gaps, but ' + escH(w0.name) + ' and ' + escH(w1.name) + ' are where it will slip first.</b> ';
+    opening += 'The business scored ' + overall + '/100 overall. ' + escH(w0.name) + ' (' + s0 + ') and ' + escH(w1.name) + ' (' + s1 + ') are the ones to tighten now, while it is cheap to do.';
+  }
   p.push(opening);
-  var second = 'Start with <b>' + escH(f1.title || '') + '</b>. ';
-  if(f1.zone === 'cashflow') second += 'Cash comes first: a cash problem left unchecked limits every other choice you have. ';
+  var cp = countryPressure([w0.id, w1.id, f1.zone]);
+  if(cp) p.push('<b>Why this matters in ' + cp.name + ':</b> ' + cp.lines.map(escH).join(' '));
+  var second = 'Start with Fix 1: <b>' + escH(f1.title || '') + '</b>. ';
+  if(f1.zone === 'cashflow') second += 'Cash comes first, because a cash problem left unchecked limits every other choice you have. ';
   if(f1.leave) second += 'If you leave it: ' + escH(f1.leave);
   p.push(second);
   if(sc) p.push(escH(sc.exec) + ' Your three fixes are written with that in mind.');
-  p.push('Three fixes' + (hrsText ? ', ' + hrsText + ' of work in total' : '') + ', each with a clear finish line. Do them this week, and next week\'s three build on them.');
+  p.push('<b>Your week:</b> three fixes' + (hrsText ? ', ' + hrsText + ' of work in total' : '') + ', each with a clear finish line. Put them in your calendar today. Next week\'s three build on them.');
   return p.map(function(t){ return '<p class="exec-para">' + t + '</p>'; }).join('');
 }
 </script>
