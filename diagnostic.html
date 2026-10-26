@@ -865,7 +865,8 @@
 <div id="report-screen">
   <div class="sample-banner" id="sample-banner" hidden>
     <div><b>This is an example report</b> for a made-up business, <span id="sample-biz">Harbour Electrical</span>, so you can see what FIXLO gives you. Your own report is based on your answers.
-      <div class="sample-switch">See the example for: <a href="diagnostic.html?sample=1&amp;country=NZ" data-c="NZ">New Zealand</a> <a href="diagnostic.html?sample=1&amp;country=AU" data-c="AU">Australia</a> <a href="diagnostic.html?sample=1&amp;country=ZA" data-c="ZA">South Africa</a></div></div>
+      <div class="sample-switch" id="sample-switch-country">Country: <a href="diagnostic.html?sample=1&amp;country=NZ" data-c="NZ">New Zealand</a> <a href="diagnostic.html?sample=1&amp;country=AU" data-c="AU">Australia</a> <a href="diagnostic.html?sample=1&amp;country=ZA" data-c="ZA">South Africa</a></div>
+      <div class="sample-switch" id="sample-switch-sector">Industry:</div></div>
     <a class="sample-cta" href="diagnostic.html">Start my own assessment</a>
   </div>
   <div class="btn-print-bar">
@@ -2348,6 +2349,16 @@ const SAMPLE_BIZ = {
   ZA:{ name:'Thabo', biz:'Fynbos Coast Tours', place:'Cape Town',    sector:'Hospitality & Tourism', revenue:'3M – 10M', staff:'6–20',
        answers:{cf2:0, cf3:5, cf4:0, op2:0, op3:7, op4:1, tm1:4, tm2:2, tm3:6, tm4:1, gr1:6, gr2:1, gr3:5, gr4:2, di1:4, di2:1, cy1:1, cy2:0, cy3:1, cy4:2, cy6:2, co1:0, co2:2, co3:2, co4:0} }
 };
+// The same sample in another industry: diagnostic.html?sample=1&country=ZA&sector=agri
+const SAMPLE_SECTOR = {
+  trades:  { label:'Trades',                sector:'Construction & Trades',      NZ:['Harbour Electrical','Auckland'],          AU:['Bayside Plumbing','Brisbane'],          ZA:['Highveld Electrical','Johannesburg'] },
+  tourism: { label:'Hospitality & tourism', sector:'Hospitality & Tourism',      NZ:['Lakefront Lodge','Rotorua'],              AU:['Wattle & Ward Café','Brisbane'],       ZA:['Fynbos Coast Tours','Cape Town'] },
+  agri:    { label:'Agriculture',           sector:'Agriculture & Horticulture', NZ:['Kaimai Ridge Orchard','Bay of Plenty'],  AU:['Red Gum Grains','Wagga Wagga'],         ZA:['Midlands Valley Dairy','Howick, KZN Midlands'] },
+  services:{ label:'Professional services', sector:'Professional Services',      NZ:['Ridgeline Surveyors','Hamilton'],         AU:['Ridgeline Surveyors','Newcastle'],      ZA:['Protea Surveyors','Pretoria'] },
+  retail:  { label:'Retail',                sector:'Retail',                     NZ:['Riverside Hardware','Whanganui'],         AU:['Corner Post Hardware','Ballarat'],      ZA:['Karoo Hardware','Bloemfontein'] },
+  health:  { label:'Healthcare',            sector:'Healthcare',                 NZ:['Bayview Physiotherapy','Tauranga'],      AU:['Harbourside Physio','Hobart'],          ZA:['Berea Physiotherapy','Durban'] }
+};
+function sampleRevenue(code, sk){ return code === 'ZA' ? '3M – 10M' : (code === 'AU' && sk === 'tourism') ? '500K – 1M' : '1M – 3M'; }
 // With no ?country= in the link, pick the visitor's country from their device time zone.
 function sampleGuessCountry(){
   try{ var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
@@ -2360,7 +2371,9 @@ function runSample(){
   var params; try{ params = new URLSearchParams(location.search); }catch(e){ return; }
   if(!params.get('sample')) return;
   var code = (params.get('country') || sampleGuessCountry()).toUpperCase(); if(!SAMPLE_BIZ[code] || !COUNTRY_DATA[code]) code = 'NZ';
-  var sb = SAMPLE_BIZ[code];
+  var sb = SAMPLE_BIZ[code], sk = (params.get('sector') || '').toLowerCase();
+  if(SAMPLE_SECTOR[sk]){ var ss = SAMPLE_SECTOR[sk]; sb = Object.assign({}, sb, { sector:ss.sector, biz:ss[code][0], place:ss[code][1], revenue:sampleRevenue(code, sk) }); }
+  else { sk = ''; Object.keys(SAMPLE_SECTOR).forEach(function(k){ if(SAMPLE_SECTOR[k].sector === sb.sector && !sk) sk = k; }); }
   var card = document.querySelector('.country-card[data-code="' + code + '"]'), cd = COUNTRY_DATA[code];
   if(card && cd) selectCountry(card, code, cd.label, cd.currency);
   document.getElementById('f-name').value = sb.name; document.getElementById('f-biz').value = sb.biz + ' (example)';
@@ -2374,9 +2387,11 @@ function runSample(){
     else { var o = (q.opts || q.options || [])[v] || {}; answers[m.id][q.id] = {idx:v, neg:!!o.neg, type:'choice'}; }
   }); });
   var b = document.getElementById('sample-banner'); if(b) b.hidden = false;
-  fxCount('sample-view-' + code);
+  fxCount('sample-view-' + code + (sk ? '-' + sk : ''));
   var sbn = document.getElementById('sample-biz'); if(sbn) sbn.textContent = sb.biz + ' in ' + sb.place;
-  document.querySelectorAll('.sample-switch a').forEach(function(a){ if(a.getAttribute('data-c') === code) a.classList.add('on'); });
+  document.querySelectorAll('#sample-switch-country a').forEach(function(a){ var c = a.getAttribute('data-c'); a.href = 'diagnostic.html?sample=1&country=' + c + (sk ? '&sector=' + sk : ''); if(c === code) a.classList.add('on'); });
+  var secRow = document.getElementById('sample-switch-sector');
+  if(secRow) Object.keys(SAMPLE_SECTOR).forEach(function(k){ var a = document.createElement('a'); a.href = 'diagnostic.html?sample=1&country=' + code + '&sector=' + k; a.textContent = SAMPLE_SECTOR[k].label; if(k === sk) a.classList.add('on'); secRow.appendChild(document.createTextNode(' ')); secRow.appendChild(a); });
   // The sample opens straight on the finished report: no "Generating" steps.
   clearInterval(timerInterval);
   MODULES.forEach(function(m){ moduleScores[m.id] = calcScore(m.id); });
