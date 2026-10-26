@@ -343,6 +343,15 @@
   .day-task { display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--ink-mid); line-height:1.55; cursor:pointer; }
   .day-task input { margin-top:3px; accent-color:var(--accent); }
   .day-task.done span { text-decoration:line-through; color:var(--ink-light); }
+  .paywall { margin:8px 48px 32px; padding:28px; border:2px solid var(--brand, #1F4E6B); border-radius:6px; background:#fff; }
+  .pw-title { font-size:24px; margin:0 0 8px; color:var(--ink); }
+  .pw-lead { font-size:16px; line-height:1.6; margin:0 0 14px; color:var(--ink); }
+  .pw-list { margin:0 0 18px; padding-left:20px; font-size:15px; line-height:1.6; color:var(--ink); }
+  .pw-btn { background:var(--brand, #1F4E6B); color:#fff; border:0; border-radius:4px; padding:14px 22px; font:inherit; font-size:16px; font-weight:600; cursor:pointer; }
+  .pw-note { font-size:13px; color:var(--ink-light); margin:12px 0 0; line-height:1.5; }
+  .pw-note a { color:var(--brand, #1F4E6B); }
+  .report-locked #paid-part, .report-locked .btn-print-bar { display:none !important; }
+  @media (max-width:600px) { .paywall { margin:8px 12px 24px; padding:20px 16px; } .pw-btn { width:100%; } }
   .next-close { background:var(--brand-soft, #E7EFF4); border-top:3px solid var(--brand, #1F4E6B); padding:36px 48px 40px; }
   .next-title { font-size:26px; margin:0 0 6px; color:var(--ink); }
   .next-lead { margin:0 0 20px; color:var(--ink-mid, #444); font-size:16px; }
@@ -935,6 +944,19 @@
       </div>
     </div>
 
+    <!-- PAYWALL: scores are free; the summary, fixes and plan unlock on payment (only when a Stripe link is set) -->
+    <div class="paywall" id="paywall" hidden>
+      <h2 class="pw-title" id="pw-title">Your scores are ready</h2>
+      <p class="pw-lead" id="pw-lead"></p>
+      <ul class="pw-list">
+        <li>Your executive summary, written for your business, industry and country</li>
+        <li>Your three named fixes for this week, each with steps, a time and a finish line</li>
+        <li>Your seven-day plan, one-page snapshot and calendar reminders</li>
+      </ul>
+      <button class="pw-btn" type="button" id="pw-btn" onclick="unlockReport()">Unlock my three fixes</button>
+      <p class="pw-note">Secure payment by Stripe. Your answers stay on this device while you pay and are never sent to FIXLO. <a href="diagnostic.html?sample=1" id="pw-sample">See a full sample report</a></p>
+    </div>
+    <div id="paid-part">
     <!-- SECTION 3: EXECUTIVE SUMMARY -->
     <div class="section-band">
       <span class="section-band-num">03</span>
@@ -1016,6 +1038,7 @@
       </ol>
       <p class="next-foot">Fix three things. Every week.</p>
     </div>
+    </div><!-- /paid-part -->
     <div class="upgrade-box">
       <div class="ub-eyebrow">Want this every Monday, automatically?</div>
       <h3 class="ub-title">FIXLO Weekly is<br><em>coming soon.</em></h3>
@@ -1245,14 +1268,14 @@ function selectCountry(el, code, price, currency) {
   document.getElementById('wl-price').textContent = price;
   var weekly = {NZ:'NZ$129', AU:'A$105', ZA:'R1,200'}[code];
   var pn = document.getElementById('wl-price-note');
-  if(pn && weekly) pn.textContent = 'Counts as week one of FIXLO Weekly, ' + weekly + ' a month (coming soon)';
+  if(pn && weekly) pn.textContent = (PAY_LINKS[code] ? 'Answer the questions and see your seven scores free. Pay only to unlock your three fixes. ' : '') + 'Counts as week one of FIXLO Weekly, ' + weekly + ' a month (coming soon)';
   ['wl-sample-link','wp-sample-link'].forEach(function(id){ var a = document.getElementById(id); if(a) a.href = 'diagnostic.html?sample=1&country=' + code; });
   const hint = document.getElementById('rev-currency-hint');
   if(hint) hint.textContent = currency;
   const btn = document.getElementById('step1-next');
   if(btn) { btn.disabled = false; btn.style.opacity = '1'; }
   const begin = document.getElementById('begin-btn');
-  if(begin) begin.textContent = (typeof PAY_LINKS !== 'undefined' && PAY_LINKS[code]) ? ('Pay ' + price + ' and begin →') : 'Begin my diagnostic →';
+  if(begin) begin.textContent = (typeof PAY_LINKS !== 'undefined' && PAY_LINKS[code]) ? 'Begin, scores are free →' : 'Begin my diagnostic →';
 }
 
 function goStep1() {
@@ -1779,6 +1802,11 @@ function showReport(reportText, worst, best) {
   document.getElementById('working-title').textContent = 'Strongest Area: ' + best.name;
   document.getElementById('working-score').textContent = moduleScores[best.id] + '/100';
 
+  var payLink = PAY_LINKS[(userData && userData.countryCode) || ''];
+  var locked = !window._sample && !window._unlocked && !!payLink;
+  var rs = document.getElementById('report-screen'); if(rs) rs.classList.toggle('report-locked', locked);
+  var pw = document.getElementById('paywall'); if(pw) pw.hidden = !locked;
+  if(locked){ showPaywall(worst, overall); window.scrollTo(0,0); return; }
   renderReport(reportText, worst, best);
   try{ var nm = new Date(); nm.setDate(nm.getDate() + (((8 - nm.getDay()) % 7) || 7));
     document.getElementById('next-monday').textContent = 'Monday ' + nm.toLocaleDateString('en-NZ', {day:'numeric', month:'long'});
@@ -2111,6 +2139,12 @@ function moduleFindingsText(mid){
 function saveRunAndDelta(overall){
   if(window._sample){ window._fixloRunId = 'sample'; window._planStart = new Date(); var se = document.getElementById('rc-delta'); if(se) se.textContent = 'Example report for a made-up business'; return; }
   var hist = store('history') || [];
+  if(window._resumeRun){ // returning from payment: same run, already saved
+    window._fixloRunId = window._resumeRun.id; window._planStart = new Date(window._resumeRun.start);
+    var pi = -1; hist.forEach(function(h, i){ if(h.id === window._resumeRun.id) pi = i; });
+    var pv = pi > 0 ? hist[pi-1] : null, de = document.getElementById('rc-delta');
+    if(de) de.textContent = pv ? ('Last time '+pv.overall+' on '+pv.date+' ('+(overall-pv.overall>=0?'+':'')+(overall-pv.overall)+')') : 'First run. Retake next week to see the change.';
+    return; }
   var prev = hist.length ? hist[hist.length-1] : null;
   window._fixloRunId = 'r'+Date.now();
   window._planStart = new Date();
@@ -2139,23 +2173,47 @@ function payAndBegin(){
   var biz = document.getElementById('f-biz').value.trim();
   var sector = document.getElementById('f-sector').value;
   if(!name || !biz || !sector){ alert('Please fill in your name, business name and sector to continue.'); return; }
-  var link = PAY_LINKS[wizardCountry.code];
-  if(!link){ startAssessment(); return; }
-  store('pending', {code:wizardCountry.code, name:name, biz:biz, sector:sector, revenue:document.getElementById('f-revenue').value, staff:document.getElementById('f-staff').value});
+  startAssessment(); // the questions and scores are free; payment unlocks the fixes
+}
+
+function showPaywall(worst, overall){
+  var code = (userData && userData.countryCode) || 'NZ', cd = COUNTRY_DATA[code] || {};
+  var price = (typeof wizardCountry !== 'undefined' && wizardCountry.price) || cd.label || '';
+  document.getElementById('pw-title').textContent = (userData.name ? userData.name + ', y' : 'Y') + 'our scores are ready';
+  document.getElementById('pw-lead').innerHTML = escH(userData.biz || 'Your business') + ' scored <b>' + overall + '/100</b>. Your weakest areas are <b>' + escH(worst[0].name) + '</b> (' + moduleScores[worst[0].id] + ') and <b>' + escH(worst[1].name) + '</b> (' + moduleScores[worst[1].id] + '). Unlock your full report to see exactly what to do about them this week.';
+  document.getElementById('pw-btn').textContent = 'Unlock my three fixes · ' + price;
+  var sl = document.getElementById('pw-sample'); if(sl) sl.href = 'diagnostic.html?sample=1&country=' + code;
+}
+
+function unlockReport(){
+  var code = (userData && userData.countryCode) || 'NZ', link = PAY_LINKS[code];
+  if(!link) return;
+  // Kept on this device only, so the report can be rebuilt after payment. Nothing is sent to FIXLO.
+  store('pending_run', { code:code, name:userData.name, biz:userData.biz, sector:userData.sector, revenue:userData.revenue, staff:userData.staff,
+    answers:answers, numbers:userNumbers, id:window._fixloRunId, start:(window._planStart || new Date()).toISOString() });
+  fxCount('unlock-click-' + code);
   window.location.href = link;
 }
 
 function resumeAfterPayment(){
   var params; try{ params = new URLSearchParams(window.location.search); }catch(e){ return; }
   if(!params.get('paid')) return;
-  var p = store('pending'); if(!p) return;
+  var p = store('pending_run'); if(!p) return;
   var card = document.querySelector('.country-card[data-code="'+p.code+'"]');
   var cd = COUNTRY_DATA[p.code]; if(!card || !cd) return;
   selectCountry(card, p.code, cd.label, cd.currency);
   document.getElementById('f-name').value = p.name; document.getElementById('f-biz').value = p.biz;
   document.getElementById('f-sector').value = p.sector; document.getElementById('f-revenue').value = p.revenue || ''; document.getElementById('f-staff').value = p.staff || '';
-  try{ localStorage.removeItem('fixlo.pending'); }catch(e){}
-  startAssessment();
+  window._sample = true; startAssessment(); window._sample = false; // skip the begin count on resume
+  answers = p.answers || {}; userNumbers = p.numbers || {};
+  window._unlocked = true; window._resumeRun = { id:p.id, start:p.start };
+  clearInterval(timerInterval);
+  MODULES.forEach(function(m){ moduleScores[m.id] = calcScore(m.id); });
+  var sorted = MODULES.slice().sort(function(a, c){ return moduleScores[a.id] - moduleScores[c.id]; });
+  var worst = sorted.slice(0, 2), best = sorted[sorted.length - 1];
+  fxCount('unlocked-' + p.code);
+  showReport(buildFallback(worst, best), worst, best);
+  try{ localStorage.removeItem('fixlo.pending_run'); history.replaceState(null, '', 'diagnostic.html'); }catch(e){}
 }
 
 document.addEventListener('change', function(e){
@@ -2165,6 +2223,7 @@ document.addEventListener('change', function(e){
   var t = store('ticks.'+runId) || {}; t[k] = e.target.checked; store('ticks.'+runId, t);
   e.target.parentNode.classList.toggle('done', e.target.checked);
 });
+
 if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', resumeAfterPayment); } else { resumeAfterPayment(); }
 
 
