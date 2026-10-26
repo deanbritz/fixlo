@@ -2322,7 +2322,7 @@ function calendarFixes(){
 
 // ══ SIMPLE VISIT COUNT (GoatCounter, no cookies). Sends only an event name such as "sample-view-NZ". Never answers, scores or business details. ══
 // Paste your GoatCounter site code here (for "fixlo.goatcounter.com" it is 'fixlo'). Leave '' to switch counting off.
-var COUNTER_CODE = '';
+var COUNTER_CODE = 'fixlo';
 function fxCount(name){
   if(!COUNTER_CODE) return;
   var send = function(n){ try{ window.goatcounter.count({ path:n, title:n, event:true }); }catch(e){} };
