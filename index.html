@@ -134,6 +134,10 @@
 .sec-chip.on { background:var(--brand, #1F4E6B); border-color:var(--brand, #1F4E6B); color:#fff; }
 .sample-ind b { display:inline; font-size:13px; }
 .sample-ind { display:block; font-style:normal; font-size:13px; line-height:1.5; color:var(--ink); margin-top:6px; padding-left:8px; border-left:3px solid var(--brand, #1F4E6B); }
+.country-rule { margin:4px 0 22px; padding:12px 14px; border-left:4px solid var(--brand, #1F4E6B); background:#fff; font-size:15px; line-height:1.55; color:var(--ink); max-width:620px; }
+.sec-prompt { margin:0 0 8px; font-size:14px; line-height:1.5; color:var(--ink); }
+.sec-chip { box-shadow:0 1px 2px rgba(0,0,0,.08); }
+.sec-chip:not(.on):hover { border-color:var(--brand, #1F4E6B); color:var(--brand, #1F4E6B); }
 </style>
 </head>
 <body>
@@ -151,6 +155,7 @@
       <p class="eyebrow">For small and medium-sized businesses in New Zealand, Australia and South Africa</p>
       <h1>Find the three things to fix in your business this week.</h1>
       <p class="lede">A practical check across seven areas of your business. You get a score for each area, three named fixes with the steps to take, and a seven-day plan to get them done.</p>
+      <p class="country-rule" id="country-rule"><b>Written for your country.</b> <span id="country-rule-text">In New Zealand, Inland Revenue adds interest and late payment penalties to overdue GST and PAYE, so a cash gap quickly turns into a tax debt.</span></p>
       <div class="cta-row">
         <a class="btn" href="diagnostic.html">Start the assessment</a>
         <a class="btn outline" href="diagnostic.html?sample=1">See a sample report</a>
@@ -167,7 +172,8 @@
 
     <div class="sample" aria-label="Example of the three fixes in a FIXLO report">
       <div class="sample-head"><b>Your 3 fixes this week</b><small><a id="sample-full" href="diagnostic.html?sample=1&amp;sector=trades">See the full example report</a></small></div>
-      <div class="sec-chips" role="group" aria-label="Show the example for your industry"><button type="button" class="sec-chip on" data-k="trades" aria-pressed="true">Trades</button><button type="button" class="sec-chip" data-k="tourism" aria-pressed="false">Tourism</button><button type="button" class="sec-chip" data-k="agri" aria-pressed="false">Farming</button><button type="button" class="sec-chip" data-k="services" aria-pressed="false">Services</button><button type="button" class="sec-chip" data-k="retail" aria-pressed="false">Retail</button><button type="button" class="sec-chip" data-k="health" aria-pressed="false">Health</button></div>
+      <p class="sec-prompt" id="sec-prompt"><b>Choose your industry</b> to see the advice for a business like yours:</p>
+      <div class="sec-chips" role="group" aria-labelledby="sec-prompt"><button type="button" class="sec-chip on" data-k="trades" aria-pressed="true">Trades</button><button type="button" class="sec-chip" data-k="tourism" aria-pressed="false">Tourism</button><button type="button" class="sec-chip" data-k="agri" aria-pressed="false">Farming</button><button type="button" class="sec-chip" data-k="services" aria-pressed="false">Services</button><button type="button" class="sec-chip" data-k="retail" aria-pressed="false">Retail</button><button type="button" class="sec-chip" data-k="health" aria-pressed="false">Health</button></div>
       <div class="sample-fix"><div class="sample-num">1</div><div><b>Calculate your cash runway and check it weekly</b><span>Cash &amp; Financial Health · 60 minutes</span><em class="sample-ind" data-z="cash"><b>In a trades business:</b> take deposits on larger jobs, send progress claims on time, and chase retentions as soon as they fall due.</em></div></div>
       <div class="sample-fix"><div class="sample-num">2</div><div><b>Turn on multi-factor authentication</b><span>Cyber Security · 60 minutes</span><em class="sample-ind" data-z="cyber"><b>In a trades business:</b> phones on site hold client details and photos; lock them, and confirm any change to a supplier&#x27;s bank details by phone.</em></div></div>
       <div class="sample-fix"><div class="sample-num">3</div><div><b>Bring your privacy policy up to date</b><span>Compliance &amp; Legal Risk · 90 minutes</span><em class="sample-ind" data-z="comp"><b>In a trades business:</b> keep health and safety records, licences and certifications current, alongside your tax and employment paperwork.</em></div></div>
@@ -324,6 +330,17 @@ fxCount('front-page');
     var a = document.getElementById('sample-full'); if(a) a.href = 'diagnostic.html?sample=1&sector=' + k;
   };
   document.querySelectorAll('.sec-chip').forEach(function(b){ b.addEventListener('click', function(){ show(b.getAttribute('data-k')); }); });
+})();
+</script>
+<script>
+(function(){
+  // One checked rule per country, picked from the visitor's time zone. Nothing is sent anywhere.
+  var RULES = {
+    AU:'In Australia, the ATO charges interest on overdue tax, and since 1 July 2025 that interest is no longer tax deductible.',
+    ZA:'In South Africa, SARS adds a 10% late payment penalty, plus interest, to overdue VAT and PAYE.'
+  };
+  try{ var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '', c = /^Australia\//.test(tz) ? 'AU' : tz === 'Africa/Johannesburg' ? 'ZA' : '';
+    if(c && RULES[c]) document.getElementById('country-rule-text').textContent = RULES[c]; }catch(e){}
 })();
 </script>
 </body>
