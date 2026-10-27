@@ -569,6 +569,7 @@
   .wl-price-amount { color:var(--ink); }
   .wl-price-note { color:var(--ink-light); font-size:13px; }
   .score-note { font-size:13px; line-height:1.55; color:var(--ink-light); margin:-12px 0 24px; max-width:760px; }
+  .wp-guess { font-size:14px; color:var(--brand, #1F4E6B); margin:-4px 0 14px; }
   .wl-sample-link { display:inline-block; margin-top:10px; font-size:14px; color:var(--brand); text-decoration:underline; }
   .wp-trust a.wp-sample { color:var(--brand); text-decoration:underline; }
   @media (max-width:768px) { .wizard-left { border-right:none; border-bottom:1px solid var(--border); padding:32px 20px; } .wizard-right, .wizard-panel { padding:32px 20px; } }
@@ -729,7 +730,8 @@
         <div class="wp-dot wp-inactive"></div>
       </div>
       <div class="wp-title">Where are you<br><em>based?</em></div>
-      <div class="wp-sub">We use your location to set the right currency and the tax, privacy and employment rules in your report.</div>
+      <div class="wp-sub">Choose your country. It sets your price and currency, and the tax, privacy and employment rules used in your report.</div>
+      <div class="wp-guess" id="wp-guess" hidden></div>
       <div class="country-grid">
         <div class="country-card" onclick="selectCountry(this,'NZ','$49 NZD','NZD')" data-code="NZ">
           <span class="cc-flag">🇳🇿</span>
@@ -1263,6 +1265,7 @@ let wizardCountry = { code:'NZ', price:'$49 NZD', currency:'NZD', name:'New Zeal
 function selectCountry(el, code, price, currency) {
   document.querySelectorAll('.country-card').forEach(c => c.classList.remove('cc-selected'));
   el.classList.add('cc-selected');
+  var wg = document.getElementById('wp-guess'); if(wg) wg.hidden = true;
   const names = {AU:'Australia',NZ:'New Zealand',UK:'United Kingdom',CA:'Canada',US:'United States',ZA:'South Africa'};
   wizardCountry = { code, price, currency, name: names[code] || code };
   document.getElementById('wl-price').textContent = price;
@@ -2461,6 +2464,19 @@ function runSample(){
   var cur = {NZ:'NZ$', AU:'A$', ZA:'R'}[code];
   document.querySelectorAll('#rc-meta .rc-meta-item').forEach(function(it){ var l = it.querySelector('.rc-meta-label'), v = it.querySelector('.rc-meta-val'); if(l && v && l.textContent === 'Revenue') v.textContent = cur + sb.revenue; });
 }
+// Pre-select the country card from the device time zone (read in the browser, nothing sent). The owner can tap another.
+function preselectCountry(){
+  var params; try{ params = new URLSearchParams(location.search); }catch(e){ params = null; }
+  if(params && (params.get('sample') || params.get('paid'))) return;
+  var tz = ''; try{ tz = Intl.DateTimeFormat().resolvedOptions().timeZone || ''; }catch(e){}
+  var code = /^Australia\//.test(tz) ? 'AU' : tz === 'Africa/Johannesburg' ? 'ZA' : /^Pacific\/(Auckland|Chatham)$/.test(tz) ? 'NZ' : '';
+  var card = code && document.querySelector('.country-card[data-code="' + code + '"]'), cd = COUNTRY_DATA[code];
+  if(!card || !cd || document.querySelector('.country-card.cc-selected')) return;
+  selectCountry(card, code, cd.label, cd.currency);
+  var g = document.getElementById('wp-guess');
+  if(g){ g.textContent = (wizardCountry.name || cd.label) + ' is selected from your device settings. Tap another country if that is not right.'; g.hidden = false; }
+}
+if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', preselectCountry); } else { preselectCountry(); }
 if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', runSample); } else { runSample(); }
 
 // On phones, keep the current module's chip in view in the scrolling strip.

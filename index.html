@@ -138,6 +138,8 @@
 .sec-prompt { margin:0 0 8px; font-size:14px; line-height:1.5; color:var(--ink); }
 .sec-chip { box-shadow:0 1px 2px rgba(0,0,0,.08); }
 .sec-chip:not(.on):hover { border-color:var(--brand, #1F4E6B); color:var(--brand, #1F4E6B); }
+.cr-switch { display:block; margin-top:6px; font-size:13px; color:var(--ink-light); }
+.cr-switch a { color:var(--brand, #1F4E6B); text-decoration:underline; margin-left:8px; white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -155,7 +157,8 @@
       <p class="eyebrow">For small and medium-sized businesses in New Zealand, Australia and South Africa</p>
       <h1>Find the three things to fix in your business this week.</h1>
       <p class="lede">A practical check across seven areas of your business. You get a score for each area, three named fixes with the steps to take, and a seven-day plan to get them done.</p>
-      <p class="country-rule" id="country-rule"><b>Written for your country.</b> <span id="country-rule-text">In New Zealand, Inland Revenue adds interest and late payment penalties to overdue GST and PAYE, so a cash gap quickly turns into a tax debt.</span></p>
+      <p class="country-rule" id="country-rule"><b>Written for your country.</b> <span id="country-rule-text">In New Zealand, Inland Revenue adds interest and late payment penalties to overdue GST and PAYE, so a cash gap quickly turns into a tax debt.</span>
+        <span class="cr-switch" id="cr-switch">Not in New Zealand? <a href="#" data-c="AU">Australia</a> <a href="#" data-c="ZA">South Africa</a></span></p>
       <div class="cta-row">
         <a class="btn" href="diagnostic.html">Start the assessment</a>
         <a class="btn outline" href="diagnostic.html?sample=1">See a sample report</a>
@@ -327,7 +330,7 @@ fxCount('front-page');
     var c = SECT[k]; if(!c) return;
     document.querySelectorAll('.sample-ind').forEach(function(e){ e.innerHTML = '<b>' + esc(c.lead) + ':</b> ' + esc(c[e.getAttribute('data-z')]); });
     document.querySelectorAll('.sec-chip').forEach(function(b){ var on = b.getAttribute('data-k') === k; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
-    var a = document.getElementById('sample-full'); if(a) a.href = 'diagnostic.html?sample=1&sector=' + k;
+    var a = document.getElementById('sample-full'); if(a) a.href = 'diagnostic.html?sample=1&sector=' + k + (window._fxCountry ? '&country=' + window._fxCountry : '');
   };
   document.querySelectorAll('.sec-chip').forEach(function(b){ b.addEventListener('click', function(){ show(b.getAttribute('data-k')); }); });
 })();
@@ -335,12 +338,22 @@ fxCount('front-page');
 <script>
 (function(){
   // One checked rule per country, picked from the visitor's time zone. Nothing is sent anywhere.
+  var NAMES = { NZ:'New Zealand', AU:'Australia', ZA:'South Africa' };
   var RULES = {
+    NZ:'In New Zealand, Inland Revenue adds interest and late payment penalties to overdue GST and PAYE, so a cash gap quickly turns into a tax debt.',
     AU:'In Australia, the ATO charges interest on overdue tax, and since 1 July 2025 that interest is no longer tax deductible.',
     ZA:'In South Africa, SARS adds a 10% late payment penalty, plus interest, to overdue VAT and PAYE.'
   };
+  var setC = function(c){
+    window._fxCountry = c;
+    document.getElementById('country-rule-text').textContent = RULES[c];
+    var sw = document.getElementById('cr-switch'), others = ['NZ','AU','ZA'].filter(function(x){ return x !== c; });
+    sw.innerHTML = 'Not in ' + NAMES[c] + '? ' + others.map(function(x){ return '<a href="#" data-c="' + x + '">' + NAMES[x] + '</a>'; }).join(' ');
+    document.querySelectorAll('a[href^="diagnostic.html?sample=1"]').forEach(function(a){ a.href = a.getAttribute('href').replace(/&country=[A-Z]+/, '') + '&country=' + c; });
+  };
+  document.getElementById('cr-switch').addEventListener('click', function(e){ var c = e.target.getAttribute && e.target.getAttribute('data-c'); if(c && RULES[c]){ e.preventDefault(); setC(c); } });
   try{ var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '', c = /^Australia\//.test(tz) ? 'AU' : tz === 'Africa/Johannesburg' ? 'ZA' : '';
-    if(c && RULES[c]) document.getElementById('country-rule-text').textContent = RULES[c]; }catch(e){}
+    if(c) setC(c); }catch(e){}
 })();
 </script>
 </body>
